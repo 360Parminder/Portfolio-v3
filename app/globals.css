@@ -3,6 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Blueprint / construction line tokens — light mode */
+  --line-stroke: rgba(0, 0, 0, 0.10);
+  --line-stroke-light: rgba(0, 0, 0, 0.06);
+  --line-stroke-accent: rgba(0, 0, 0, 0.15);
+  --line-fill: rgba(0, 0, 0, 0.03);
+  --line-fill-accent: rgba(0, 0, 0, 0.05);
+  --line-hatch: rgba(0, 0, 0, 0.07);
+  --nav-link: rgba(0, 0, 0, 0.45);
+  --nav-link-hover: rgba(0, 0, 0, 0.85);
+  --ram-notch: rgba(255, 255, 255, 0.7);
 }
 
 @theme inline {
@@ -16,6 +27,17 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* Blueprint / construction line tokens — dark mode */
+    --line-stroke: rgba(255, 255, 255, 0.08);
+    --line-stroke-light: rgba(255, 255, 255, 0.05);
+    --line-stroke-accent: rgba(255, 255, 255, 0.12);
+    --line-fill: rgba(255, 255, 255, 0.02);
+    --line-fill-accent: rgba(255, 255, 255, 0.04);
+    --line-hatch: rgba(255, 255, 255, 0.06);
+    --nav-link: rgba(255, 255, 255, 0.5);
+    --nav-link-hover: rgba(255, 255, 255, 0.9);
+    --ram-notch: rgba(0, 0, 0, 0.5);
   }
 }
 
