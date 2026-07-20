@@ -1,11 +1,8 @@
 "use client";
 
 export function RightGutter() {
-  const stroke = "var(--line-stroke)";
   const strokeLight = "var(--line-stroke-light)";
-  const strokeAccent = "var(--line-stroke-accent)";
-  const fill = "var(--line-fill)";
-  const fillAccent = "var(--line-fill-accent)";
+  const stroke = "var(--line-stroke)";
 
   const hatching = `repeating-linear-gradient(
     -45deg,
@@ -26,7 +23,7 @@ export function RightGutter() {
         overflow: "hidden",
       }}
     >
-      {/* ── Blueprint SVG art ── */}
+      {/* Subtle engineering grid background */}
       <svg
         viewBox="0 0 400 1080"
         xmlns="http://www.w3.org/2000/svg"
@@ -38,9 +35,8 @@ export function RightGutter() {
           height: "100%",
           display: "block",
         }}
-        preserveAspectRatio="xMidYMin meet"
+        preserveAspectRatio="xMidYMin slice"
       >
-        {/* Engineering grid background */}
         <defs>
           <pattern id="rgSmall" width="20" height="20" patternUnits="userSpaceOnUse">
             <path d="M 20 0 L 0 0 0 20" fill="none" stroke={strokeLight} strokeWidth="0.3" />
@@ -51,145 +47,10 @@ export function RightGutter() {
           </pattern>
         </defs>
         <rect width="400" height="1080" fill="url(#rgLarge)" opacity="0.5" />
-
-        {/* ── HARD DRIVE — top area ── */}
-        <g transform="translate(60, 70)">
-          <text x="0" y="-6" fill={stroke} fontSize="5" fontFamily="var(--font-geist-mono)">
-            STORAGE UNIT
-          </text>
-          {/* Drive housing */}
-          <rect x="0" y="0" width="180" height="120" rx="4" fill={fill} stroke={stroke} strokeWidth="0.6" />
-          {/* Platter rings */}
-          <circle cx="80" cy="55" r="42" fill="none" stroke={stroke} strokeWidth="0.5" />
-          <circle cx="80" cy="55" r="30" fill="none" stroke={strokeLight} strokeWidth="0.3" />
-          <circle cx="80" cy="55" r="18" fill="none" stroke={strokeLight} strokeWidth="0.3" />
-          <circle cx="80" cy="55" r="5" fill={fillAccent} stroke={strokeAccent} strokeWidth="0.5" />
-          {/* Actuator arm */}
-          <line x1="80" y1="55" x2="158" y2="22" stroke={strokeAccent} strokeWidth="0.7" />
-          <rect x="150" y="16" width="22" height="14" rx="2" fill={fill} stroke={stroke} strokeWidth="0.4" />
-          {/* Labels */}
-          <text x="10" y="115" fill={stroke} fontSize="4.5" fontFamily="var(--font-geist-mono)">PLATTERS</text>
-          <text x="152" y="14" fill={stroke} fontSize="4" fontFamily="var(--font-geist-mono)">ACT.</text>
-        </g>
-
-        {/* ── Trace from HDD down ── */}
-        <polyline
-          points="140,190 140,250 380,250 380,320"
-          fill="none"
-          stroke={stroke}
-          strokeWidth="0.5"
-        />
-        <circle cx="140" cy="250" r="2" fill={strokeAccent} />
-        <circle cx="380" cy="320" r="2" fill={strokeAccent} />
-
-        {/* ── IO PORTS — USB ports cluster ── */}
-        <g transform="translate(60, 280)">
-          <text x="0" y="-8" fill={stroke} fontSize="5" fontFamily="var(--font-geist-mono)">IO PORTS</text>
-          {[0, 1, 2].map((i) => (
-            <g key={`usb-${i}`} transform={`translate(0, ${i * 42})`}>
-              <rect x="0" y="0" width="60" height="30" rx="2" fill={fill} stroke={stroke} strokeWidth="0.5" />
-              <rect x="6" y="6" width="48" height="18" rx="1" fill="none" stroke={strokeLight} strokeWidth="0.4" />
-              <rect x="12" y="10" width="36" height="10" rx="1" fill={fillAccent} stroke={stroke} strokeWidth="0.3" />
-            </g>
-          ))}
-          {/* Ethernet port */}
-          <g transform="translate(80, 0)">
-            <rect x="0" y="0" width="55" height="36" rx="2" fill={fill} stroke={stroke} strokeWidth="0.5" />
-            {Array.from({ length: 8 }).map((_, i) => (
-              <rect key={`eth-${i}`} x={4 + i * 6} y="26" width="4" height="8" fill={fillAccent} stroke={stroke} strokeWidth="0.2" />
-            ))}
-            <text x="4" y="18" fill={stroke} fontSize="4" fontFamily="var(--font-geist-mono)">RJ-45</text>
-          </g>
-        </g>
-
-        {/* ── Trace from IO to chipset ── */}
-        <polyline
-          points="120,440 20,440 20,560"
-          fill="none"
-          stroke={stroke}
-          strokeWidth="0.5"
-        />
-        <circle cx="20" cy="440" r="2" fill={strokeAccent} />
-
-        {/* ── CHIPSET — lower section ── */}
-        <g transform="translate(40, 520)">
-          <text x="60" y="-8" textAnchor="middle" fill={stroke} fontSize="5" fontFamily="var(--font-geist-mono)">
-            CORE PROCESSOR
-          </text>
-          <rect x="0" y="0" width="160" height="160" rx="4" fill={fill} stroke={stroke} strokeWidth="0.6" />
-          {/* Stacked boards */}
-          {[0, 1, 2, 3].map((i) => (
-            <rect key={`board-${i}`} x="10" y={10 + i * 35} width="140" height="28" rx="2" fill={fillAccent} stroke={stroke} strokeWidth="0.4" />
-          ))}
-          {/* Chips on boards */}
-          {[0, 1, 2, 3].map((i) =>
-            [0, 1, 2].map((j) => (
-              <rect
-                key={`bchip-${i}-${j}`}
-                x={20 + j * 44}
-                y={15 + i * 35}
-                width="32"
-                height="18"
-                rx="1"
-                fill={fill}
-                stroke={strokeLight}
-                strokeWidth="0.3"
-              />
-            ))
-          )}
-          <text x="80" y="175" textAnchor="middle" fill={stroke} fontSize="4" fontFamily="var(--font-geist-mono)">
-            FIG_001.chipset
-          </text>
-        </g>
-
-        {/* ── Dimension line ── */}
-        <g>
-          <line x1="20" y1="720" x2="380" y2="720" stroke={strokeLight} strokeWidth="0.3" />
-          <line x1="20" y1="715" x2="20" y2="725" stroke={strokeLight} strokeWidth="0.3" />
-          <line x1="380" y1="715" x2="380" y2="725" stroke={strokeLight} strokeWidth="0.3" />
-          <text x="200" y="718" textAnchor="middle" fill={strokeLight} fontSize="4" fontFamily="var(--font-geist-mono)">
-            360mm
-          </text>
-        </g>
-
-        {/* ── Resistors ── */}
-        {[{ x: 230, y: 760 }, { x: 258, y: 760 }, { x: 286, y: 760 }, { x: 240, y: 778 }, { x: 268, y: 778 }].map(
-          (pos, i) => (
-            <rect key={`res-${i}`} x={pos.x} y={pos.y} width="14" height="6" rx="1" fill={fillAccent} stroke={stroke} strokeWidth="0.3" />
-          )
-        )}
-
-        {/* ── Capacitors ── */}
-        {[{ x: 280, y: 540 }, { x: 306, y: 540 }, { x: 330, y: 555 }, { x: 356, y: 555 }].map((pos, i) => (
-          <g key={`cap-${i}`} transform={`translate(${pos.x}, ${pos.y})`}>
-            <rect x="0" y="0" width="18" height="30" rx="9" fill={fill} stroke={stroke} strokeWidth="0.4" />
-            <line x1="4" y1="9" x2="14" y2="9" stroke={strokeLight} strokeWidth="0.3" />
-            <line x1="4" y1="21" x2="14" y2="21" stroke={strokeLight} strokeWidth="0.3" />
-          </g>
-        ))}
-
-        {/* ── Annotation text (rotated along right edge) ── */}
-        <text
-          x="386"
-          y="200"
-          fill={stroke}
-          fontSize="5"
-          fontFamily="var(--font-geist-mono)"
-          transform="rotate(90, 386, 200)"
-          letterSpacing="0.08em"
-        >
-          REV_A · PORTFOLIO · 2025.01
-        </text>
-
-        {/* ── FIG label ── */}
-        <text x="20" y="1060" fill={stroke} fontSize="4.5" fontFamily="var(--font-geist-mono)">
-          FIG_003.right.panel
-        </text>
       </svg>
 
-      {/* ── Thin hatching strip on the inner (left) edge ── */}
+      {/* Thin hatching strip on the inner (left) edge */}
       <div
-        aria-hidden="true"
         style={{
           position: "absolute",
           top: 0,
@@ -200,6 +61,107 @@ export function RightGutter() {
           pointerEvents: "none",
         }}
       />
+
+      {/* Coordinate Scale (Numbers) */}
+      <div
+        className="absolute top-0 bottom-0 flex flex-col"
+        style={{
+          left: "16px",
+          width: "24px",
+          fontFamily: "var(--font-geist-mono)",
+          fontSize: "10px",
+          color: "var(--line-stroke-accent)",
+        }}
+      >
+        {["4", "3", "2", "1"].map((n, i) => (
+          <div
+            key={n}
+            className="flex-1 flex items-center justify-center"
+            style={{
+              borderBottom: i < 3 ? "1px solid var(--line-stroke)" : "none",
+              borderRight: "1px solid var(--line-stroke)",
+            }}
+          >
+            {n}
+          </div>
+        ))}
+      </div>
+
+      {/* Title Block (Bottom Right) */}
+      <div
+        className="absolute bottom-[24px] right-[24px]"
+        style={{
+          width: "350px",
+          borderLeft: "1px solid var(--line-stroke)",
+          borderTop: "1px solid var(--line-stroke)",
+          backgroundColor: "var(--background)",
+          pointerEvents: "auto",
+        }}
+      >
+        <div
+          className="absolute -top-5 right-0 text-[9px] tracking-wide"
+          style={{ color: "var(--line-stroke-accent)" }}
+        >
+          ALL SOURCE CODE AND REPOSITORIES ARE AVAILABLE AT GITHUB.COM/PARMINDER360
+        </div>
+
+        <div className="flex flex-col uppercase">
+          <div className="flex border-b border-[var(--line-stroke)]">
+            <div className="w-full p-2 flex items-center justify-center">
+              <span className="font-bold text-sm tracking-widest text-[var(--foreground)]">
+                PARMINDER DESIGNS
+              </span>
+            </div>
+          </div>
+
+          <div className="flex border-b border-[var(--line-stroke)]">
+            <div className="w-[60%] p-2 border-r border-[var(--line-stroke)] flex flex-col justify-center">
+              <span className="text-[8px] opacity-70 text-[var(--line-stroke-accent)]">PROJECT TITLE</span>
+              <span className="text-xs font-semibold tracking-wide mt-0.5 text-[var(--foreground)]">PORTFOLIO ARCHITECTURE</span>
+            </div>
+            <div className="w-[40%] flex flex-col">
+              <div className="flex-1 border-b border-[var(--line-stroke)] flex items-center px-2">
+                <span className="text-[8px] w-8 opacity-70 text-[var(--line-stroke-accent)]">SIZE</span>
+                <span className="text-[10px] text-[var(--foreground)]">WEB</span>
+              </div>
+              <div className="flex-1 flex items-center px-2">
+                <span className="text-[8px] w-8 opacity-70 text-[var(--line-stroke-accent)]">REV</span>
+                <span className="text-[10px] text-[var(--foreground)]">03</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex border-b border-[var(--line-stroke)]">
+            <div className="flex-1 border-r border-[var(--line-stroke)] flex flex-col p-1.5 px-2">
+              <span className="text-[7px] opacity-70 text-[var(--line-stroke-accent)]">DRAWN BY</span>
+              <span className="text-[9px] text-[var(--foreground)]">P. SINGH</span>
+            </div>
+            <div className="flex-1 border-r border-[var(--line-stroke)] flex flex-col p-1.5 px-2">
+              <span className="text-[7px] opacity-70 text-[var(--line-stroke-accent)]">DATE</span>
+              <span className="text-[9px] text-[var(--foreground)]">2026-07-20</span>
+            </div>
+            <div className="flex-1 flex flex-col p-1.5 px-2">
+              <span className="text-[7px] opacity-70 text-[var(--line-stroke-accent)]">SCALE</span>
+              <span className="text-[9px] text-[var(--foreground)]">1:1 (PIXELS)</span>
+            </div>
+          </div>
+
+          <div className="flex">
+            <div className="flex-1 border-r border-[var(--line-stroke)] flex flex-col p-1.5 px-2">
+              <span className="text-[7px] opacity-70 text-[var(--line-stroke-accent)]">APPROVED BY</span>
+              <span className="text-[9px] text-[var(--foreground)]">CLIENT</span>
+            </div>
+            <div className="flex-1 border-r border-[var(--line-stroke)] flex flex-col p-1.5 px-2">
+              <span className="text-[7px] opacity-70 text-[var(--line-stroke-accent)]">STATUS</span>
+              <span className="text-[9px] text-[var(--foreground)]">PRODUCTION</span>
+            </div>
+            <div className="flex-1 flex flex-col p-1.5 px-2">
+              <span className="text-[7px] opacity-70 text-[var(--line-stroke-accent)]">SHEET</span>
+              <span className="text-[9px] text-[var(--foreground)]">1 OF 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

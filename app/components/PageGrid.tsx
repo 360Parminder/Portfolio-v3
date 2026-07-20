@@ -41,7 +41,7 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
       style={{
         display: "grid",
         gridTemplateColumns: "var(--col-left) 1fr var(--col-right)",
-        gridTemplateRows: "200px 1px 9px 1px 1fr 1px 15px 1px",
+        gridTemplateRows: "auto 1px 9px 1px 1fr 1px 15px 1px",
         minHeight: "100vh",
       }}
     >
@@ -55,9 +55,6 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
         <RightGutter />
       </div>
 
-      {/* ── ROW 1, COL 2: top spacer (content column only) ── */}
-      <div style={{ gridColumn: "2", gridRow: "1" }} aria-hidden="true" />
-
       {/* ── ROWS 2-4: top horizontal band — full width ── */}
       <div
         aria-hidden="true"
@@ -65,17 +62,28 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
       />
       <div
         aria-hidden="true"
-        style={{ gridColumn: "1 / -1", gridRow: "3", ...hatching }}
-      />
+        style={{ gridColumn: "1 / -1", gridRow: "3", ...hatching, position: "relative" }}
+      >
+        {/* Horizontal scale (Top) */}
+        <div 
+          className="absolute inset-0 flex"
+          style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10px", color: "var(--line-stroke-accent)", top: "-18px" }}
+        >
+          {["H", "G", "F", "E", "D", "C", "B", "A"].map((l, i) => (
+            <div key={l} className="flex-1 flex items-center justify-center relative">
+              <span className="absolute bottom-1 bg-[var(--background)] px-1">{l}</span>
+              <div className="absolute bottom-0 w-[1px] h-[6px] bg-[var(--line-stroke)]" />
+            </div>
+          ))}
+        </div>
+      </div>
       <div
         aria-hidden="true"
         style={{ gridColumn: "1 / -1", gridRow: "4", backgroundColor: "var(--line-stroke)" }}
       />
 
-      {/* ── ROW 5, COL 2: main content ── */}
-      <div style={{ gridColumn: "2", gridRow: "5" }}>
-        {children}
-      </div>
+      {/* ── MAIN CONTENT (participates directly in grid via display:contents in page.tsx) ── */}
+      {children}
 
       {/* ── ROWS 6-8: bottom horizontal band — full width ── */}
       <div
@@ -84,8 +92,21 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
       />
       <div
         aria-hidden="true"
-        style={{ gridColumn: "1 / -1", gridRow: "7", ...hatching }}
-      />
+        style={{ gridColumn: "1 / -1", gridRow: "7", ...hatching, position: "relative" }}
+      >
+        {/* Horizontal scale (Bottom) */}
+        <div 
+          className="absolute inset-0 flex"
+          style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10px", color: "var(--line-stroke-accent)", bottom: "-18px" }}
+        >
+          {["H", "G", "F", "E", "D", "C", "B", "A"].map((l, i) => (
+            <div key={l} className="flex-1 flex items-center justify-center relative">
+              <div className="absolute top-0 w-[1px] h-[6px] bg-[var(--line-stroke)]" />
+              <span className="absolute top-1 bg-[var(--background)] px-1">{l}</span>
+            </div>
+          ))}
+        </div>
+      </div>
       <div
         aria-hidden="true"
         style={{ gridColumn: "1 / -1", gridRow: "8", backgroundColor: "var(--line-stroke)" }}

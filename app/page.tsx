@@ -7,17 +7,19 @@ import clsx from "clsx";
 
 export default function Page() {
   return (
-    <main className={clsx("relative", "min-h-full")}>
+    <main style={{ display: "contents" }}>
 
       {/* ── HERO SECTION ──
-          Starts at the top of grid row 5, which is right below the top horizontal band (y ≈ 211px).
-          No paddingTop needed — the grid row already positions this correctly.
+          Placed in gridRow: 1 (above the top horizontal band).
+          Padding top is 60px to clear the fixed navbar.
       */}
       <section
         className={clsx("relative", "flex", "flex-col")}
         style={{
+          gridColumn: "2",
+          gridRow: "1",
+          paddingTop: "60px", 
           borderBottom: "1px solid var(--line-stroke)",
-          minHeight: "340px",
         }}
       >
         {/* Hero image — flush to left and right edges of the content column */}
@@ -61,6 +63,15 @@ export default function Page() {
           </span>
         </div>
       </section>
+
+      {/* ── MAIN CONTENT ──
+          Placed in gridRow: 5 (below the top horizontal band).
+      */}
+      <div style={{ gridColumn: "2", gridRow: "5" }}>
+        {/* Future page content will go here */}
+        <section style={{ minHeight: "50vh", padding: "40px 0" }}>
+        </section>
+      </div>
 
     </main>
   );
