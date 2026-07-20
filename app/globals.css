@@ -14,6 +14,10 @@
   --nav-link: rgba(0, 0, 0, 0.45);
   --nav-link-hover: rgba(0, 0, 0, 0.85);
   --ram-notch: rgba(255, 255, 255, 0.7);
+
+  /* Content column — inner edges of the vertical border bands */
+  --col-left: 416px;   /* inner edge of left vertical band  */
+  --col-right: 400px;  /* inner edge of right vertical band (from right) */
 }
 
 @theme inline {

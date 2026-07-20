@@ -18,8 +18,6 @@ export function Navbar() {
       className={clsx(
         "fixed",
         "top-0",
-        "left-0",
-        "right-0",
         "z-40",
         "flex",
         "items-center",
@@ -29,6 +27,8 @@ export function Navbar() {
         "dark:border-white/5",
       )}
       style={{
+        left: "var(--col-left)",
+        right: "var(--col-right)",
         height: "60px",
         gap: "24px",
       }}
