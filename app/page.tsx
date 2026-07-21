@@ -18,7 +18,7 @@ export default function Page() {
         style={{
           gridColumn: "2",
           gridRow: "1",
-          paddingTop: "60px", 
+          paddingTop: "60px",
           borderBottom: "1px solid var(--line-stroke)",
         }}
       >
@@ -61,6 +61,45 @@ export default function Page() {
           >
             FIG_001
           </span>
+        </div>
+
+        {/* Profile Image Placeholder */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "0",
+            left: "10px",
+            transform: "translateY(50%)",
+            width: "120px",
+            height: "120px",
+            borderRadius: "50%",
+            border: "1px dashed var(--line-stroke-accent)",
+            backgroundColor: "var(--background)",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {/* Inner solid border to make it look like a technical target */}
+          <div
+            className={clsx("relative", "overflow-hidden")}
+            style={{
+              width: "104px",
+              height: "104px",
+              borderRadius: "50%",
+              border: "1px solid var(--line-stroke)",
+            }}
+          >
+            <Image
+              src="/profile.jpg"
+              alt="Hero artwork"
+              fill
+              style={{ objectFit: "cover", objectPosition: "center 30%" }}
+              priority
+            />
+
+          </div>
         </div>
       </section>
 
