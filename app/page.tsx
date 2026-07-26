@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import clsx from "clsx";
+import { TitleBlock } from "./components/TitleBlock";
 import { Caveat } from "next/font/google";
 
 const caveat = Caveat({
@@ -311,9 +312,8 @@ function CadTechStack() {
         {stackCategories.map((cat, index) => (
           <div
             key={cat.id}
+            className="grid grid-cols-1 md:grid-cols-[200px_1fr]"
             style={{
-              display: "grid",
-              gridTemplateColumns: "200px 1fr",
               borderBottom: index === stackCategories.length - 1 ? "none" : "1px solid var(--line-stroke)",
             }}
           >
@@ -458,8 +458,8 @@ function CadProjects() {
           position: "absolute",
           top: "0",
           bottom: "0",
-          left: "-24px",
-          width: "12px",
+          left: "-12px",
+          width: "6px",
           borderTop: "1px solid var(--line-stroke-accent)",
           borderBottom: "1px solid var(--line-stroke-accent)",
           borderLeft: "1px solid var(--line-stroke-accent)",
@@ -489,10 +489,10 @@ function CadProjects() {
       <div
         style={{
           position: "absolute",
-          top: "-24px",
+          top: "-12px",
           left: "0",
           right: "0",
-          height: "12px",
+          height: "6px",
           borderLeft: "1px solid var(--line-stroke-accent)",
           borderRight: "1px solid var(--line-stroke-accent)",
           borderTop: "1px solid var(--line-stroke-accent)",
@@ -988,6 +988,7 @@ export default function Page() {
         >
           {/* CAD-style rotating role label */}
           <div
+            className="hidden 2xl:block"
             style={{
               position: "absolute",
               top: "-55px",
@@ -1666,6 +1667,11 @@ export default function Page() {
 
           {/* CAD TECH STACK SPECIFICATION MATRIX */}
           <CadTechStack />
+
+          {/* CAD Title Block for Mobile (Hidden on Desktop) */}
+          <div className="flex 2xl:hidden mt-12 mb-8 justify-center">
+            <TitleBlock className="relative" />
+          </div>
         </section>
       </div>
 

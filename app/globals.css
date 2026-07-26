@@ -16,8 +16,10 @@
   --ram-notch: rgba(255, 255, 255, 0.7);
 
   /* Content column — inner edges of the vertical border bands */
-  --col-left: 416px;   /* inner edge of left vertical band  */
-  --col-right: 400px;  /* inner edge of right vertical band (from right) */
+  --col-left: 550px;
+  /* inner edge of left vertical band  */
+  --col-right: 550px;
+  /* inner edge of right vertical band (from right) */
 }
 
 @theme inline {
@@ -84,4 +86,43 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 1700px) {
+  :root {
+    --col-left: 450px;
+    --col-right: 450px;
+  }
+}
+
+@media (max-width: 1536px) {
+  :root {
+    --col-left: 350px;
+    --col-right: 350px;
+  }
+}
+
+@media (max-width: 1280px) {
+  :root {
+    --col-left: 200px;
+    --col-right: 200px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --col-left: 80px;
+    --col-right: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --col-left: 0px;
+    --col-right: 0px;
+  }
 }

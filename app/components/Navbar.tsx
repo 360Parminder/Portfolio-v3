@@ -56,7 +56,10 @@ export function Navbar() {
         "flex",
         "items-center",
         "justify-between",
-        "w-full"
+        "w-full",
+        "overflow-x-auto",
+        "scrollbar-hide",
+        "whitespace-nowrap"
       )}
       style={{
         height: "60px",
@@ -154,7 +157,7 @@ export function Navbar() {
             e.currentTarget.style.borderColor = "var(--line-stroke)";
           }}
         >
-          <GithubIcon size={14} color="currentColor" variant="solid" />
+          <GithubIcon size={14} color="currentColor" />
           <span style={{ fontSize: "10px" }}>GIT</span>
         </a>
 
