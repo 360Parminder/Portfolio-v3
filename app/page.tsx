@@ -191,9 +191,9 @@ function CadTechStack() {
       id: "01",
       name: "Language",
       skills: [
-        { name: "TypeScript", icon: "TS" },
-        { name: "JavaScript", icon: "JS" },
-        { name: "Python", icon: "PY" },
+        { name: "TypeScript", icon: "TS", logo: "/typescript.png" },
+        { name: "JavaScript", icon: "JS", logo: "/javascript.png" },
+        { name: "Python", icon: "PY", logo: "/python.png" },
         { name: "Java", icon: "JV" },
       ],
     },
@@ -201,15 +201,15 @@ function CadTechStack() {
       id: "02",
       name: "Frontend & Mobile",
       skills: [
-        { name: "React", icon: "⚛" },
-        { name: "React Native", icon: "📱" },
-        { name: "Next.js", icon: "N" },
-        { name: "Tailwind CSS", icon: "≈" },
-        { name: "shadcn/ui", icon: "//" },
+        { name: "React", icon: "⚛", logo: "/react.png" },
+        { name: "React Native", icon: "📱", logo: "/react-native.png" },
+        { name: "Next.js", icon: "N", logo: "/next.svg" },
+        { name: "Tailwind CSS", icon: "≈", logo: "/tailwindcss.png" },
+        { name: "shadcn/ui", icon: "//", logo: "/shading.png" },
         { name: "Radix UI", icon: "⁘" },
-        { name: "Base UI", icon: "b" },
-        { name: "Motion", icon: "///" },
-        { name: "Expo", icon: "▲" },
+        { name: "Base UI", icon: "b", logo: "/base-ui.png" },
+        { name: "Motion", icon: "///", logo: "/motion.png" },
+        { name: "Expo", icon: "▲", logo: "/expo.png" },
         { name: "TanStack", icon: "🏝" },
         { name: "MobX-State-Tree", icon: "▵" },
       ],
@@ -218,33 +218,33 @@ function CadTechStack() {
       id: "03",
       name: "Backend & Database",
       skills: [
-        { name: "Node.js", icon: "⬢" },
-        { name: "Bun", icon: "🧅" },
-        { name: "PostgreSQL", icon: "🐘" },
-        { name: "MongoDB", icon: "🍃" },
-        { name: "Redis", icon: "⚡" },
-        { name: "nginx", icon: "N" },
+        { name: "Node.js", icon: "⬢", logo: "/nodejs.png" },
+        { name: "Bun", icon: "🧅", logo: "/bun.png" },
+        { name: "PostgreSQL", icon: "🐘", logo: "/postgresql.png" },
+        { name: "MongoDB", icon: "🍃", logo: "/mongodb.png" },
+        { name: "Redis", icon: "⚡", logo: "/redis.png" },
+        { name: "nginx", icon: "N", logo: "/nginx.png" },
       ],
     },
     {
       id: "04",
       name: "Workflow & AI",
       skills: [
-        { name: "Cursor", icon: "✦" },
-        { name: "Claude", icon: "✳" },
-        { name: "Gemini", icon: "✦" },
-        { name: "ChatGPT", icon: "❖" },
-        { name: "Git", icon: "⎇" },
-        { name: "GitHub", icon: "🐙" },
-        { name: "Docker", icon: "🐳" },
-        { name: "Vercel", icon: "▲" },
+        { name: "Cursor", icon: "✦", logo: "/cursor.png" },
+        { name: "Claude", icon: "✳", logo: "/claude.png" },
+        { name: "Gemini", icon: "✦", logo: "/gemini-logo.png" },
+        { name: "ChatGPT", icon: "❖", logo: "/gpt.png" },
+        { name: "Git", icon: "⎇", logo: "/git.png" },
+        { name: "GitHub", icon: "🐙", logo: "/github.png" },
+        { name: "Docker", icon: "🐳", logo: "/docker.png" },
+        { name: "Vercel", icon: "▲", logo: "/vercel.svg" },
       ],
     },
     {
       id: "05",
       name: "IoT & Hardware",
       skills: [
-        { name: "Arduino", icon: "♾" },
+        { name: "Arduino", icon: "♾", logo: "/arduino.png" },
         { name: "ESP32", icon: "📻" },
       ],
     },
@@ -253,14 +253,14 @@ function CadTechStack() {
       name: "Analytics",
       skills: [
         { name: "OpenPanel", icon: "OI" },
-        { name: "PostHog", icon: "🦔" },
+        { name: "PostHog", icon: "🦔", logo: "/posthog.png" },
       ],
     },
     {
       id: "07",
       name: "Design",
       skills: [
-        { name: "Figma", icon: "❖" },
+        { name: "Figma", icon: "❖", logo: "/figma.png" },
         { name: "Paper", icon: "🗏" },
         { name: "Photoshop", icon: "Ps" },
       ],
@@ -370,21 +370,258 @@ function CadTechStack() {
                     e.currentTarget.style.backgroundColor = "var(--line-fill)";
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: "9px",
-                      fontWeight: 700,
-                      opacity: 0.8,
-                      padding: "1px 4px",
-                      borderRadius: "2px",
-                      border: "1px solid var(--line-stroke)",
-                      backgroundColor: "var(--background)",
-                    }}
-                  >
-                    {skill.icon}
-                  </span>
+                  {skill.logo ? (
+                    <div style={{ position: "relative", width: "12px", height: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Image 
+                        src={skill.logo} 
+                        alt={skill.name}
+                        fill
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                  ) : (
+                    <span
+                      style={{
+                        fontSize: "9px",
+                        fontWeight: 700,
+                        opacity: 0.8,
+                        padding: "1px 4px",
+                        borderRadius: "2px",
+                        border: "1px solid var(--line-stroke)",
+                        backgroundColor: "var(--background)",
+                      }}
+                    >
+                      {skill.icon}
+                    </span>
+                  )}
                   <span>{skill.name}</span>
                 </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── CAD PROJECTS SCHEMA ── */
+function CadProjects() {
+  const projects = [
+    {
+      id: "PRJ-01",
+      name: "Portfolio V3",
+      status: "PRODUCTION",
+      description: "A highly stylized developer portfolio built with Next.js, featuring a CAD-inspired brutalist design system and interactive blueprint matrices.",
+      tech: ["Next.js", "React", "TypeScript", "Vercel"],
+      link: "https://parminder.com",
+    },
+    {
+      id: "PRJ-02",
+      name: "Kosh App",
+      status: "DEVELOPMENT",
+      description: "An innovative fintech application bridging traditional finance and modern digital assets with robust cross-border infrastructure.",
+      tech: ["React Native", "Node.js", "GraphQL", "AWS"],
+      link: "#",
+    },
+    {
+      id: "PRJ-03",
+      name: "IoT Smart Hub",
+      status: "PROTOTYPE",
+      description: "A centralized command module for ESP32 and Arduino based sensor networks, gathering environmental telemetry in real-time.",
+      tech: ["ESP32", "Arduino", "C++", "MQTT", "React"],
+      link: "#",
+    }
+  ];
+
+  return (
+    <div
+      id="projects"
+      style={{
+        marginTop: "24px",
+        border: "1px solid var(--line-stroke-accent)",
+        backgroundColor: "var(--line-fill)",
+        position: "relative",
+        fontSize: "12px",
+        fontFamily: "var(--font-geist-mono)",
+      }}
+    >
+      {/* CAD Corner Crosshairs */}
+      <div style={{ position: "absolute", top: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", top: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+
+      {/* CAD Height Dimension (Left Side) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: "-24px",
+          width: "12px",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          pointerEvents: "none",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "0",
+            transform: "translate(-50%, -50%) rotate(-90deg)",
+            fontSize: "9px",
+            fontFamily: "var(--font-geist-mono)",
+            color: "var(--line-stroke-accent)",
+            backgroundColor: "var(--background)",
+            padding: "0 4px",
+            letterSpacing: "0.1em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          H: AUTO
+        </span>
+      </div>
+
+      {/* CAD Width Dimension (Top Side) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-24px",
+          left: "0",
+          right: "0",
+          height: "12px",
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          borderRight: "1px solid var(--line-stroke-accent)",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          pointerEvents: "none",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            fontSize: "9px",
+            fontFamily: "var(--font-geist-mono)",
+            color: "var(--line-stroke-accent)",
+            backgroundColor: "var(--background)",
+            padding: "0 4px",
+            letterSpacing: "0.1em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          W: 100% (SCALE 1:1)
+        </span>
+      </div>
+
+      {/* Header Bar */}
+      <div
+        style={{
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          padding: "10px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "var(--line-fill-accent)",
+          fontSize: "11px",
+          letterSpacing: "0.1em",
+          color: "var(--nav-link-hover)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ width: "6px", height: "6px", backgroundColor: "#3b82f6", borderRadius: "50%", display: "inline-block" }} />
+          <span>SPEC_DATA // PROJECTS_SCHEMA</span>
+        </div>
+        <span>TOTAL: 0{projects.length}_ACTIVE_NODES</span>
+      </div>
+
+      {/* Projects Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
+        {projects.map((prj, index) => (
+          <div
+            key={prj.id}
+            style={{
+              padding: "16px",
+              borderBottom: index === projects.length - 1 ? "none" : "1px solid var(--line-stroke)",
+              backgroundColor: "var(--background)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              transition: "background-color 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--line-fill)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--background)";
+            }}
+          >
+            {/* Project Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <span style={{ fontSize: "10px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>{prj.id} // {prj.status}</span>
+                <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--foreground)" }}>{prj.name}</span>
+              </div>
+              {prj.link && prj.link !== "#" && (
+                <a 
+                  href={prj.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "4px 8px",
+                    border: "1px dashed var(--line-stroke-accent)",
+                    color: "var(--foreground)",
+                    fontSize: "10px",
+                    textDecoration: "none",
+                    transition: "all 0.2s"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--foreground)";
+                    e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                  <span>VIEW_LIVE</span>
+                </a>
+              )}
+            </div>
+
+            {/* Description */}
+            <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
+              {prj.description}
+            </div>
+
+            {/* Tech Stack Tags */}
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
+              {prj.tech.map(t => (
+                <span 
+                  key={t}
+                  style={{
+                    padding: "4px 8px",
+                    backgroundColor: "var(--background)",
+                    border: "1px solid var(--line-stroke)",
+                    color: "var(--foreground)",
+                    fontSize: "10px",
+                    letterSpacing: "0.05em"
+                  }}
+                >
+                  {t}
+                </span>
               ))}
             </div>
           </div>
@@ -946,7 +1183,7 @@ export default function Page() {
                 lineHeight: "1",
               }}
             >
-              24
+              23
             </span>
           </div>
 
@@ -1038,7 +1275,7 @@ export default function Page() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--foreground)", fontWeight: 500 }}>
                   <BriefcaseIcon />
-                  <span>Founder @ Kosh</span>
+                  <span>Founder @Kosh</span>
                 </div>
               </div>
 
@@ -1423,6 +1660,9 @@ export default function Page() {
 
           {/* CAD GITHUB CONTRIBUTION CHART */}
           <CadGithubChart />
+
+          {/* CAD PROJECTS SCHEMA */}
+          <CadProjects />
 
           {/* CAD TECH STACK SPECIFICATION MATRIX */}
           <CadTechStack />
