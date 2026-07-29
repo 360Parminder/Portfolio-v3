@@ -45,6 +45,11 @@ export function Navbar() {
     const nextDark = !isDark;
     applyTheme(nextDark);
     localStorage.setItem("theme", nextDark ? "dark" : "light");
+
+    // Play mode-change sound
+    const audio = new Audio("/mode_change_sound.mp3");
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
   };
 
   return (

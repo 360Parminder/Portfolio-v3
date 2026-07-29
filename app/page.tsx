@@ -5,6 +5,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { TitleBlock } from "./components/TitleBlock";
 import { Caveat } from "next/font/google";
+import Link from "next/link";
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -312,7 +313,7 @@ function CadTechStack() {
         {stackCategories.map((cat, index) => (
           <div
             key={cat.id}
-            className="grid grid-cols-1 md:grid-cols-[200px_1fr]"
+            className={clsx('grid', 'grid-cols-1', 'md:grid-cols-[200px_1fr]')}
             style={{
               borderBottom: index === stackCategories.length - 1 ? "none" : "1px solid var(--line-stroke)",
             }}
@@ -372,8 +373,8 @@ function CadTechStack() {
                 >
                   {skill.logo ? (
                     <div style={{ position: "relative", width: "12px", height: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <Image 
-                        src={skill.logo} 
+                      <Image
+                        src={skill.logo}
                         alt={skill.name}
                         fill
                         style={{ objectFit: "contain" }}
@@ -406,6 +407,457 @@ function CadTechStack() {
 }
 
 /* ── CAD PROJECTS SCHEMA ── */
+/* ── CAD EXPERIENCE TIMELINE ── */
+function CadExperience() {
+  const experiences = [
+    {
+      id: "EXP-01",
+      role: "Founder & Lead Engineer",
+      company: "Kosh",
+      period: "2024 — PRESENT",
+      status: "ACTIVE",
+      description:
+        "Building an innovative fintech platform bridging traditional finance and modern digital assets. Leading architecture decisions, product design, and full-stack development.",
+      tech: ["React Native", "Node.js", "GraphQL", "AWS", "PostgreSQL"],
+    },
+    {
+      id: "EXP-02",
+      role: "Full Stack Developer",
+      company: "Freelance",
+      period: "2022 — 2024",
+      status: "COMPLETED",
+      description:
+        "Delivered high-quality web and mobile applications for diverse clients. Specialized in modern React architectures, performance optimization, and pixel-perfect UI implementation.",
+      tech: ["Next.js", "React", "TypeScript", "Tailwind", "Firebase"],
+    },
+    {
+      id: "EXP-03",
+      role: "Frontend Developer",
+      company: "Open Source",
+      period: "2021 — PRESENT",
+      status: "ONGOING",
+      description:
+        "Active contributor to multiple open-source projects. Focus on developer tooling, UI component libraries, and documentation improvements.",
+      tech: ["TypeScript", "React", "Vite", "GitHub Actions"],
+    },
+  ];
+
+  return (
+    <div
+      id="experience"
+      style={{
+        marginTop: "24px",
+        border: "1px solid var(--line-stroke-accent)",
+        backgroundColor: "var(--line-fill)",
+        position: "relative",
+        fontSize: "12px",
+        fontFamily: "var(--font-geist-mono)",
+      }}
+    >
+      {/* CAD Corner Crosshairs */}
+      <div style={{ position: "absolute", top: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", top: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+
+      {/* CAD Height Dimension (Left Side) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: "-12px",
+          width: "6px",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          pointerEvents: "none",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "0",
+            transform: "translate(-50%, -50%) rotate(-90deg)",
+            fontSize: "9px",
+            fontFamily: "var(--font-geist-mono)",
+            color: "var(--line-stroke-accent)",
+            backgroundColor: "var(--background)",
+            padding: "0 4px",
+            letterSpacing: "0.1em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          H: AUTO
+        </span>
+      </div>
+
+      {/* Header Bar */}
+      <div
+        style={{
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          padding: "10px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "var(--line-fill-accent)",
+          fontSize: "11px",
+          letterSpacing: "0.1em",
+          color: "var(--nav-link-hover)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ width: "6px", height: "6px", backgroundColor: "#f59e0b", borderRadius: "50%", display: "inline-block" }} />
+          <span>SPEC_DATA // EXPERIENCE_TIMELINE</span>
+        </div>
+        <span>TOTAL: 0{experiences.length}_NODES</span>
+      </div>
+
+      {/* Experience Entries */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
+        {experiences.map((exp, index) => (
+          <div
+            key={exp.id}
+            style={{
+              padding: "20px 16px",
+              borderBottom: index === experiences.length - 1 ? "none" : "1px solid var(--line-stroke)",
+              backgroundColor: "var(--background)",
+              display: "flex",
+              gap: "16px",
+              transition: "background-color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--line-fill)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--background)";
+            }}
+          >
+            {/* Timeline Column */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                minWidth: "20px",
+                position: "relative",
+              }}
+            >
+              {/* Node */}
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  border: "2px solid var(--line-stroke-accent)",
+                  borderRadius: "50%",
+                  backgroundColor: exp.status === "ACTIVE" ? "#22c55e" : exp.status === "ONGOING" ? "#3b82f6" : "var(--background)",
+                  zIndex: 2,
+                  flexShrink: 0,
+                  marginTop: "4px",
+                }}
+              />
+              {/* Line */}
+              {index < experiences.length - 1 && (
+                <div
+                  style={{
+                    width: "1px",
+                    flex: 1,
+                    borderLeft: "1px dashed var(--line-stroke-accent)",
+                    marginTop: "4px",
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
+              {/* Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                  <span style={{ fontSize: "9px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>
+                    {exp.id} // {exp.status}
+                  </span>
+                  <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>
+                    {exp.role}
+                  </span>
+                  <span style={{ fontSize: "12px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
+                    @ {exp.company}
+                  </span>
+                </div>
+                <span
+                  style={{
+                    fontSize: "10px",
+                    color: "var(--nav-link)",
+                    letterSpacing: "0.05em",
+                    padding: "4px 8px",
+                    border: "1px dashed var(--line-stroke)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {exp.period}
+                </span>
+              </div>
+
+              {/* Description */}
+              <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
+                {exp.description}
+              </div>
+
+              {/* Tech Tags */}
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
+                {exp.tech.map((t) => (
+                  <span
+                    key={t}
+                    style={{
+                      padding: "3px 7px",
+                      backgroundColor: "var(--background)",
+                      border: "1px solid var(--line-stroke)",
+                      color: "var(--foreground)",
+                      fontSize: "10px",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── CAD EDUCATION TIMELINE ── */
+function CadEducation() {
+  const education = [
+    {
+      id: "EDU-01",
+      degree: "Bachelor of Technology",
+      field: "Computer Science & Engineering",
+      institution: "Rajasthan Technical University",
+      period: "2020 — 2024",
+      status: "COMPLETED",
+      highlights: [
+        "Data Structures & Algorithms",
+        "Operating Systems",
+        "Database Management",
+        "Computer Networks",
+      ],
+    },
+    {
+      id: "EDU-02",
+      degree: "Higher Secondary (XII)",
+      field: "Science — PCM",
+      institution: "CBSE Board",
+      period: "2018 — 2020",
+      status: "COMPLETED",
+      highlights: ["Physics", "Chemistry", "Mathematics"],
+    },
+  ];
+
+  return (
+    <div
+      id="education"
+      style={{
+        marginTop: "24px",
+        border: "1px solid var(--line-stroke-accent)",
+        backgroundColor: "var(--line-fill)",
+        position: "relative",
+        fontSize: "12px",
+        fontFamily: "var(--font-geist-mono)",
+      }}
+    >
+      {/* CAD Corner Crosshairs */}
+      <div style={{ position: "absolute", top: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", top: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+
+      {/* CAD Height Dimension (Left Side) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: "-12px",
+          width: "6px",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          pointerEvents: "none",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "0",
+            transform: "translate(-50%, -50%) rotate(-90deg)",
+            fontSize: "9px",
+            fontFamily: "var(--font-geist-mono)",
+            color: "var(--line-stroke-accent)",
+            backgroundColor: "var(--background)",
+            padding: "0 4px",
+            letterSpacing: "0.1em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          H: AUTO
+        </span>
+      </div>
+
+      {/* Header Bar */}
+      <div
+        style={{
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          padding: "10px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "var(--line-fill-accent)",
+          fontSize: "11px",
+          letterSpacing: "0.1em",
+          color: "var(--nav-link-hover)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ width: "6px", height: "6px", backgroundColor: "#8b5cf6", borderRadius: "50%", display: "inline-block" }} />
+          <span>SPEC_DATA // EDUCATION_SCHEMA</span>
+        </div>
+        <span>TOTAL: 0{education.length}_RECORDS</span>
+      </div>
+
+      {/* Education Entries */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
+        {education.map((edu, index) => (
+          <div
+            key={edu.id}
+            style={{
+              padding: "20px 16px",
+              borderBottom: index === education.length - 1 ? "none" : "1px solid var(--line-stroke)",
+              backgroundColor: "var(--background)",
+              display: "flex",
+              gap: "16px",
+              transition: "background-color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--line-fill)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--background)";
+            }}
+          >
+            {/* Timeline Column */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                minWidth: "20px",
+                position: "relative",
+              }}
+            >
+              {/* Node — square for education (vs circle for experience) */}
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  border: "2px solid var(--line-stroke-accent)",
+                  backgroundColor: "var(--background)",
+                  zIndex: 2,
+                  flexShrink: 0,
+                  marginTop: "4px",
+                  transform: "rotate(45deg)",
+                }}
+              />
+              {/* Line */}
+              {index < education.length - 1 && (
+                <div
+                  style={{
+                    width: "1px",
+                    flex: 1,
+                    borderLeft: "1px dashed var(--line-stroke-accent)",
+                    marginTop: "4px",
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
+              {/* Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                  <span style={{ fontSize: "9px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>
+                    {edu.id} // {edu.status}
+                  </span>
+                  <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>
+                    {edu.degree}
+                  </span>
+                  <span style={{ fontSize: "12px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
+                    {edu.field} — {edu.institution}
+                  </span>
+                </div>
+                <span
+                  style={{
+                    fontSize: "10px",
+                    color: "var(--nav-link)",
+                    letterSpacing: "0.05em",
+                    padding: "4px 8px",
+                    border: "1px dashed var(--line-stroke)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {edu.period}
+                </span>
+              </div>
+
+              {/* Highlight Tags */}
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
+                {edu.highlights.map((h) => (
+                  <span
+                    key={h}
+                    style={{
+                      padding: "3px 7px",
+                      backgroundColor: "var(--background)",
+                      border: "1px solid var(--line-stroke)",
+                      color: "var(--foreground)",
+                      fontSize: "10px",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    {h}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* CAD Footer Bar */}
+      <div
+        style={{
+          borderTop: "1px solid var(--line-stroke)",
+          padding: "8px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          fontSize: "9px",
+          color: "var(--nav-link)",
+          letterSpacing: "0.05em",
+        }}
+      >
+        <span>CREDENTIAL_VERIFICATION // VALID</span>
+        <span>LAST_UPDATED: 2026-07</span>
+      </div>
+    </div>
+  );
+}
+
 function CadProjects() {
   const projects = [
     {
@@ -567,7 +1019,7 @@ function CadProjects() {
                 <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--foreground)" }}>{prj.name}</span>
               </div>
               {prj.link && prj.link !== "#" && (
-                <a 
+                <a
                   href={prj.link}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -609,7 +1061,7 @@ function CadProjects() {
             {/* Tech Stack Tags */}
             <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
               {prj.tech.map(t => (
-                <span 
+                <span
                   key={t}
                   style={{
                     padding: "4px 8px",
@@ -988,7 +1440,7 @@ export default function Page() {
         >
           {/* CAD-style rotating role label */}
           <div
-            className="hidden 2xl:block"
+            className={clsx('hidden', '2xl:block')}
             style={{
               position: "absolute",
               top: "-55px",
@@ -1276,7 +1728,8 @@ export default function Page() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--foreground)", fontWeight: 500 }}>
                   <BriefcaseIcon />
-                  <span>Founder @Kosh</span>
+                  <span>Building</span>
+                  <Link className="text-primary" href="https://kosh.uno">Kosh</Link>
                 </div>
               </div>
 
@@ -1659,6 +2112,12 @@ export default function Page() {
             </div>
           </div>
 
+          {/* CAD EXPERIENCE TIMELINE */}
+          <CadExperience />
+
+          {/* CAD EDUCATION TIMELINE */}
+          <CadEducation />
+
           {/* CAD GITHUB CONTRIBUTION CHART */}
           <CadGithubChart />
 
@@ -1669,7 +2128,7 @@ export default function Page() {
           <CadTechStack />
 
           {/* CAD Title Block for Mobile (Hidden on Desktop) */}
-          <div className="flex 2xl:hidden mt-12 mb-8 justify-center">
+          <div className={clsx('flex', '2xl:hidden', 'mt-12', 'mb-8', 'justify-center')}>
             <TitleBlock className="relative" />
           </div>
         </section>
