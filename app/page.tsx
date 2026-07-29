@@ -636,9 +636,9 @@ function CadEducation() {
     {
       id: "EDU-01",
       degree: "Bachelor of Technology",
-      field: "Computer Science & Engineering",
-      institution: "Rajasthan Technical University",
-      period: "2020 — 2024",
+      field: "Computer Science",
+      institution: "Bikaner Technical University, Bikaner",
+      period: "2021 — 2025",
       status: "COMPLETED",
       highlights: [
         "Data Structures & Algorithms",
@@ -649,10 +649,10 @@ function CadEducation() {
     },
     {
       id: "EDU-02",
-      degree: "Higher Secondary (XII)",
+      degree: "Senior Secondary (XII)",
       field: "Science — PCM",
-      institution: "CBSE Board",
-      period: "2018 — 2020",
+      institution: "VLM Public School, Alwar",
+      period: "2021",
       status: "COMPLETED",
       highlights: ["Physics", "Chemistry", "Mathematics"],
     },
@@ -862,28 +862,44 @@ function CadProjects() {
   const projects = [
     {
       id: "PRJ-01",
-      name: "Portfolio V3",
+      name: "Kosh",
       status: "PRODUCTION",
-      description: "A highly stylized developer portfolio built with Next.js, featuring a CAD-inspired brutalist design system and interactive blueprint matrices.",
-      tech: ["Next.js", "React", "TypeScript", "Vercel"],
-      link: "https://parminder.com",
+      description: "The Future of Email. Say goodbye to cluttered inboxes with an effortless, chat-like interface. Combine the simplicity of instant messaging with the power of email, featuring AI-powered smart filtering, instant custom domains, and a unified cross-platform experience — web, iOS, and Android.",
+      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Motion", "Socket.io"],
+      link: "https://kosh.uno",
     },
     {
       id: "PRJ-02",
-      name: "Kosh App",
-      status: "DEVELOPMENT",
-      description: "An innovative fintech application bridging traditional finance and modern digital assets with robust cross-border infrastructure.",
-      tech: ["React Native", "Node.js", "GraphQL", "AWS"],
+      name: "Rajdoot",
+      status: "PRODUCTION",
+      description: "Sophisticated Messaging APIs for Developers. Build powerful messaging applications with our elegant, reliable, and affordable API platform.",
+      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
       link: "#",
     },
     {
       id: "PRJ-03",
-      name: "IoT Smart Hub",
-      status: "PROTOTYPE",
-      description: "A centralized command module for ESP32 and Arduino based sensor networks, gathering environmental telemetry in real-time.",
-      tech: ["ESP32", "Arduino", "C++", "MQTT", "React"],
+      name: "Swasthya",
+      status: "PRODUCTION",
+      description: "A platform that allows you to monitor your health and get alerts when your health is not good. It also allows you to track your family and friends medication and health.",
+      tech: ["React Native", "Node.js", "Tailwind", "Motion", "MongoDB", "AWS", "Cloudinary", "IOT"],
       link: "#",
-    }
+    },
+    {
+      id: "PRJ-04",
+      name: "Aura",
+      status: "PRODUCTION",
+      description: "Mobile-first responsive design with modern animations.",
+      tech: ["React", "Firebase", "Tailwind", "Motion", "Node.js", "MongoDB", "Razorpay"],
+      link: "#",
+    },
+    {
+      id: "PRJ-05",
+      name: "The Slug",
+      status: "PRODUCTION",
+      description: "URL Shortener with a twist. Shorten your URLs and share them with the world. The Slug is a URL shortener that allows you to create short links for your long URLs.",
+      tech: ["React", "Node.js", "Tailwind", "MongoDB", "Motion"],
+      link: "#",
+    },
   ];
 
   return (
@@ -1357,6 +1373,192 @@ function CadGithubChart() {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── CAD ABOUT ME SECTION ── */
+function CadAboutMe() {
+  const [greeting, setGreeting] = useState("Good Evening");
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) setGreeting("Good Morning");
+    else if (hour >= 12 && hour < 17) setGreeting("Good Afternoon");
+    else setGreeting("Good Evening");
+  }, []);
+
+  const aboutParts = [
+    {
+      id: "ABT-01",
+      label: "WHO_I_AM",
+      text: "I'm Parminder — a full-stack developer and founder of Kosh, passionate about building products that feel alive. I love turning complex problems into clean, elegant interfaces that people actually enjoy using.",
+    },
+    {
+      id: "ABT-02",
+      label: "WHAT_I_DO",
+      text: "I craft modern web and mobile experiences using React, Node.js, and cloud-native architectures. From real-time messaging systems to IoT health platforms, I build end-to-end solutions that scale.",
+    },
+    {
+      id: "ABT-03",
+      label: "BEYOND_CODE",
+      text: "When I'm not shipping code, you'll find me exploring new frameworks, contributing to open source, or diving deep into system design. I believe great software is built at the intersection of engineering and empathy.",
+    },
+  ];
+
+  return (
+    <div
+      id="about"
+      style={{
+        marginTop: "16px",
+        border: "1px solid var(--line-stroke-accent)",
+        backgroundColor: "var(--line-fill)",
+        position: "relative",
+        fontSize: "12px",
+        fontFamily: "var(--font-geist-mono)",
+      }}
+    >
+      {/* CAD Corner Crosshairs */}
+      <div style={{ position: "absolute", top: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", top: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+      <div style={{ position: "absolute", bottom: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+
+      {/* Header Bar */}
+      <div
+        style={{
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          padding: "8px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "var(--line-fill-accent)",
+          fontSize: "10px",
+          letterSpacing: "0.1em",
+          color: "var(--nav-link-hover)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ width: "6px", height: "6px", backgroundColor: "#22c55e", borderRadius: "50%", display: "inline-block" }} />
+          <span>SPEC_DATA // ABOUT_SCHEMA</span>
+        </div>
+        <span>TOTAL: 03_SECTIONS</span>
+      </div>
+
+      {/* Greeting Heading */}
+      <div
+        style={{
+          padding: "20px 14px 8px",
+          borderBottom: "1px dashed var(--line-stroke)",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "9px",
+            color: "var(--nav-link)",
+            letterSpacing: "0.1em",
+            marginBottom: "6px",
+          }}
+        >
+          SYS.TIME // GREETING_MODULE
+        </div>
+        <div
+          style={{
+            fontSize: "22px",
+            fontWeight: 700,
+            color: "var(--foreground)",
+            letterSpacing: "-0.02em",
+            lineHeight: "1.3",
+          }}
+        >
+          {greeting}, I&apos;m Parminder{" "}
+          <span style={{ display: "inline-block", animation: "wave 2.5s infinite", transformOrigin: "70% 70%", fontSize: "22px" }}>👋</span>
+        </div>
+        <div
+          style={{
+            fontSize: "11px",
+            color: "var(--nav-link-hover)",
+            marginTop: "4px",
+            letterSpacing: "0.02em",
+          }}
+        >
+          Full-Stack Developer · Founder · Open Source Enthusiast
+        </div>
+      </div>
+
+      {/* 3-Part About Grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: "0px",
+        }}
+      >
+        {aboutParts.map((part, index) => (
+          <div
+            key={part.id}
+            style={{
+              padding: "14px",
+              borderRight: index < aboutParts.length - 1 ? "1px solid var(--line-stroke)" : "none",
+              borderBottom: "1px solid var(--line-stroke)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
+            {/* Section Label */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "9px",
+                color: "var(--nav-link)",
+                letterSpacing: "0.1em",
+              }}
+            >
+              <span
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  border: "1.5px solid var(--foreground)",
+                  display: "inline-block",
+                  opacity: 0.6,
+                }}
+              />
+              <span>0{index + 1} // {part.label}</span>
+            </div>
+
+            {/* Section Text */}
+            <div
+              style={{
+                color: "var(--nav-link-hover)",
+                fontSize: "12px",
+                lineHeight: "1.7",
+              }}
+            >
+              {part.text}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer Metadata Bar */}
+      <div
+        style={{
+          padding: "8px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          fontSize: "9px",
+          color: "var(--nav-link)",
+          letterSpacing: "0.05em",
+          borderTop: "1px dashed var(--line-stroke)",
+        }}
+      >
+        <span>NODE: ABOUT_ME // STATUS: RENDERED</span>
+        <span>GRID: 03_COL x 01_ROW</span>
       </div>
     </div>
   );
@@ -1926,7 +2128,7 @@ export default function Page() {
             >
               {/* X */}
               <a
-                href="https://x.com"
+                href="https://x.com/360parminder"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -1957,7 +2159,7 @@ export default function Page() {
 
               {/* GitHub */}
               <a
-                href="https://github.com"
+                href="https://github.com/360Parminder"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -1988,7 +2190,7 @@ export default function Page() {
 
               {/* LinkedIn */}
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/360parminder"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -2019,7 +2221,7 @@ export default function Page() {
 
               {/* daily.dev */}
               <a
-                href="https://daily.dev"
+                href="https://daily.dev/360parminder"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -2050,7 +2252,7 @@ export default function Page() {
 
               {/* Discord */}
               <a
-                href="https://discord.com"
+                href="https://discord.com/users/717397694183768076"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -2081,7 +2283,7 @@ export default function Page() {
 
               {/* Medium */}
               <a
-                href="https://medium.com"
+                href="https://medium.com/@360Parminder"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -2111,6 +2313,11 @@ export default function Page() {
               </a>
             </div>
           </div>
+          {/* CAD GITHUB CONTRIBUTION CHART */}
+          <CadGithubChart />
+
+          {/* CAD ABOUT ME SECTION */}
+          <CadAboutMe />
 
           {/* CAD EXPERIENCE TIMELINE */}
           <CadExperience />
@@ -2118,8 +2325,7 @@ export default function Page() {
           {/* CAD EDUCATION TIMELINE */}
           <CadEducation />
 
-          {/* CAD GITHUB CONTRIBUTION CHART */}
-          <CadGithubChart />
+
 
           {/* CAD PROJECTS SCHEMA */}
           <CadProjects />
