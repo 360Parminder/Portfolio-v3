@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import { TitleBlock } from "./components/TitleBlock";
@@ -196,7 +196,10 @@ function CadTechStack() {
         { name: "TypeScript", icon: "TS", logo: "/typescript.png" },
         { name: "JavaScript", icon: "JS", logo: "/javascript.png" },
         { name: "Python", icon: "PY", logo: "/python.png" },
-        { name: "Java", icon: "JV" },
+        { name: "Java", icon: "JV", logo: "/java.png" },
+        { name: "C++", icon: "C++", logo: "/c++.png" },
+        { name: "C", icon: "C", logo: "/c.png" },
+        { name: 'sql', icon: 'SQL', logo: '/sql.png' }
       ],
     },
     {
@@ -859,6 +862,8 @@ function CadEducation() {
 }
 
 function CadProjects() {
+  const [expandedId, setExpandedId] = useState<string>("PRJ-01");
+
   const projects = [
     {
       id: "PRJ-01",
@@ -874,7 +879,7 @@ function CadProjects() {
       status: "PRODUCTION",
       description: "Sophisticated Messaging APIs for Developers. Build powerful messaging applications with our elegant, reliable, and affordable API platform.",
       tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
-      link: "#",
+      link: "https://Rajdoot.wtf",
     },
     {
       id: "PRJ-03",
@@ -882,23 +887,15 @@ function CadProjects() {
       status: "PRODUCTION",
       description: "A platform that allows you to monitor your health and get alerts when your health is not good. It also allows you to track your family and friends medication and health.",
       tech: ["React Native", "Node.js", "Tailwind", "Motion", "MongoDB", "AWS", "Cloudinary", "IOT"],
-      link: "#",
+      link: "https://swasthya.parminder.pro",
     },
     {
       id: "PRJ-04",
-      name: "Aura",
+      name: "ZURL",
       status: "PRODUCTION",
-      description: "Mobile-first responsive design with modern animations.",
-      tech: ["React", "Firebase", "Tailwind", "Motion", "Node.js", "MongoDB", "Razorpay"],
-      link: "#",
-    },
-    {
-      id: "PRJ-05",
-      name: "The Slug",
-      status: "PRODUCTION",
-      description: "URL Shortener with a twist. Shorten your URLs and share them with the world. The Slug is a URL shortener that allows you to create short links for your long URLs.",
+      description: "URL Shortener with a twist. Shorten your URLs and share them with the world. ZURL is a URL shortener that allows you to create short links for your long URLs.",
       tech: ["React", "Node.js", "Tailwind", "MongoDB", "Motion"],
-      link: "#",
+      link: "https://zurl.parminder.pro",
     },
   ];
 
@@ -1009,91 +1006,188 @@ function CadProjects() {
 
       {/* Projects Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
-        {projects.map((prj, index) => (
-          <div
-            key={prj.id}
-            style={{
-              padding: "16px",
-              borderBottom: index === projects.length - 1 ? "none" : "1px solid var(--line-stroke)",
-              backgroundColor: "var(--background)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-              transition: "background-color 0.2s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--line-fill)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--background)";
-            }}
-          >
-            {/* Project Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{ fontSize: "10px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>{prj.id} // {prj.status}</span>
-                <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--foreground)" }}>{prj.name}</span>
+        {projects.map((prj, index) => {
+          const isExpanded = expandedId === prj.id;
+
+          return (
+            <div
+              key={prj.id}
+              style={{
+                borderBottom: index === projects.length - 1 ? "none" : "1px solid var(--line-stroke)",
+                backgroundColor: "var(--background)",
+                transition: "background-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--background)";
+              }}
+            >
+              {/* Compact Header Row — always visible */}
+              <div
+                style={{
+                  padding: "12px 16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => setExpandedId(isExpanded ? "" : prj.id)}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  {/* Project icon */}
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      border: "1px solid var(--line-stroke-accent)",
+                      borderRadius: "6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      color: "var(--foreground)",
+                      backgroundColor: "var(--line-fill-accent)",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {prj.name.charAt(0)}
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--foreground)" }}>{prj.name}</span>
+                      <span
+                        style={{
+                          fontSize: "8px",
+                          padding: "2px 6px",
+                          border: "1px solid var(--line-stroke-accent)",
+                          color: "var(--nav-link)",
+                          letterSpacing: "0.08em",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {prj.status}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: "9px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>{prj.id}</span>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  {/* Live link */}
+                  {prj.link && prj.link !== "#" && (
+                    <a
+                      href={prj.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        padding: "4px 8px",
+                        border: "1px dashed var(--line-stroke-accent)",
+                        color: "var(--foreground)",
+                        fontSize: "10px",
+                        textDecoration: "none",
+                        transition: "all 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "var(--foreground)";
+                        e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                      <span>LIVE</span>
+                    </a>
+                  )}
+
+                  {/* Expand/Collapse chevron */}
+                  <div
+                    style={{
+                      width: "28px",
+                      height: "28px",
+                      border: "1px solid var(--line-stroke-accent)",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transition: "all 0.2s",
+                      color: "var(--foreground)",
+                    }}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{
+                        transition: "transform 0.3s ease",
+                        transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                      }}
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-              {prj.link && prj.link !== "#" && (
-                <a
-                  href={prj.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    padding: "4px 8px",
-                    border: "1px dashed var(--line-stroke-accent)",
-                    color: "var(--foreground)",
-                    fontSize: "10px",
-                    textDecoration: "none",
-                    transition: "all 0.2s"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "var(--foreground)";
-                    e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                    <polyline points="15 3 21 3 21 9" />
-                    <line x1="10" y1="14" x2="21" y2="3" />
-                  </svg>
-                  <span>VIEW_LIVE</span>
-                </a>
-              )}
-            </div>
 
-            {/* Description */}
-            <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
-              {prj.description}
-            </div>
+              {/* Expandable Details */}
+              <div
+                style={{
+                  overflow: "hidden",
+                  maxHeight: isExpanded ? "500px" : "0px",
+                  transition: "max-height 0.4s ease, opacity 0.3s ease",
+                  opacity: isExpanded ? 1 : 0,
+                }}
+              >
+                <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Divider */}
+                  <div style={{ borderTop: "1px dashed var(--line-stroke)", marginBottom: "0" }} />
 
-            {/* Tech Stack Tags */}
-            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
-              {prj.tech.map(t => (
-                <span
-                  key={t}
-                  style={{
-                    padding: "4px 8px",
-                    backgroundColor: "var(--background)",
-                    border: "1px solid var(--line-stroke)",
-                    color: "var(--foreground)",
-                    fontSize: "10px",
-                    letterSpacing: "0.05em"
-                  }}
-                >
-                  {t}
-                </span>
-              ))}
+                  {/* Description */}
+                  <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
+                    {prj.description}
+                  </div>
+
+                  {/* Tech Stack Tags */}
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                    {prj.tech.map(t => (
+                      <span
+                        key={t}
+                        style={{
+                          padding: "4px 8px",
+                          backgroundColor: "var(--background)",
+                          border: "1px solid var(--line-stroke)",
+                          color: "var(--foreground)",
+                          fontSize: "10px",
+                          letterSpacing: "0.05em"
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -1104,6 +1198,8 @@ function CadGithubChart() {
   const [weeks, setWeeks] = useState<{ date: string; count: number; level: number }[][]>([]);
   const [totalContributions, setTotalContributions] = useState<number | null>(null);
   const [monthLabels, setMonthLabels] = useState<{ label: string; x: number }[]>([]);
+  const [tooltip, setTooltip] = useState<{ date: string; count: number; x: number; y: number } | null>(null);
+  const chartRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Fetch live contribution data from our GraphQL API proxy
@@ -1165,11 +1261,13 @@ function CadGithubChart() {
 
   return (
     <div
+      ref={chartRef}
       style={{
         marginTop: "16px",
         border: "1px solid var(--line-stroke-accent)",
         backgroundColor: "var(--line-fill)",
         position: "relative",
+        overflow: "visible",
         fontSize: "12px",
         fontFamily: "var(--font-geist-mono)",
       }}
@@ -1275,9 +1373,20 @@ function CadGithubChart() {
                         fill={fillStyle}
                         stroke="var(--line-stroke-accent)"
                         strokeWidth="1"
-                      >
-                        <title>{`${day.date}: ${day.level === 0 ? "No activity" : day.level === 1 ? "Low activity" : day.level === 2 ? "Moderate activity" : day.level === 3 ? "High activity" : "Intense activity"}`}</title>
-                      </rect>
+                        style={{ cursor: day.date ? "pointer" : "default" }}
+                        onMouseEnter={(e) => {
+                          if (!day.date || !chartRef.current) return;
+                          const svgRect = chartRef.current.getBoundingClientRect();
+                          const cellRect = (e.target as SVGRectElement).getBoundingClientRect();
+                          setTooltip({
+                            date: day.date,
+                            count: day.count,
+                            x: cellRect.left - svgRect.left + cellRect.width / 2,
+                            y: cellRect.top - svgRect.top,
+                          });
+                        }}
+                        onMouseLeave={() => setTooltip(null)}
+                      />
                     );
                   })}
                 </g>
@@ -1374,6 +1483,56 @@ function CadGithubChart() {
           </div>
         </div>
       </div>
+
+      {/* Custom Tooltip — rendered outside scroll container to avoid clipping */}
+      {tooltip && (
+        <div
+          style={{
+            position: "absolute",
+            left: tooltip.x,
+            top: tooltip.y - 6,
+            transform: "translate(-50%, -100%)",
+            backgroundColor: "var(--foreground)",
+            color: "var(--background)",
+            padding: "6px 10px",
+            borderRadius: "4px",
+            fontSize: "11px",
+            fontFamily: "var(--font-geist-mono)",
+            letterSpacing: "0.03em",
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+            zIndex: 50,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "2px",
+          }}
+        >
+          <span style={{ fontWeight: 700 }}>
+            {tooltip.count} {tooltip.count === 1 ? "contribution" : "contributions"}
+          </span>
+          <span style={{ fontSize: "9px", opacity: 0.7 }}>
+            {(() => {
+              const parts = tooltip.date.split("-");
+              const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+              return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+            })()}
+          </span>
+          {/* Tooltip Arrow */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-4px",
+              left: "50%",
+              transform: "translateX(-50%) rotate(45deg)",
+              width: "8px",
+              height: "8px",
+              backgroundColor: "var(--foreground)",
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
