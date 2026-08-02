@@ -412,6 +412,8 @@ function CadTechStack() {
 /* ── CAD PROJECTS SCHEMA ── */
 /* ── CAD EXPERIENCE TIMELINE ── */
 function CadExperience() {
+  const [expandedId, setExpandedId] = useState<string>("EXP-01");
+
   const experiences = [
     {
       id: "EXP-01",
@@ -519,115 +521,154 @@ function CadExperience() {
 
       {/* Experience Entries */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
-        {experiences.map((exp, index) => (
-          <div
-            key={exp.id}
-            style={{
-              padding: "20px 16px",
-              borderBottom: index === experiences.length - 1 ? "none" : "1px solid var(--line-stroke)",
-              backgroundColor: "var(--background)",
-              display: "flex",
-              gap: "16px",
-              transition: "background-color 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--line-fill)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--background)";
-            }}
-          >
-            {/* Timeline Column */}
+        {experiences.map((exp, index) => {
+          const isExpanded = expandedId === exp.id;
+          const statusColor = exp.status === "ACTIVE" ? "#22c55e" : exp.status === "ONGOING" ? "#3b82f6" : "var(--nav-link)";
+
+          return (
             <div
+              key={exp.id}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                minWidth: "20px",
-                position: "relative",
+                borderBottom: index === experiences.length - 1 ? "none" : "1px solid var(--line-stroke)",
+                backgroundColor: "var(--background)",
+                transition: "background-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--background)";
               }}
             >
-              {/* Node */}
+              {/* Compact Header Row — always visible */}
               <div
                 style={{
-                  width: "10px",
-                  height: "10px",
-                  border: "2px solid var(--line-stroke-accent)",
-                  borderRadius: "50%",
-                  backgroundColor: exp.status === "ACTIVE" ? "#22c55e" : exp.status === "ONGOING" ? "#3b82f6" : "var(--background)",
-                  zIndex: 2,
-                  flexShrink: 0,
-                  marginTop: "4px",
+                  padding: "12px 16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
                 }}
-              />
-              {/* Line */}
-              {index < experiences.length - 1 && (
-                <div
-                  style={{
-                    width: "1px",
-                    flex: 1,
-                    borderLeft: "1px dashed var(--line-stroke-accent)",
-                    marginTop: "4px",
-                  }}
-                />
-              )}
-            </div>
-
-            {/* Content */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
-              {/* Header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                  <span style={{ fontSize: "9px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>
-                    {exp.id} // {exp.status}
-                  </span>
-                  <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>
-                    {exp.role}
-                  </span>
-                  <span style={{ fontSize: "12px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
-                    @ {exp.company}
-                  </span>
-                </div>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    color: "var(--nav-link)",
-                    letterSpacing: "0.05em",
-                    padding: "4px 8px",
-                    border: "1px dashed var(--line-stroke)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {exp.period}
-                </span>
-              </div>
-
-              {/* Description */}
-              <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
-                {exp.description}
-              </div>
-
-              {/* Tech Tags */}
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
-                {exp.tech.map((t) => (
-                  <span
-                    key={t}
+                onClick={() => setExpandedId(isExpanded ? "" : exp.id)}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  {/* Company icon */}
+                  <div
                     style={{
-                      padding: "3px 7px",
-                      backgroundColor: "var(--background)",
-                      border: "1px solid var(--line-stroke)",
+                      width: "32px",
+                      height: "32px",
+                      border: "1px solid var(--line-stroke-accent)",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "14px",
+                      fontWeight: 700,
                       color: "var(--foreground)",
-                      fontSize: "10px",
-                      letterSpacing: "0.05em",
+                      backgroundColor: "var(--line-fill-accent)",
+                      flexShrink: 0,
                     }}
                   >
-                    {t}
-                  </span>
-                ))}
+                    {exp.company.charAt(0)}
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--foreground)" }}>{exp.role}</span>
+                      <span
+                        style={{
+                          fontSize: "8px",
+                          padding: "2px 6px",
+                          border: `1px solid ${statusColor}`,
+                          color: statusColor,
+                          letterSpacing: "0.08em",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {exp.status}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: "10px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
+                      @ {exp.company} · <span style={{ color: "var(--nav-link)", fontWeight: 400 }}>{exp.period}</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Expand/Collapse chevron */}
+                <div
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    border: "1px solid var(--line-stroke-accent)",
+                    borderRadius: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "all 0.2s",
+                    color: "var(--foreground)",
+                    flexShrink: 0,
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transition: "transform 0.3s ease",
+                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Expandable Details */}
+              <div
+                style={{
+                  overflow: "hidden",
+                  maxHeight: isExpanded ? "500px" : "0px",
+                  transition: "max-height 0.4s ease, opacity 0.3s ease",
+                  opacity: isExpanded ? 1 : 0,
+                }}
+              >
+                <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Divider */}
+                  <div style={{ borderTop: "1px dashed var(--line-stroke)" }} />
+
+                  {/* Description */}
+                  <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
+                    {exp.description}
+                  </div>
+
+                  {/* Tech Tags */}
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                    {exp.tech.map((t) => (
+                      <span
+                        key={t}
+                        style={{
+                          padding: "3px 7px",
+                          backgroundColor: "var(--background)",
+                          border: "1px solid var(--line-stroke)",
+                          color: "var(--foreground)",
+                          fontSize: "10px",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -635,6 +676,8 @@ function CadExperience() {
 
 /* ── CAD EDUCATION TIMELINE ── */
 function CadEducation() {
+  const [expandedId, setExpandedId] = useState<string>("EDU-01");
+
   const education = [
     {
       id: "EDU-01",
@@ -735,110 +778,152 @@ function CadEducation() {
 
       {/* Education Entries */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
-        {education.map((edu, index) => (
-          <div
-            key={edu.id}
-            style={{
-              padding: "20px 16px",
-              borderBottom: index === education.length - 1 ? "none" : "1px solid var(--line-stroke)",
-              backgroundColor: "var(--background)",
-              display: "flex",
-              gap: "16px",
-              transition: "background-color 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--line-fill)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--background)";
-            }}
-          >
-            {/* Timeline Column */}
+        {education.map((edu, index) => {
+          const isExpanded = expandedId === edu.id;
+
+          return (
             <div
+              key={edu.id}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                minWidth: "20px",
-                position: "relative",
+                borderBottom: index === education.length - 1 ? "none" : "1px solid var(--line-stroke)",
+                backgroundColor: "var(--background)",
+                transition: "background-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--background)";
               }}
             >
-              {/* Node — square for education (vs circle for experience) */}
+              {/* Compact Header Row — always visible */}
               <div
                 style={{
-                  width: "10px",
-                  height: "10px",
-                  border: "2px solid var(--line-stroke-accent)",
-                  backgroundColor: "var(--background)",
-                  zIndex: 2,
-                  flexShrink: 0,
-                  marginTop: "4px",
-                  transform: "rotate(45deg)",
+                  padding: "12px 16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
                 }}
-              />
-              {/* Line */}
-              {index < education.length - 1 && (
-                <div
-                  style={{
-                    width: "1px",
-                    flex: 1,
-                    borderLeft: "1px dashed var(--line-stroke-accent)",
-                    marginTop: "4px",
-                  }}
-                />
-              )}
-            </div>
-
-            {/* Content */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
-              {/* Header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                  <span style={{ fontSize: "9px", color: "var(--nav-link)", letterSpacing: "0.05em" }}>
-                    {edu.id} // {edu.status}
-                  </span>
-                  <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>
-                    {edu.degree}
-                  </span>
-                  <span style={{ fontSize: "12px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
-                    {edu.field} — {edu.institution}
-                  </span>
-                </div>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    color: "var(--nav-link)",
-                    letterSpacing: "0.05em",
-                    padding: "4px 8px",
-                    border: "1px dashed var(--line-stroke)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {edu.period}
-                </span>
-              </div>
-
-              {/* Highlight Tags */}
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
-                {edu.highlights.map((h) => (
-                  <span
-                    key={h}
+                onClick={() => setExpandedId(isExpanded ? "" : edu.id)}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  {/* Education icon — diamond shape */}
+                  <div
                     style={{
-                      padding: "3px 7px",
-                      backgroundColor: "var(--background)",
-                      border: "1px solid var(--line-stroke)",
+                      width: "32px",
+                      height: "32px",
+                      border: "1px solid var(--line-stroke-accent)",
+                      borderRadius: "6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px",
                       color: "var(--foreground)",
-                      fontSize: "10px",
-                      letterSpacing: "0.05em",
+                      backgroundColor: "var(--line-fill-accent)",
+                      flexShrink: 0,
                     }}
                   >
-                    {h}
-                  </span>
-                ))}
+                    🎓
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--foreground)" }}>{edu.degree}</span>
+                      <span
+                        style={{
+                          fontSize: "8px",
+                          padding: "2px 6px",
+                          border: "1px solid var(--line-stroke-accent)",
+                          color: "var(--nav-link)",
+                          letterSpacing: "0.08em",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {edu.status}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: "10px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
+                      {edu.institution} · <span style={{ color: "var(--nav-link)", fontWeight: 400 }}>{edu.period}</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Expand/Collapse chevron */}
+                <div
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    border: "1px solid var(--line-stroke-accent)",
+                    borderRadius: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "all 0.2s",
+                    color: "var(--foreground)",
+                    flexShrink: 0,
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transition: "transform 0.3s ease",
+                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Expandable Details */}
+              <div
+                style={{
+                  overflow: "hidden",
+                  maxHeight: isExpanded ? "500px" : "0px",
+                  transition: "max-height 0.4s ease, opacity 0.3s ease",
+                  opacity: isExpanded ? 1 : 0,
+                }}
+              >
+                <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Divider */}
+                  <div style={{ borderTop: "1px dashed var(--line-stroke)" }} />
+
+                  {/* Field */}
+                  <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6" }}>
+                    Field of Study: <span style={{ color: "var(--foreground)", fontWeight: 500 }}>{edu.field}</span>
+                  </div>
+
+                  {/* Highlight Tags */}
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                    {edu.highlights.map((h) => (
+                      <span
+                        key={h}
+                        style={{
+                          padding: "3px 7px",
+                          backgroundColor: "var(--background)",
+                          border: "1px solid var(--line-stroke)",
+                          color: "var(--foreground)",
+                          fontSize: "10px",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* CAD Footer Bar */}
@@ -2090,7 +2175,7 @@ export default function Page() {
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--foreground)", fontWeight: 500 }}>
                   <BriefcaseIcon />
                   <span>Building</span>
-                  <Link className="text-primary" href="https://kosh.uno">Kosh</Link>
+                  <Link className="text-primary" href="https://kosh.uno">@Kosh</Link>
                 </div>
               </div>
 
@@ -2478,19 +2563,18 @@ export default function Page() {
           {/* CAD ABOUT ME SECTION */}
           <CadAboutMe />
 
+          {/* CAD TECH STACK SPECIFICATION MATRIX */}
+          <CadTechStack />
+
           {/* CAD EXPERIENCE TIMELINE */}
           <CadExperience />
-
-          {/* CAD EDUCATION TIMELINE */}
-          <CadEducation />
-
-
 
           {/* CAD PROJECTS SCHEMA */}
           <CadProjects />
 
-          {/* CAD TECH STACK SPECIFICATION MATRIX */}
-          <CadTechStack />
+          {/* CAD EDUCATION TIMELINE */}
+          <CadEducation />
+
 
           {/* CAD Title Block for Mobile (Hidden on Desktop) */}
           <div className={clsx('flex', '2xl:hidden', 'mt-12', 'mb-8', 'justify-center')}>
