@@ -419,31 +419,41 @@ function CadExperience() {
       id: "EXP-01",
       role: "Founder & Lead Engineer",
       company: "Kosh",
-      period: "2024 — PRESENT",
+      period: "2025 — PRESENT",
       status: "ACTIVE",
       description:
-        "Building an innovative fintech platform bridging traditional finance and modern digital assets. Leading architecture decisions, product design, and full-stack development.",
-      tech: ["React Native", "Node.js", "GraphQL", "AWS", "PostgreSQL"],
+        "Building a full-fledged email platform from scratch — custom SMTP server, entire mail infrastructure, and a modern client with both a chat-like interface for new-gen users and a traditional UI for classic email users. Leading architecture, product design, and end-to-end development.",
+      tech: ["Next.js", "Node.js", "JavaScript", "AWS", "SMTP", "Socket.io", "Razorpay", "PostgreSQL"],
     },
     {
       id: "EXP-02",
-      role: "Full Stack Developer",
-      company: "Freelance",
-      period: "2022 — 2024",
-      status: "COMPLETED",
-      description:
-        "Delivered high-quality web and mobile applications for diverse clients. Specialized in modern React architectures, performance optimization, and pixel-perfect UI implementation.",
-      tech: ["Next.js", "React", "TypeScript", "Tailwind", "Firebase"],
+      role: "Freelance Web & App Developer",
+      company: "Freelancing",
+      period: "2025 — PRESENT",
+      status: "ACTIVE",
+      description: "Building a full-fledged web and mobile applications for clients across the globe, utilizing the latest technologies and industry best practices.",
+      tech: ["Next.js", "React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb", "Supabase", "Socket.io", "Razorpay"],
     },
+
     {
       id: "EXP-03",
-      role: "Frontend Developer",
-      company: "Open Source",
-      period: "2021 — PRESENT",
-      status: "ONGOING",
+      role: "Full Stack Developer",
+      company: "Devnovate.co",
+      period: "2025 — 2026",
+      status: "COMPLETED",
       description:
-        "Active contributor to multiple open-source projects. Focus on developer tooling, UI component libraries, and documentation improvements.",
-      tech: ["TypeScript", "React", "Vite", "GitHub Actions"],
+        "Redesigned the existing UI/UX of the company's website & added new features.",
+      tech: ["React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb"],
+    },
+    {
+      id: "EXP-04",
+      role: "Frontend Developer",
+      company: "Microsun global infotech LLP",
+      period: "Oct 2025 — Dec 2025",
+      status: "COMPLETED",
+      description:
+        "Worked on designing the UI of the company's website and clients SME portals using Figma and React.",
+      tech: ["Figma", "TypeScript", "React", "Vite", "Tailwind", "Motion", "Chakra UI"],
     },
   ];
 
@@ -954,8 +964,8 @@ function CadProjects() {
       id: "PRJ-01",
       name: "Kosh",
       status: "PRODUCTION",
-      description: "The Future of Email. Say goodbye to cluttered inboxes with an effortless, chat-like interface. Combine the simplicity of instant messaging with the power of email, featuring AI-powered smart filtering, instant custom domains, and a unified cross-platform experience — web, iOS, and Android.",
-      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Motion", "Socket.io"],
+      description: "A full-stack email platform built entirely from scratch with a custom SMTP server and complete mail architecture. Features a chat-like interface for new-gen users alongside a traditional email UI, instant custom domain provisioning, AI-powered smart filtering, and a unified cross-platform experience.",
+      tech: ["Next.js", "Node.js", "JavaScript", "Razorpay", "AWS", "SMTP", "Motion", "Socket.io", "PostgreSQL"],
       link: "https://kosh.uno",
     },
     {
