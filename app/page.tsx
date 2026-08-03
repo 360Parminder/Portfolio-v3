@@ -2586,6 +2586,159 @@ export default function Page() {
           <CadEducation />
 
 
+          {/* INSPIRED BY */}
+          <div
+            style={{
+              marginTop: "24px",
+              border: "1px solid var(--line-stroke-accent)",
+              backgroundColor: "var(--line-fill)",
+              position: "relative",
+              fontSize: "12px",
+              fontFamily: "var(--font-geist-mono)",
+            }}
+          >
+            {/* CAD Corner Crosshairs */}
+            <div style={{ position: "absolute", top: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+            <div style={{ position: "absolute", top: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+            <div style={{ position: "absolute", bottom: "-6px", left: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+            <div style={{ position: "absolute", bottom: "-6px", right: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1" }}>+</div>
+
+            {/* Header Bar */}
+            <div
+              style={{
+                borderBottom: "1px solid var(--line-stroke-accent)",
+                padding: "8px 14px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "var(--line-fill-accent)",
+                fontSize: "10px",
+                letterSpacing: "0.1em",
+                color: "var(--nav-link-hover)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "6px", height: "6px", backgroundColor: "#ec4899", borderRadius: "50%", display: "inline-block" }} />
+                <span>SPEC_DATA // INSPIRED_BY</span>
+              </div>
+              <span>CREDITS</span>
+            </div>
+
+            {/* Content */}
+            <div style={{ padding: "16px 14px", display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div
+                style={{
+                  fontSize: "11px",
+                  color: "var(--nav-link-hover)",
+                  lineHeight: "1.6",
+                }}
+              >
+                This portfolio&apos;s CAD-inspired design language draws inspiration from the incredible work of these creators and their approach to blending engineering aesthetics with web design.
+              </div>
+
+              {/* Inspirations Grid */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                  gap: "0px",
+                }}
+              >
+                {[
+                  { name: "Lee Robinson", role: "VP of Product @ Vercel", link: "https://leerob.com" },
+                  { name: "Shu Ding", role: "Engineer @ Vercel", link: "https://shud.in" },
+                  { name: "Chánh Đại", role: "Design Engineer @ shadcncraft", link: "https://chanhdai.com/" },
+                  { name: "Ramkrishna Swarnkar", role: "SDE-L1 @ ASBL", link: "https://ramx.in/" },
+                  // { name: "Rachit Dhaka", role: "Engineer Trainee @ Microland", link: "https://www.rachitdhaka.me/" },
+                ].map((person, index) => (
+                  <a
+                    key={person.name}
+                    href={person.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      padding: "12px 14px",
+                      borderRight: "1px solid var(--line-stroke)",
+                      borderBottom: "1px solid var(--line-stroke)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      textDecoration: "none",
+                      transition: "background-color 0.2s ease",
+                      backgroundColor: "var(--background)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "var(--line-fill)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "var(--background)";
+                    }}
+                  >
+                    {/* Favicon */}
+                    <img
+                      src={`https://www.google.com/s2/favicons?domain=${new URL(person.link).hostname}&sz=64`}
+                      alt={person.name}
+                      width={28}
+                      height={28}
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "50%",
+                        border: "1px solid var(--line-stroke-accent)",
+                        backgroundColor: "var(--line-fill-accent)",
+                        flexShrink: 0,
+                        objectFit: "cover",
+                      }}
+                    />
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--foreground)" }}>
+                        {person.name}
+                      </span>
+                      <span style={{ fontSize: "9px", color: "var(--nav-link)", letterSpacing: "0.03em" }}>
+                        {person.role}
+                      </span>
+                    </div>
+
+                    {/* External link icon */}
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--nav-link)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ marginLeft: "auto", flexShrink: 0 }}
+                    >
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div
+              style={{
+                borderTop: "1px dashed var(--line-stroke)",
+                padding: "8px 14px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                fontSize: "9px",
+                color: "var(--nav-link)",
+                letterSpacing: "0.05em",
+              }}
+            >
+              <span>NODE: INSPIRATIONS // TYPE: ACKNOWLEDGEMENT</span>
+              <span>DESIGNED WITH ♥</span>
+            </div>
+          </div>
+
           {/* CAD Title Block for Mobile (Hidden on Desktop) */}
           <div className={clsx('flex', '2xl:hidden', 'mt-12', 'mb-8', 'justify-center')}>
             <TitleBlock className="relative" />

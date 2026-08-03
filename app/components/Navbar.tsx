@@ -113,13 +113,14 @@ export function Navbar() {
         }}
       >
         {[
-          { name: "ABOUT", code: "01" },
-          { name: "WORK", code: "02" },
-          { name: "SKILLS", code: "03" },
+          { name: "ABOUT", code: "01", href: "#about" },
+          { name: "WORK", code: "02", href: "#work" },
+          { name: "SKILLS", code: "03", href: "#skills" },
+          { name: "BLOG", code: "04", href: "/blog" },
         ].map((item) => (
           <Link
             key={item.name}
-            href={`#${item.name.toLowerCase()}`}
+            href={item.href}
             className={clsx("no-underline", "transition-colors", "flex", "items-center", "gap-1.5")}
             style={{
               fontSize: "11px",
