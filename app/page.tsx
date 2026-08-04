@@ -477,6 +477,7 @@ function CadExperience() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
+        className="hidden md:block"
         style={{
           position: "absolute",
           top: "0",
@@ -734,6 +735,7 @@ function CadEducation() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
+        className="hidden md:block"
         style={{
           position: "absolute",
           top: "0",
@@ -1014,6 +1016,7 @@ function CadProjects() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
+        className="hidden md:block"
         style={{
           position: "absolute",
           top: "0",
@@ -1047,6 +1050,7 @@ function CadProjects() {
 
       {/* CAD Width Dimension (Top Side) */}
       <div
+        className="hidden md:block"
         style={{
           position: "absolute",
           top: "-12px",
@@ -1833,6 +1837,7 @@ export default function Page() {
           gridRow: "1",
           paddingTop: "60px",
           borderBottom: "1px solid var(--line-stroke)",
+          minWidth: 0,
         }}
       >
         {/* Hero image — flush to left and right edges of the content column */}
@@ -1954,6 +1959,7 @@ export default function Page() {
 
           {/* CAD Height Dimension */}
           <div
+            className="hidden md:block"
             style={{
               position: "absolute",
               top: "0",
@@ -1989,6 +1995,7 @@ export default function Page() {
 
           {/* CAD Width Dimension */}
           <div
+            className="hidden md:block"
             style={{
               position: "absolute",
               bottom: "-25px",
@@ -2024,6 +2031,7 @@ export default function Page() {
 
           {/* CAD-style label with handwritten name */}
           <div
+            className="hidden md:block"
             style={{
               position: "absolute",
               top: "0px",
@@ -2061,6 +2069,7 @@ export default function Page() {
 
           {/* CAD-style label for Age */}
           <div
+            className="hidden md:block"
             style={{
               position: "absolute",
               bottom: "-25px",
@@ -2121,7 +2130,7 @@ export default function Page() {
       {/* ── MAIN CONTENT ──
           Placed in gridRow: 5 (below the top horizontal band).
       */}
-      <div style={{ gridColumn: "2", gridRow: "5", padding: "0 20px" }}>
+      <div className="px-4 md:px-5" style={{ gridColumn: "2", gridRow: "5", minWidth: 0 }}>
         {/* CAD SPECIFICATION TITLE BLOCK (Placed under the profile picture) */}
         <section style={{ paddingTop: "75px", paddingBottom: "40px" }}>
           <div
@@ -2579,11 +2588,14 @@ export default function Page() {
           {/* CAD EXPERIENCE TIMELINE */}
           <CadExperience />
 
+          {/* CAD EDUCATION TIMELINE */}
+          <CadEducation />
+
           {/* CAD PROJECTS SCHEMA */}
           <CadProjects />
 
-          {/* CAD EDUCATION TIMELINE */}
-          <CadEducation />
+          {/* CAD GITHUB CONTRIBUTION MATRIX */}
+          <CadGithubChart />
 
 
           {/* INSPIRED BY */}
