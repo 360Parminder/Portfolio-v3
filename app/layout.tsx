@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import clsx from "clsx";
 import "./globals.css";
 import { Navbar } from "./components/Navbar";
 import { PageGrid } from "./components/PageGrid";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +33,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         <PageGrid>{children}</PageGrid>
+        <Analytics />
       </body>
     </html>
   );
