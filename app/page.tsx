@@ -477,7 +477,7 @@ function CadExperience() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "0",
@@ -735,7 +735,7 @@ function CadEducation() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "0",
@@ -1016,7 +1016,7 @@ function CadProjects() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "0",
@@ -1050,7 +1050,7 @@ function CadProjects() {
 
       {/* CAD Width Dimension (Top Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "-12px",
@@ -1959,7 +1959,7 @@ export default function Page() {
 
           {/* CAD Height Dimension */}
           <div
-            className="hidden md:block"
+            className={clsx('hidden', 'md:block')}
             style={{
               position: "absolute",
               top: "0",
@@ -1995,7 +1995,7 @@ export default function Page() {
 
           {/* CAD Width Dimension */}
           <div
-            className="hidden md:block"
+            className={clsx('hidden', 'md:block')}
             style={{
               position: "absolute",
               bottom: "-25px",
@@ -2031,7 +2031,7 @@ export default function Page() {
 
           {/* CAD-style label with handwritten name */}
           <div
-            className="hidden md:block"
+            className={clsx('hidden', 'md:block')}
             style={{
               position: "absolute",
               top: "0px",
@@ -2069,7 +2069,7 @@ export default function Page() {
 
           {/* CAD-style label for Age */}
           <div
-            className="hidden md:block"
+            className={clsx('hidden', 'md:block')}
             style={{
               position: "absolute",
               bottom: "-25px",
@@ -2130,7 +2130,7 @@ export default function Page() {
       {/* ── MAIN CONTENT ──
           Placed in gridRow: 5 (below the top horizontal band).
       */}
-      <div className="px-4 md:px-5" style={{ gridColumn: "2", gridRow: "5", minWidth: 0 }}>
+      <div className={clsx('px-4', 'md:px-5')} style={{ gridColumn: "2", gridRow: "5", minWidth: 0 }}>
         {/* CAD SPECIFICATION TITLE BLOCK (Placed under the profile picture) */}
         <section style={{ paddingTop: "75px", paddingBottom: "40px" }}>
           <div
@@ -2214,7 +2214,13 @@ export default function Page() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--foreground)", fontWeight: 500 }}>
                   <MapPinIcon />
-                  <span>Rajasthan, India 🇮🇳</span>
+                  <span>Rajasthan, India </span>
+                  <Image
+                    src="/india.png"
+                    alt="India flag"
+                    width={20}
+                    height={20}
+                  />
                 </div>
               </div>
 

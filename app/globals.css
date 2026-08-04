@@ -55,7 +55,8 @@ html.dark {
 
   --line-stroke: rgba(255, 255, 255, 0.08);
   --line-stroke-light: rgba(255, 255, 255, 0.05);
-  --line-stroke-accent: rgba(255, 255, 255, 0.12);
+  --line-stroke-accent: rgba(255, 255, 255, 0.217);
+  --line-stroke-super: rgba(255, 255, 255, 0.59);
   --line-fill: rgba(255, 255, 255, 0.02);
   --line-fill-accent: rgba(255, 255, 255, 0.04);
   --line-hatch: rgba(255, 255, 255, 0.06);
@@ -129,12 +130,35 @@ body {
 
 /* Wave animation for greeting emoji */
 @keyframes wave {
-  0%   { transform: rotate(0deg); }
-  10%  { transform: rotate(14deg); }
-  20%  { transform: rotate(-8deg); }
-  30%  { transform: rotate(14deg); }
-  40%  { transform: rotate(-4deg); }
-  50%  { transform: rotate(10deg); }
-  60%  { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  10% {
+    transform: rotate(14deg);
+  }
+
+  20% {
+    transform: rotate(-8deg);
+  }
+
+  30% {
+    transform: rotate(14deg);
+  }
+
+  40% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(10deg);
+  }
+
+  60% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
