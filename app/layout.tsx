@@ -16,8 +16,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Parminder Singh",
-  description: "Portfolio",
+  metadataBase: new URL("https://parminder.pro"), // Replace with your actual domain
+  title: "Parminder Singh | Full Stack Developer",
+  description: "A passionate full-stack developer building modern web and mobile applications.",
+  openGraph: {
+    title: "Parminder Singh | Full Stack Developer",
+    description: "A passionate full-stack developer building modern web and mobile applications.",
+    url: "https://parminder.pro",
+    siteName: "Parminder Singh Portfolio",
+    images: [
+      {
+        url: "/landing.png",
+        width: 1200,
+        height: 630,
+        alt: "Parminder Singh - Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Parminder Singh | Full Stack Developer",
+    description: "A passionate full-stack developer building modern web and mobile applications.",
+    images: ["/landing.png"],
+  },
 };
 
 export default function RootLayout({
