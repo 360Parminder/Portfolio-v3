@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-export default function WorkPage() {
+export default function ProjectsPage() {
   return (
     <main
       style={{
@@ -38,7 +38,7 @@ export default function WorkPage() {
             HOME
           </Link>
           <span style={{ opacity: 0.5 }}>/</span>
-          <span style={{ color: "var(--foreground)" }}>WORK</span>
+          <span style={{ color: "var(--foreground)" }}>PROJECTS</span>
         </div>
 
         {/* Title */}
@@ -57,14 +57,14 @@ export default function WorkPage() {
                 fontFamily: "var(--font-geist-sans)",
               }}
             >
-              Work Experience
+              Projects
             </h1>
           </div>
         </div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-        <CadExperience />
+        <CadProjects />
       </div>
 
       {/* Back to Home Link */}

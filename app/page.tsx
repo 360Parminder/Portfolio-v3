@@ -528,7 +528,7 @@ function CadExperience() {
 
       {/* Experience Entries */}
       <div style={{ display: "grid", gap: "0", gridTemplateColumns: "1fr" }}>
-        {experiences.map((exp, index) => {
+        {experiences.slice(0, 2).map((exp, index) => {
           const isExpanded = expandedId === exp.id;
           const statusColor = exp.status === "ACTIVE" ? "#22c55e" : exp.status === "ONGOING" ? "#3b82f6" : "var(--nav-link)";
 
@@ -537,7 +537,7 @@ function CadExperience() {
               key={exp.id}
               style={{
                 backgroundColor: "var(--background)",
-                borderBottom: index === experiences.length - 1 ? "none" : "1px solid var(--line-stroke)",
+                borderBottom: index === 1 ? "none" : "1px solid var(--line-stroke)",
                 transition: "background-color 0.2s ease",
               }}
               onMouseEnter={(e) => {
@@ -676,6 +676,76 @@ function CadExperience() {
             </div>
           );
         })}
+      </div>
+
+      {/* Show All Work Button */}
+      <div style={{ position: "relative" }}>
+        <Link href="/work" style={{ textDecoration: "none" }}>
+          <div
+            style={{
+              alignItems: "center",
+              backgroundColor: "var(--background)",
+              borderTop: "1px solid var(--line-stroke)",
+              color: "var(--foreground)",
+              cursor: "pointer",
+              display: "flex",
+              fontSize: "11px",
+              fontWeight: 600,
+              justifyContent: "center",
+              letterSpacing: "0.1em",
+              padding: "12px 16px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              e.currentTarget.style.color = "var(--nav-link-hover)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--background)";
+              e.currentTarget.style.color = "var(--foreground)";
+            }}
+          >
+            SHOW_ALL_WORK //
+          </div>
+        </Link>
+        {/* CAD-style label for Button */}
+        <div
+          className={clsx('hidden', 'md:block')}
+          style={{
+            height: "40px",
+            pointerEvents: "none",
+            position: "absolute",
+            right: "-200px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: "220px",
+            zIndex: 20,
+          }}
+        >
+          <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+            <path
+              d="M 20,20 L 40,40 L 210,40"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+            />
+            <circle cx="20" cy="20" r="2" fill="var(--line-stroke-accent)" />
+          </svg>
+          <span
+            className={caveat.className}
+            style={{
+              bottom: "-8px",
+              color: "var(--foreground)",
+              fontSize: "18px",
+              left: "45px",
+              lineHeight: "1",
+              position: "absolute",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Height: Auto, Size: 11px, Weight: 600
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -1101,7 +1171,7 @@ function CadProjects() {
 
       {/* Projects Grid */}
       <div style={{ display: "grid", gap: "0", gridTemplateColumns: "1fr" }}>
-        {projects.map((prj, index) => {
+        {projects.slice(0, 2).map((prj, index) => {
           const isExpanded = expandedId === prj.id;
 
           return (
@@ -1109,7 +1179,7 @@ function CadProjects() {
               key={prj.id}
               style={{
                 backgroundColor: "var(--background)",
-                borderBottom: index === projects.length - 1 ? "none" : "1px solid var(--line-stroke)",
+                borderBottom: index === 1 ? "none" : "1px solid var(--line-stroke)",
                 transition: "background-color 0.2s ease",
               }}
               onMouseEnter={(e) => {
@@ -1283,6 +1353,76 @@ function CadProjects() {
             </div>
           );
         })}
+      </div>
+
+      {/* Show All Projects Button */}
+      <div style={{ position: "relative" }}>
+        <Link href="/projects" style={{ textDecoration: "none" }}>
+          <div
+            style={{
+              alignItems: "center",
+              backgroundColor: "var(--background)",
+              borderTop: "1px solid var(--line-stroke)",
+              color: "var(--foreground)",
+              cursor: "pointer",
+              display: "flex",
+              fontSize: "11px",
+              fontWeight: 600,
+              justifyContent: "center",
+              letterSpacing: "0.1em",
+              padding: "12px 16px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              e.currentTarget.style.color = "var(--nav-link-hover)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--background)";
+              e.currentTarget.style.color = "var(--foreground)";
+            }}
+          >
+            SHOW_ALL_PROJECTS //
+          </div>
+        </Link>
+        {/* CAD-style label for Button */}
+        <div
+          className={clsx('hidden', 'md:block')}
+          style={{
+            height: "40px",
+            pointerEvents: "none",
+            position: "absolute",
+            right: "-200px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: "220px",
+            zIndex: 20,
+          }}
+        >
+          <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+            <path
+              d="M 20,20 L 40,40 L 210,40"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+            />
+            <circle cx="20" cy="20" r="2" fill="var(--line-stroke-accent)" />
+          </svg>
+          <span
+            className={caveat.className}
+            style={{
+              bottom: "-8px",
+              color: "var(--foreground)",
+              fontSize: "18px",
+              left: "45px",
+              lineHeight: "1",
+              position: "absolute",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Height: Auto, Size: 11px, Weight: 600
+          </span>
+        </div>
       </div>
     </div>
   );
