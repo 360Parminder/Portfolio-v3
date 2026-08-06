@@ -79,7 +79,7 @@ export default function BlogPage() {
                 marginBottom: "6px",
               }}
             >
-              SECTION_04 // ENGINEERING_LOG
+              SECTION_03 // ENGINEERING_LOG
             </div>
             <h1
               style={{

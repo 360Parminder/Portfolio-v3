@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./components/Navbar";
 import { PageGrid } from "./components/PageGrid";
+import { ScrollToTop } from "./components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -54,6 +55,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body>
+        <ScrollToTop />
         <Navbar />
         <PageGrid>{children}</PageGrid>
         <Analytics />

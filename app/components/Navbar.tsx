@@ -50,14 +50,14 @@ export function Navbar() {
     // Play mode-change sound
     const audio = new Audio("/mode_change_sound.mp3");
     audio.volume = 0.5;
-    audio.play().catch(() => {});
+    audio.play().catch(() => { });
   };
 
   const navLinks = [
     { name: "HOME", code: "01", href: "/" },
     { name: "WORK", code: "02", href: "/work" },
-    { name: "RESUME", code: "03", href: "#skills" },
-    { name: "BLOG", code: "04", href: "/blog" },
+    { name: "BLOG", code: "03", href: "/blog" },
+    { name: "RESUME", code: "04", href: "/resume" },
   ];
 
   return (
@@ -233,28 +233,28 @@ export function Navbar() {
       {/* ── MOBILE NAVIGATION ── */}
       <div className="md:hidden">
         {/* Mobile Floating Pill */}
-        <div 
-          className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-4 px-5 py-3 rounded-full backdrop-blur-xl shadow-lg border border-[var(--line-stroke-accent)]"
-          style={{ 
+        <div
+          className={clsx('fixed', 'bottom-12', 'left-1/2', '-translate-x-1/2', 'z-50', 'flex', 'items-center', 'justify-between', 'gap-4', 'px-5', 'py-3', 'rounded-full', 'backdrop-blur-xl', 'shadow-lg', 'border', 'border-[var(--line-stroke-accent)]')}
+          style={{
             backgroundColor: "color-mix(in srgb, var(--background) 75%, transparent)",
           }}
         >
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="flex items-center justify-center transition-colors"
+            className={clsx('flex', 'items-center', 'justify-center', 'transition-colors')}
             style={{ color: "var(--nav-link)" }}
             aria-label="Toggle Dark / Light Theme"
           >
             {isDark ? <Moon02Icon size={22} color="currentColor" /> : <Sun01Icon size={22} color="currentColor" />}
           </button>
-          
-          <div className="w-[1px] h-6 bg-[var(--line-stroke-accent)] opacity-50" />
+
+          <div className={clsx('w-[1px]', 'h-6', 'bg-[var(--line-stroke-accent)]', 'opacity-50')} />
 
           {/* Hamburger Menu Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="flex items-center justify-center transition-colors"
+            className={clsx('flex', 'items-center', 'justify-center', 'transition-colors')}
             style={{ color: "var(--foreground)" }}
             aria-label="Toggle Mobile Menu"
           >
@@ -264,20 +264,20 @@ export function Navbar() {
 
         {/* Mobile Popup Menu Card */}
         {isMobileMenuOpen && (
-          <div 
-            className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-[240px] rounded-[24px] p-4 shadow-2xl border border-[var(--line-stroke-accent)] backdrop-blur-xl"
-            style={{ 
+          <div
+            className={clsx('fixed', 'bottom-32', 'left-1/2', '-translate-x-1/2', 'z-40', 'w-[240px]', 'rounded-[24px]', 'p-4', 'shadow-2xl', 'border', 'border-[var(--line-stroke-accent)]', 'backdrop-blur-xl')}
+            style={{
               backgroundColor: "color-mix(in srgb, var(--background) 80%, transparent)",
               fontFamily: "var(--font-geist-mono)",
             }}
           >
-            <div className="flex flex-col gap-1">
+            <div className={clsx('flex', 'flex-col', 'gap-1')}>
               {navLinks.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-xl no-underline transition-all border border-transparent"
+                  className={clsx('flex', 'items-center', 'gap-3', 'p-3', 'rounded-xl', 'no-underline', 'transition-all', 'border', 'border-transparent')}
                   style={{
                     color: "var(--nav-link)",
                     fontSize: "12px",
@@ -299,15 +299,15 @@ export function Navbar() {
                 </Link>
               ))}
 
-              <div className="my-3 mx-2 border-t border-[var(--line-stroke)] opacity-50" />
+              <div className={clsx('my-3', 'mx-2', 'border-t', 'border-[var(--line-stroke)]', 'opacity-50')} />
 
               {/* Action Buttons in Mobile Menu */}
-              <div className="flex items-center justify-between gap-2 px-1">
+              <div className={clsx('flex', 'items-center', 'justify-between', 'gap-2', 'px-1')}>
                 <a
                   href="https://github.com/360Parminder"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center flex-1 py-2.5 rounded-xl border border-[var(--line-stroke-accent)] transition-colors"
+                  className={clsx('flex', 'items-center', 'justify-center', 'flex-1', 'py-2.5', 'rounded-xl', 'border', 'border-[var(--line-stroke-accent)]', 'transition-colors')}
                   style={{ color: "var(--foreground)", backgroundColor: "var(--line-fill)" }}
                 >
                   <GithubIcon size={16} color="currentColor" />
@@ -316,7 +316,7 @@ export function Navbar() {
                 <button
                   data-cal-link="https://cal.com/parminder360/chat"
                   data-cal-config={`{"layout":"month_view","theme":"${isDark ? 'dark' : 'light'}"}`}
-                  className="flex items-center justify-center flex-1 py-2.5 rounded-xl border border-[var(--line-stroke-accent)] transition-colors"
+                  className={clsx('flex', 'items-center', 'justify-center', 'flex-1', 'py-2.5', 'rounded-xl', 'border', 'border-[var(--line-stroke-accent)]', 'transition-colors')}
                   style={{ color: "var(--foreground)", backgroundColor: "var(--line-fill-accent)" }}
                 >
                   <Calendar01Icon size={16} color="currentColor" />
