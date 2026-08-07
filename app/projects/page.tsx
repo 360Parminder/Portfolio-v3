@@ -116,7 +116,7 @@ function CadProjects() {
         "Implemented AI-powered smart email filtering, automated thread categorization, and real-time inbox synchronization via Socket.io.",
         "Integrated Razorpay subscription billing, AWS S3 storage for mail attachments, and a PostgreSQL database schema."
       ],
-      tech: ["Next.js", "Node.js", "JavaScript", "Razorpay", "AWS", "SMTP", "Motion", "Socket.io", "PostgreSQL"],
+      tech: ["Next.js", "Node.js", "JavaScript","TypeScript","Tailwind", "Razorpay", "AWS", "SMTP", "Motion", "Socket.io", "PostgreSQL"],
       link: "https://kosh.uno",
     },
     {
