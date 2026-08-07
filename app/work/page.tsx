@@ -3,6 +3,101 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import clsx from "clsx";
+import { motion, AnimatePresence } from "motion/react";
+import { techLogos, getTechLogo } from "../data/techLogos";
+
+function HoverTechTag({ techName, baseStyle }: { techName: string; baseStyle: React.CSSProperties }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const logo = getTechLogo(techName) || techLogos[techName];
+
+  const height = baseStyle.height || "32px";
+  const minWidth = baseStyle.minWidth || "32px";
+
+  const smoothEase = [0.16, 1, 0.3, 1] as const; // Smooth ease-out curve
+
+  return (
+    <motion.div
+      layout
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      initial={false}
+      animate={{
+        borderColor: isHovered ? "var(--foreground)" : (baseStyle.borderColor as string || "var(--line-stroke-accent)"),
+        backgroundColor: isHovered ? "var(--line-fill-accent)" : (baseStyle.backgroundColor as string || "transparent"),
+      }}
+      transition={{
+        duration: 0.3,
+        ease: smoothEase,
+        layout: { duration: 0.3, ease: smoothEase },
+      }}
+      style={{
+        ...baseStyle,
+        height,
+        minWidth,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        userSelect: "none",
+        position: "relative",
+        padding: baseStyle.padding || "10px 10px",
+      }}
+    >
+      {/* Icon on Left with Shadow on the right side when text is coming out */}
+      {logo ? (
+        <motion.span
+          layout
+          animate={{
+            filter: isHovered
+              ? "drop-shadow(3px 0px 4px rgba(0,0,0,0.5))"
+              : "drop-shadow(0px 0px 0px rgba(0,0,0,0))",
+          }}
+          transition={{ duration: 0.25, ease: smoothEase }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            zIndex: 2,
+            position: "relative",
+          }}
+        >
+          {logo}
+        </motion.span>
+      ) : null}
+
+      {/* Tech Name on Right - Instant Text View with Smooth Width Expansion */}
+      <AnimatePresence initial={false}>
+        {(isHovered || !logo) && (
+          <motion.span
+            initial={{ opacity: 1, width: 0, marginLeft: 0 }}
+            animate={{ opacity: 1, width: "auto", marginLeft: logo ? 6 : 0 }}
+            exit={{ opacity: 1, width: 0, marginLeft: 0 }}
+            transition={{
+              duration: 0.3,
+              ease: smoothEase,
+            }}
+            style={{
+              display: "inline-block",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              fontSize: baseStyle.fontSize || "11px",
+              fontWeight: baseStyle.fontWeight || 500,
+              color: baseStyle.color || "var(--foreground)",
+              letterSpacing: baseStyle.letterSpacing || "normal",
+              zIndex: 1,
+            }}
+          >
+            {techName}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 export default function WorkPage() {
   return (
@@ -101,48 +196,49 @@ export default function WorkPage() {
 }
 
 function CadExperience() {
-  const [expandedId, setExpandedId] = useState<string>("EXP-01");
 
   const experiences = [
     {
       id: "EXP-01",
-      role: "Founder & Lead Engineer",
-      company: "Kosh",
-      period: "2025 — PRESENT",
+      role: "Freelance Web & App Developer",
+      company: "Freelancing",
+      period: "Apr 2026 — Present",
+      location: "Remote",
       status: "ACTIVE",
-      description:
-        "Building a full-fledged email platform from scratch — custom SMTP server, entire mail infrastructure, and a modern client with both a chat-like interface for new-gen users and a traditional UI for classic email users. Leading architecture, product design, and end-to-end development.",
-      tech: ["Next.js", "Node.js", "JavaScript", "AWS", "SMTP", "Socket.io", "Razorpay", "PostgreSQL"],
+      description: [
+        "Building full-fledged web and mobile applications for clients across the globe using React, Next.js, and React Native.",
+        "Designing scalable backend architectures with Node.js, Express, MongoDB, and Supabase integration.",
+        "Implementing real-time communication features, payment gateways (Razorpay), and smooth UI animations with Motion."
+      ],
+      tech: ["Next.js", "React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb", "Supabase", "Socket.io", "Razorpay"],
     },
     {
       id: "EXP-02",
-      role: "Freelance Web & App Developer",
-      company: "Freelancing",
-      period: "2025 — PRESENT",
-      status: "ACTIVE",
-      description: "Building a full-fledged web and mobile applications for clients across the globe, utilizing the latest technologies and industry best practices.",
-      tech: ["Next.js", "React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb", "Supabase", "Socket.io", "Razorpay"],
-    },
-
-    {
-      id: "EXP-03",
       role: "Full Stack Developer",
       company: "Devnovate.co",
-      period: "2025 — 2026",
+      period: "Jan 2025 — May 2026",
+      location: "Remote",
       status: "COMPLETED",
-      description:
-        "Redesigned the existing UI/UX of the company's website & added new features.",
-      tech: ["React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb"],
+      description: [
+        "Redesigned the existing UI/UX of the company's core web platform to significantly enhance user engagement and accessibility.",
+        "Developed responsive frontend components using React, TypeScript, and Tailwind CSS with fluid motion effects.",
+        "Engineered RESTful backend APIs and optimized database models using Node.js, Express, and MongoDB."
+      ],
+      tech: ["React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb", "Chakra UI"],
     },
     {
-      id: "EXP-04",
+      id: "EXP-03",
       role: "Frontend Developer",
       company: "Microsun global infotech LLP",
       period: "Oct 2025 — Dec 2025",
+      location: "Remote",
       status: "COMPLETED",
-      description:
-        "Worked on designing the UI of the company's website and clients SME portals using Figma and React.",
-      tech: ["Figma", "TypeScript", "React", "Vite", "Tailwind", "Motion", "Chakra UI"],
+      description: [
+        "Designed high-fidelity UI wireframes and interactive prototypes in Figma for client SME portals.",
+        "Developed modular, high-performance web application interfaces using React, Vite, TypeScript, and Chakra UI.",
+        "Collaborated with cross-functional teams to integrate backend APIs, improve load speed, and ensure cross-browser compatibility."
+      ],
+      tech: ["Figma", "JavaScript", "React", "Vite", "Tailwind", "Motion","AWS"],
     },
   ];
 
@@ -166,7 +262,7 @@ function CadExperience() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "0",
@@ -220,151 +316,92 @@ function CadExperience() {
       </div>
 
       {/* Experience Entries */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "32px", padding: "24px 20px" }}>
         {experiences.map((exp, index) => {
-          const isExpanded = expandedId === exp.id;
-          const statusColor = exp.status === "ACTIVE" ? "#22c55e" : exp.status === "ONGOING" ? "#3b82f6" : "var(--nav-link)";
+          const statusColor = exp.status === "ACTIVE" ? "#22c55e" : "var(--nav-link)";
+          const isLast = index === experiences.length - 1;
 
           return (
             <div
               key={exp.id}
               style={{
-                borderBottom: index === experiences.length - 1 ? "none" : "1px solid var(--line-stroke)",
-                backgroundColor: "var(--background)",
-                transition: "background-color 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--line-fill)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--background)";
+                borderBottom: isLast ? "none" : "1px dashed var(--line-stroke)",
+                paddingBottom: isLast ? "0" : "12px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
               }}
             >
-              {/* Compact Header Row — always visible */}
-              <div
-                style={{
-                  padding: "12px 16px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-                onClick={() => setExpandedId(isExpanded ? "" : exp.id)}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  {/* Company icon */}
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      border: "1px solid var(--line-stroke-accent)",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      color: "var(--foreground)",
-                      backgroundColor: "var(--line-fill-accent)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {exp.company.charAt(0)}
-                  </div>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                      <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--foreground)" }}>{exp.role}</span>
+              {/* Top Row: Company, Role, Date, Location */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
+                {/* Left Side */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <span style={{ fontSize: "20px", fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em" }}>{exp.company}</span>
+                    {exp.status === "ACTIVE" ?
                       <span
                         style={{
-                          fontSize: "8px",
-                          padding: "2px 6px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                          padding: "3px 10px",
                           border: `1px solid ${statusColor}`,
+                          borderStyle: "dotted",
+                          borderRadius: "5px",
+                          fontSize: "11px",
                           color: statusColor,
-                          letterSpacing: "0.08em",
-                          borderRadius: "2px",
+                          backgroundColor: "var(--line-fill-accent)",
+                          letterSpacing: "0.05em",
+                          fontWeight: 500,
                         }}
                       >
-                        {exp.status}
-                      </span>
-                    </div>
-                    <span style={{ fontSize: "10px", color: "var(--nav-link-hover)", fontWeight: 500 }}>
-                      @ {exp.company} · <span style={{ color: "var(--nav-link)", fontWeight: 400 }}>{exp.period}</span>
-                    </span>
+                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: statusColor }} />
+                        Working
+                      </span> : null}
                   </div>
+                  <span style={{ fontSize: "14px", color: "var(--nav-link-hover)" }}>{exp.role}</span>
                 </div>
 
-                {/* Expand/Collapse chevron */}
-                <div
-                  style={{
-                    width: "28px",
-                    height: "28px",
-                    border: "1px solid var(--line-stroke-accent)",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.2s",
-                    color: "var(--foreground)",
-                    flexShrink: 0,
-                  }}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{
-                      transition: "transform 0.3s ease",
-                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-                    }}
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
+                {/* Right Side */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+                  <span style={{ fontSize: "14px", color: "var(--nav-link-hover)" }}>{exp.period}</span>
+                  <span style={{ fontSize: "13px", color: "var(--nav-link)" }}>{exp.location}</span>
                 </div>
               </div>
 
-              {/* Expandable Details */}
-              <div
-                style={{
-                  overflow: "hidden",
-                  maxHeight: isExpanded ? "500px" : "0px",
-                  transition: "max-height 0.4s ease, opacity 0.3s ease",
-                  opacity: isExpanded ? 1 : 0,
-                }}
-              >
-                <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {/* Divider */}
-                  <div style={{ borderTop: "1px dashed var(--line-stroke)" }} />
-
-                  {/* Description */}
-                  <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6", maxWidth: "800px" }}>
-                    {exp.description}
-                  </div>
-
-                  {/* Tech Tags */}
-                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                    {exp.tech.map((t) => (
-                      <span
-                        key={t}
-                        style={{
-                          padding: "3px 7px",
-                          backgroundColor: "var(--background)",
-                          border: "1px solid var(--line-stroke)",
-                          color: "var(--foreground)",
-                          fontSize: "10px",
-                          letterSpacing: "0.05em",
-                        }}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+              {/* Technologies & Tools */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>Technologies & Tools</span>
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  {exp.tech.map((t) => (
+                    <HoverTechTag
+                      key={t}
+                      techName={t}
+                      baseStyle={{
+                        padding: "12px 12px",
+                        backgroundColor: "var(--line-fill-accent)",
+                        border: "1px dashed var(--line-stroke-accent)",
+                        color: "var(--foreground)",
+                        fontSize: "12px",
+                        borderRadius: "6px",
+                        fontWeight: 500,
+                      }}
+                    />
+                  ))}
                 </div>
+              </div>
+
+              {/* What I've done */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "8px" }}>
+                <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>What I've done</span>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {(Array.isArray(exp.description) ? exp.description : [exp.description]).map((desc, i) => (
+                    <li key={i} style={{ display: "flex", gap: "12px", color: "var(--nav-link-hover)", fontSize: "13px", lineHeight: "1.6" }}>
+                      <span style={{ color: "var(--line-stroke-accent)", marginTop: "1px", fontSize: "10px" }}>▪</span>
+                      <span>{desc}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           );
@@ -432,7 +469,7 @@ function CadProjects() {
 
       {/* CAD Height Dimension (Left Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "0",
@@ -466,7 +503,7 @@ function CadProjects() {
 
       {/* CAD Width Dimension (Top Side) */}
       <div
-        className="hidden md:block"
+        className={clsx('hidden', 'md:block')}
         style={{
           position: "absolute",
           top: "-12px",
@@ -683,19 +720,20 @@ function CadProjects() {
                   {/* Tech Stack Tags */}
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                     {prj.tech.map(t => (
-                      <span
+                      <HoverTechTag
                         key={t}
-                        style={{
-                          padding: "4px 8px",
+                        techName={t}
+                        baseStyle={{
+                          padding: "0 8px",
                           backgroundColor: "var(--background)",
                           border: "1px solid var(--line-stroke)",
                           color: "var(--foreground)",
                           fontSize: "10px",
-                          letterSpacing: "0.05em"
+                          letterSpacing: "0.05em",
+                          height: "24px",
+                          minWidth: "24px",
                         }}
-                      >
-                        {t}
-                      </span>
+                      />
                     ))}
                   </div>
                 </div>
