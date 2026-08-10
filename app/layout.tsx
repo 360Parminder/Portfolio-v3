@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "Parminder Singh Portfolio",
     images: [
       {
-        url: "/landing.png",
+        url: "https://res.cloudinary.com/dvo4tvvgb/image/upload/v1786394946/Profile/landing_jz9jmv.png",
         width: 1200,
         height: 630,
         alt: "Parminder Singh - Portfolio",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Parminder Singh | Full Stack Developer",
     description: "A passionate full-stack developer building modern web and mobile applications.",
-    images: ["/landing.png"],
+    images: ["https://res.cloudinary.com/dvo4tvvgb/image/upload/v1786394946/Profile/landing_jz9jmv.png"],
   },
 };
 
