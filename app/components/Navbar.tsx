@@ -100,7 +100,7 @@ export function Navbar() {
                 backgroundColor: "var(--line-fill)",
               }}
             >
-              <Image src="/logo.svg" alt="logo" width={26} height={26} />
+              <Image src="/logo.svg" alt="logo" width={26} height={26} priority fetchPriority="high" />
             </div>
           </Link>
 

@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { blogPosts, getCategoryColor } from "../data";
 
 export default function BlogPostPage() {
@@ -180,6 +181,58 @@ export default function BlogPostPage() {
           </div>
           <span>{post.status}</span>
         </div>
+
+        {/* Cover Image Schematic Display */}
+        {post.coverImage && (
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "320px",
+              borderBottom: "1px solid var(--line-stroke-accent)",
+              overflow: "hidden",
+              backgroundColor: "var(--line-fill)",
+            }}
+          >
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              priority
+              fetchPriority="high"
+              sizes="(max-width: 768px) 100vw, 800px"
+            />
+            {/* Blueprint Grid / Gradient Overlay */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to bottom, transparent 60%, var(--background) 100%)",
+                pointerEvents: "none",
+              }}
+            />
+            {/* CAD Spec Label */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "12px",
+                right: "14px",
+                backgroundColor: "rgba(0, 0, 0, 0.8)",
+                border: "1px solid var(--line-stroke-accent)",
+                padding: "3px 10px",
+                fontSize: "9px",
+                fontFamily: "var(--font-geist-mono)",
+                color: "var(--line-stroke-accent)",
+                letterSpacing: "0.1em",
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              FIG_001 // INFRASTRUCTURE_SCHEMATIC
+            </div>
+          </div>
+        )}
 
         {/* Article Header */}
         <div

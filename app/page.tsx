@@ -2041,6 +2041,7 @@ export default function Page() {
             fill
             style={{ objectFit: "cover", objectPosition: "center 30%" }}
             priority
+            fetchPriority="high"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {/* Subtle gradient fade at the bottom */}
@@ -2308,6 +2309,7 @@ export default function Page() {
               fill
               style={{ objectFit: "cover", objectPosition: "center 30%" }}
               priority
+              fetchPriority="high"
               sizes="104px"
             />
 
