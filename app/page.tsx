@@ -326,11 +326,7 @@ function CadTechStack() {
       }}
     >
       <CadDimensionLabel />
-      {/* CAD Corner Crosshairs */}
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
       {/* Header Bar */}
       <div
@@ -511,11 +507,7 @@ function CadExperience() {
       }}
     >
       <CadDimensionLabel />
-      {/* CAD Corner Crosshairs */}
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
       {/* CAD Height Dimension (Left Side) */}
       <div
@@ -840,11 +832,7 @@ function CadEducation() {
       }}
     >
       <CadDimensionLabel />
-      {/* CAD Corner Crosshairs */}
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
       {/* CAD Height Dimension (Left Side) */}
       <div
@@ -1122,11 +1110,7 @@ function CadProjects() {
       }}
     >
       <CadDimensionLabel />
-      {/* CAD Corner Crosshairs */}
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
       {/* CAD Height Dimension (Left Side) */}
       <div
@@ -1584,11 +1568,7 @@ function CadGithubChart() {
         </defs>
       </svg>
 
-      {/* CAD Corner Crosshairs */}
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
       {/* Header Bar */}
       <div
@@ -1863,11 +1843,7 @@ function CadAboutMe() {
       }}
     >
       <CadDimensionLabel />
-      {/* CAD Corner Crosshairs */}
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-      <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-      <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
       {/* Header Bar */}
       <div
@@ -2333,11 +2309,7 @@ export default function Page() {
             }}
           >
             <CadDimensionLabel />
-            {/* CAD Corner Crosshairs */}
-            <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-            <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-            <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-            <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
             {/* Header Bar */}
             <div
@@ -2385,7 +2357,7 @@ export default function Page() {
                 <div style={{ alignItems: "center", color: "var(--foreground)", display: "flex", fontWeight: 500, gap: "8px" }}>
                   <BriefcaseIcon />
                   <span>Building</span>
-                  <Link className="text-primary" href="https://kosh.uno">@Kosh</Link>
+                  <Link className="text-primary" href="https://rajdoot.wtf">@Rajdoot</Link>
                 </div>
               </div>
 
@@ -2805,11 +2777,7 @@ export default function Page() {
             }}
           >
             <CadDimensionLabel />
-            {/* CAD Corner Crosshairs */}
-            <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute", top: "-6px" }}>+</div>
-            <div style={{ color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px", top: "-6px" }}>+</div>
-            <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", left: "-6px", lineHeight: "1", position: "absolute" }}>+</div>
-            <div style={{ bottom: "-6px", color: "var(--line-stroke-accent)", fontSize: "10px", lineHeight: "1", position: "absolute", right: "-6px" }}>+</div>
+
 
             {/* Header Bar */}
             <div

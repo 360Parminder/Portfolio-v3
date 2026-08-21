@@ -175,55 +175,7 @@ export default function BlogPage() {
           fontSize: "12px",
         }}
       >
-        {/* CAD Corner Crosshairs */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-6px",
-            left: "-6px",
-            color: "var(--line-stroke-accent)",
-            fontSize: "10px",
-            lineHeight: "1",
-          }}
-        >
-          +
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            top: "-6px",
-            right: "-6px",
-            color: "var(--line-stroke-accent)",
-            fontSize: "10px",
-            lineHeight: "1",
-          }}
-        >
-          +
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-6px",
-            left: "-6px",
-            color: "var(--line-stroke-accent)",
-            fontSize: "10px",
-            lineHeight: "1",
-          }}
-        >
-          +
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-6px",
-            right: "-6px",
-            color: "var(--line-stroke-accent)",
-            fontSize: "10px",
-            lineHeight: "1",
-          }}
-        >
-          +
-        </div>
+
 
         {/* Header Bar */}
         <div
