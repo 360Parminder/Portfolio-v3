@@ -33,6 +33,7 @@ export async function GET() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "portfolio-github-contributions",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
@@ -43,8 +44,14 @@ export async function GET() {
     });
 
     if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      console.error("GitHub API response error:", res.status, errorData);
       return NextResponse.json(
-        { error: "Failed to fetch from GitHub GraphQL API" },
+        {
+          error: "Failed to fetch from GitHub GraphQL API",
+          status: res.status,
+          details: errorData?.message || "Unknown error from GitHub",
+        },
         { status: res.status }
       );
     }
