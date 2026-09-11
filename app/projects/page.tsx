@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { HoverTechTag } from "../components/HoverTechTag";
+import { ProjectLogo } from "../components/ProjectLogo";
 
 export default function ProjectsPage() {
   return (
@@ -226,24 +227,7 @@ function CadProjects() {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                   {/* Project icon */}
-                  <div
-                    style={{
-                      width: "36px",
-                      height: "36px",
-                      border: "1px solid var(--line-stroke-accent)",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      color: "var(--foreground)",
-                      backgroundColor: "var(--line-fill-accent)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {prj.name.charAt(0)}
-                  </div>
+                  <ProjectLogo url={prj.link} name={prj.name} size={36} shape="circle" />
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

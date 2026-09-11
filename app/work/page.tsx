@@ -6,6 +6,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { motion, AnimatePresence } from "motion/react";
 import { techLogos, getTechLogo } from "../data/techLogos";
+import { ProjectLogo } from "../components/ProjectLogo";
 
 function HoverTechTag({ techName, baseStyle }: { techName: string; baseStyle: React.CSSProperties }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -532,24 +533,7 @@ function CadProjects() {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                   {/* Project icon */}
-                  <div
-                    style={{
-                      width: "36px",
-                      height: "36px",
-                      border: "1px solid var(--line-stroke-accent)",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      color: "var(--foreground)",
-                      backgroundColor: "var(--line-fill-accent)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {prj.name.charAt(0)}
-                  </div>
+                  <ProjectLogo url={prj.link} name={prj.name} size={36} shape="circle" />
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

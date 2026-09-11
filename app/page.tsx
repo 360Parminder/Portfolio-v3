@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import { TitleBlock } from "./components/TitleBlock";
+import { ProjectLogo } from "./components/ProjectLogo";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
 
@@ -1234,24 +1235,7 @@ function CadProjects() {
               >
                 <div style={{ alignItems: "center", display: "flex", gap: "12px" }}>
                   {/* Project icon */}
-                  <div
-                    style={{
-                      alignItems: "center",
-                      backgroundColor: "var(--line-fill-accent)",
-                      border: "1px solid var(--line-stroke-accent)",
-                      borderRadius: "6px",
-                      color: "var(--foreground)",
-                      display: "flex",
-                      flexShrink: 0,
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      height: "32px",
-                      justifyContent: "center",
-                      width: "32px",
-                    }}
-                  >
-                    {prj.name.charAt(0)}
-                  </div>
+                  <ProjectLogo url={prj.link} name={prj.name} size={32} shape="rounded" />
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                     <div style={{ alignItems: "center", display: "flex", gap: "8px" }}>
