@@ -144,7 +144,7 @@ export async function GET(request: Request) {
         },
       }
     );
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       {
         logoUrl: googleFavicon,

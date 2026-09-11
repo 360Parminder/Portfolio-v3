@@ -38,20 +38,26 @@ export function ProjectLogo({
     return { src: null, isFallback: false, hasFailed: false, loading: true };
   });
 
+  const [prevUrl, setPrevUrl] = useState(url);
+  if (url !== prevUrl) {
+    setPrevUrl(url);
+    const cached = url ? logoCache.get(url) : null;
+    setLogoState(
+      !url
+        ? { src: null, isFallback: false, hasFailed: true, loading: false }
+        : cached
+        ? { src: cached.logoUrl, isFallback: false, hasFailed: false, loading: false }
+        : { src: null, isFallback: false, hasFailed: false, loading: true }
+    );
+  }
+
   useEffect(() => {
-    if (!url) {
-      setLogoState({ src: null, isFallback: false, hasFailed: true, loading: false });
-      return;
-    }
+    if (!url) return;
 
     const cached = logoCache.get(url);
-    if (cached) {
-      setLogoState({ src: cached.logoUrl, isFallback: false, hasFailed: false, loading: false });
-      return;
-    }
+    if (cached) return;
 
     let isMounted = true;
-    setLogoState((prev) => ({ ...prev, loading: true }));
 
     fetch(`/api/extract-logo?url=${encodeURIComponent(url)}`)
       .then((res) => {

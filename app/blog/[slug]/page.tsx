@@ -173,7 +173,7 @@ export default function BlogPostPage() {
                 display: "inline-block",
               }}
             />
-            <span>{post.id} // {post.category}</span>
+            <span>{post.id} {"//"} {post.category}</span>
           </div>
           <span>{post.status}</span>
         </div>
@@ -446,7 +446,7 @@ export default function BlogPostPage() {
             letterSpacing: "0.05em",
           }}
         >
-          <span>NODE: {post.id} // TYPE: ARTICLE</span>
+          <span>NODE: {post.id} {"//"} TYPE: ARTICLE</span>
           <span>WORDS: ~{post.content.join(" ").split(/\s+/).length}</span>
         </div>
       </article>

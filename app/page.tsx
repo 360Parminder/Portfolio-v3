@@ -372,7 +372,7 @@ function CadTechStack() {
                 padding: "14px 16px",
               }}
             >
-              <span style={{ color: "var(--nav-link)", fontSize: "9px" }}>{cat.id} //</span>
+              <span style={{ color: "var(--nav-link)", fontSize: "9px" }}>{cat.id} {"//"}</span>
               <span style={{ color: "var(--foreground)", fontWeight: 600 }}>{cat.name}</span>
             </div>
 
@@ -1676,7 +1676,7 @@ function CadComponents() {
                       </span>
                     </div>
                     <span style={{ color: "var(--nav-link)", fontSize: "9px", letterSpacing: "0.05em" }}>
-                      {cmp.id} // {cmp.package}
+                      {cmp.id} {"//"} {cmp.package}
                     </span>
                   </div>
                 </div>
@@ -1806,11 +1806,11 @@ function CadGithubChart() {
           const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           let lastMonth = -1;
 
-          calendar.weeks.forEach((week: any, wIndex: number) => {
+          calendar.weeks.forEach((week: { contributionDays: { date: string; contributionCount: number }[] }, wIndex: number) => {
             // Initialize a 7-day week (Sunday to Saturday) with empty cells
             const currentW: { count: number; date: string; level: number }[] = Array(7).fill({ count: 0, date: "", level: 0 });
 
-            week.contributionDays.forEach((day: any) => {
+            week.contributionDays.forEach((day: { date: string; contributionCount: number }) => {
               // Parse date as local timezone to avoid off-by-one errors with UTC
               const parts = day.date.split("-");
               const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
@@ -2127,14 +2127,12 @@ function CadGithubChart() {
 
 /* ── CAD ABOUT ME SECTION ── */
 function CadAboutMe() {
-  const [greeting, setGreeting] = useState("Good Evening");
-
-  useEffect(() => {
+  const [greeting] = useState(() => {
     const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting("Good Morning");
-    else if (hour >= 12 && hour < 17) setGreeting("Good Afternoon");
-    else setGreeting("Good Evening");
-  }, []);
+    if (hour >= 5 && hour < 12) return "Good Morning";
+    if (hour >= 12 && hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  });
 
   const aboutParts = [
     {
@@ -2271,7 +2269,7 @@ function CadAboutMe() {
                   width: "8px",
                 }}
               />
-              <span>0{index + 1} // {part.label}</span>
+              <span>0{index + 1} {"//"} {part.label}</span>
             </div>
 
             {/* Section Text */}
@@ -3155,7 +3153,7 @@ export default function Page() {
                   { link: "https://chanhdai.com/", name: "Chánh Đại", role: "Design Engineer @ shadcncraft" },
                   { link: "https://ramx.in/", name: "Ramkrishna Swarnkar", role: "SDE-L1 @ ASBL" },
 
-                ].map((person, index) => (
+                ].map((person) => (
                   <a
                     key={person.name}
                     href={person.link}
@@ -3180,6 +3178,7 @@ export default function Page() {
                     }}
                   >
                     {/* Favicon */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://www.google.com/s2/favicons?domain=${new URL(person.link).hostname}&sz=64`}
                       alt={person.name}

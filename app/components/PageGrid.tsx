@@ -69,7 +69,7 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
           className="absolute inset-0 flex"
           style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10px", color: "var(--line-stroke-accent)", top: "-18px" }}
         >
-          {["H", "G", "F", "E", "D", "C", "B", "A"].map((l, i) => (
+          {["H", "G", "F", "E", "D", "C", "B", "A"].map((l) => (
             <div key={l} className="flex-1 flex items-center justify-center relative">
               <span className="absolute bottom-1 bg-[var(--background)] px-1">{l}</span>
               <div className="absolute bottom-0 w-[1px] h-[6px] bg-[var(--line-stroke)]" />
@@ -99,7 +99,7 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
           className="absolute inset-0 flex"
           style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10px", color: "var(--line-stroke-accent)", bottom: "-18px" }}
         >
-          {["H", "G", "F", "E", "D", "C", "B", "A"].map((l, i) => (
+          {["H", "G", "F", "E", "D", "C", "B", "A"].map((l) => (
             <div key={l} className="flex-1 flex items-center justify-center relative">
               <div className="absolute top-0 w-[1px] h-[6px] bg-[var(--line-stroke)]" />
               <span className="absolute top-1 bg-[var(--background)] px-1">{l}</span>

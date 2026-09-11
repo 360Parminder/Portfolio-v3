@@ -29,6 +29,7 @@ export function Navbar() {
     const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const initialDark = savedTheme ? savedTheme === "dark" : systemDark;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     applyTheme(initialDark);
 
     (async function () {
@@ -138,7 +139,7 @@ export function Navbar() {
               onMouseEnter={(e) => (e.currentTarget.style.color = "var(--nav-link-hover)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "var(--nav-link)")}
             >
-              <span style={{ fontSize: "9px", opacity: 0.5 }}>{item.code} //</span>
+              <span style={{ fontSize: "9px", opacity: 0.5 }}>{item.code} {"//"}</span>
               <span>{item.name}</span>
             </Link>
           ))}

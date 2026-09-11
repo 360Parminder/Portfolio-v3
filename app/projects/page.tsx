@@ -355,7 +355,7 @@ function CadProjects() {
 
                   {/* What I've done (5 Points) */}
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "4px" }}>
-                    <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>What I've done</span>
+                    <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--foreground)" }}>What I&apos;ve done</span>
                     <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
                       {(Array.isArray(prj.description) ? prj.description : [prj.description]).map((desc, i) => (
                         <li key={i} style={{ display: "flex", gap: "12px", color: "var(--nav-link-hover)", fontSize: "13px", lineHeight: "1.6" }}>
