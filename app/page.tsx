@@ -294,7 +294,7 @@ function CadTechStack() {
       skills: [
         { name: "Arduino", icon: "♾", logo: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><title>Arduino</title><path d="M18.087 6.146c-.3 0-.607.017-.907.069-2.532.367-4.23 2.239-5.18 3.674-.95-1.435-2.648-3.307-5.18-3.674a6.49 6.49 0 0 0-.907-.069C2.648 6.146 0 8.77 0 12s2.656 5.854 5.913 5.854c.3 0 .607-.017.916-.069 2.531-.376 4.23-2.247 5.18-3.683.949 1.436 2.647 3.307 5.18 3.683.299.043.607.069.915.069C21.344 17.854 24 15.23 24 12s-2.656-5.854-5.913-5.854zM6.53 15.734a3.837 3.837 0 0 1-.625.043c-2.148 0-3.889-1.7-3.889-3.777 0-2.085 1.749-3.777 3.898-3.777.208 0 .416.017.624.043 2.39.35 3.847 2.768 4.347 3.734-.508.974-1.974 3.384-4.355 3.734zm11.558.043c-.208 0-.416-.017-.624-.043-2.39-.35-3.856-2.768-4.347-3.734.491-.966 1.957-3.384 4.347-3.734.208-.026.416-.043.624-.043 2.149 0 3.89 1.7 3.89 3.777 0 2.085-1.75 3.777-3.89 3.777zm1.65-4.404v1.134h-1.205v1.182h-1.156v-1.182H16.17v-1.134h1.206V10.19h1.156v1.183h1.206zM4.246 12.498H7.82v-1.125H4.245v1.125z" /></svg>, url: "https://www.arduino.cc/" },
         { name: "ESP32", icon: "📻", logo: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><title>Espressif</title><path d="M12.926 19.324a7.6 7.6 0 00-2.983-6.754 7.44 7.44 0 00-3.828-1.554.697.697 0 01-.606-.731.674.674 0 01.743-.617 8.97 8.97 0 018 9.805 7.828 7.828 0 01-.298 1.542l1.989.56a11.039 11.039 0 001.714-.651 12.159 12.159 0 00.217-2.343A12.57 12.57 0 007.212 6.171a5.53 5.53 0 00-2 0 4.354 4.354 0 00-2.16 1.337 4.274 4.274 0 001.909 6.856 9.896 9.896 0 001.074.195 4.011 4.011 0 013.337 3.954 3.965 3.965 0 01-.64 2.16l1.371.88a10.182 10.182 0 002.057.342 7.52 7.52 0 00.754-2.628m.16 4.73A13.073 13.073 0 01.001 10.983 12.982 12.982 0 013.83 1.737l.743.697a12.067 12.067 0 000 17.141 12.067 12.067 0 0017.141 0l.697.697a12.97 12.97 0 01-9.336 3.726M24 10.993A10.993 10.993 0 0012.949 0c-.389 0-.766 0-1.143.057l-.252.732a18.912 18.912 0 0111.588 11.576l.731-.263c0-.366.069-.732.069-1.143m-1.269 5.165A17.53 17.53 0 007.818 1.27a11.119 11.119 0 00-2.457 1.77v1.635A13.919 13.919 0 0119.268 18.57h1.634a11.713 11.713 0 001.771-2.446M7.92 17.884a1.691 1.691 0 11-1.69-1.691 1.691 1.691 0 011.69 1.691" /></svg>, url: "https://www.espressif.com/en/products/socs/esp32" },
-        { name: "Raspberry Pi", icon: "", logo: <svg viewBox="0 0 274.072 350" ><path d="M74.19.005c-1.77.055-3.676.708-5.838 2.415C63.057.377 57.922-.332 53.33 3.826c-7.091-.919-9.395.978-11.141 3.194-1.557-.032-11.648-1.6-16.275 5.303-11.629-1.376-15.305 6.841-11.141 14.502-2.375 3.677-4.836 7.309.718 14.319-1.965 3.904-.747 8.139 3.882 13.265-1.222 5.488 1.18 9.36 5.486 12.378-.806 7.51 6.887 11.876 9.184 13.433.882 4.376 2.72 8.505 11.507 10.789 1.449 6.521 6.73 7.648 11.844 9.017-16.901 9.824-31.396 22.75-31.297 54.466l-2.476 4.417c-19.379 11.785-36.815 49.664-9.55 80.453 1.781 9.637 4.768 16.56 7.427 24.221 3.978 30.873 29.937 45.328 36.783 47.037C68.315 318.26 79 325.512 93.46 330.591c13.631 14.06 28.399 19.417 43.247 19.408.218 0 .439.003.657 0 14.849.009 29.616-5.349 43.248-19.408 14.459-5.079 25.146-12.331 35.179-19.974 6.847-1.709 32.806-16.164 36.783-47.037 2.659-7.661 5.646-14.584 7.427-24.221 27.265-30.791 9.83-68.672-9.551-80.458l-2.479-4.416c.098-31.713-14.396-44.64-31.297-54.466 5.113-1.369 10.395-2.495 11.843-9.017 8.786-2.284 10.626-6.413 11.507-10.789 2.297-1.556 9.99-5.922 9.185-13.433 4.306-3.018 6.708-6.89 5.485-12.378 4.629-5.125 5.848-9.36 3.883-13.265 5.555-7.006 3.09-10.639.719-14.316 4.161-7.662.488-15.878-11.145-14.502-4.627-6.903-14.715-5.335-16.275-5.303-1.746-2.215-4.049-4.113-11.139-3.194-4.593-4.157-9.727-3.448-15.023-1.406-6.289-4.962-10.45-.984-15.203.52-7.614-2.488-9.355.92-13.096 2.308-8.304-1.754-10.827 2.065-14.808 6.098l-4.63-.092c-12.524 7.381-18.746 22.41-20.952 30.135-2.207-7.727-8.414-22.756-20.936-30.135l-4.63.092c-3.986-4.032-6.509-7.852-14.813-6.098C92.907 3.858 91.17.45 83.552 2.938c-3.12-.987-5.989-3.039-9.368-2.934l.006.001z" /><path fill="currentColor" fill-rule="evenodd" d="M177.65 253.658v-.391c-.119-20.27-18.029-36.609-40.01-36.5-21.979.101-39.709 16.621-39.59 36.891v.39c.11 20.271 18.03 36.61 40.01 36.5 21.981-.1 39.701-16.62 39.59-36.89zm-62.83-104.84c-16.489-10.811-40.26-3.83-53.079 15.57-12.83 19.41-9.86 43.9 6.64 54.7 16.49 10.811 40.25 3.84 53.08-15.57 12.82-19.411 9.85-43.9-6.641-54.7zm44.511-1.961c-16.49 10.811-19.47 35.301-6.64 54.702 12.819 19.41 36.59 26.379 53.08 15.58 16.489-10.811 19.459-35.301 6.64-54.702-12.83-19.41-36.591-26.379-53.08-15.58zM32.392 166.478c-29.54 16.87-24.41 54.411-8.471 67.23 14.49 6.431 26.28-72 8.471-67.23zm205.769-.98c-17.81-4.77-6.011 73.67 8.47 67.231 15.939-12.811 21.07-50.361-8.47-67.231zm-60.5-58.4c-11.32 1.9 54.25 59.16 55.26 46.38 1.04-33.32-24.53-51.57-55.26-46.38zm-84.9-.98c-30.729-5.19-56.289 13.069-55.26 46.39 1.01 12.769 66.58-44.49 55.26-46.39zm44.139-7.77c-18.34-.48-35.939 13.61-35.979 21.78-.05 9.931 14.5 20.101 36.11 20.351 22.06.16 36.14-8.131 36.21-18.381.079-11.61-20.07-23.931-36.341-23.75zm1.121 203.6c-15.891-.39-40.261 6.37-39.961 15.03-.25 5.91 19.131 22.959 38.9 22.109 19.09.33 38.811-16.699 38.55-24.23-.039-7.759-21.499-13.599-37.489-12.909zm-59.06-45.969c-13.061-15.16-30.029-24.201-41.02-17.51-7.351 5.59-8.69 24.619 1.77 43.319 15.51 22.29 37.34 24.521 46.33 19.101 9.5-7.101 4.311-31.201-7.08-44.91zm115.84-4.361c-12.32 14.43-19.17 40.75-10.189 49.22 8.59 6.59 31.649 5.67 48.689-17.97 12.37-15.88 8.221-42.39 1.16-49.431-10.5-8.119-25.561 2.271-39.66 18.181z" clip-rule="evenodd" /><path fill="currentColor" fill-rule="evenodd" d="M49.247 32.48c25.851 8.78 49.17 20.491 68.71 36.6 22.939-10.85 7.12-38.21-4.07-49.07-.57 2.87-1.209 4.68-1.949 5.22-3.641-3.97-6.621-8.03-11.311-11.85-.02 2.24 1.11 4.68-1.68 6.46-2.52-3.44-5.92-6.51-10.44-9.11 2.181 3.81.38 4.96-.79 6.54-3.449-3-6.729-6.04-13.09-8.4 1.74 2.15 4.17 4.25 1.59 6.72-3.55-2.25-7.119-4.5-15.56-6.1 1.899 2.15 5.84 4.3 3.45 6.46-4.461-1.73-9.391-2.99-14.851-3.72 2.61 2.19 4.79 4.32 2.65 6.01-4.771-1.49-11.34-3.49-17.77-1.76l4.07 4.15c.45.56-9.52.43-16.09.53 2.4 3.39 4.84 6.65 6.27 12.47-.65.67-3.91.29-6.98 0 3.15 6.73 8.62 8.43 9.9 11.31-1.93 1.48-4.6 1.1-7.52.09 2.27 4.75 7.03 8 10.79 11.85-.95.681-2.61 1.091-6.54.62 3.47 3.74 7.67 7.17 12.64 10.25-.88 1.04-3.91.99-6.72 1.061 4.51 4.479 10.3 6.799 15.74 9.729-2.71 1.88-4.65 1.44-6.72 1.41 3.839 3.21 10.38 4.88 16.44 6.81-1.149 1.82-2.3 2.32-4.771 2.83 6.42 3.61 15.621 1.96 18.211 3.801-.62 1.81-2.391 2.989-4.51 3.979 10.34.61 38.609-.38 44.029-22.101C101.796 63.46 82.476 49.61 49.247 32.48zm176.309 0c-33.219 17.13-52.539 30.98-63.119 42.79 5.42 21.721 33.689 22.711 44.029 22.101-2.119-.99-3.889-2.17-4.51-3.979 2.59-1.841 11.791-.19 18.211-3.801-2.471-.51-3.621-1.01-4.771-2.83 6.061-1.93 12.602-3.6 16.441-6.81-2.07.03-4.01.47-6.721-1.41 5.439-2.931 11.23-5.25 15.74-9.729-2.811-.07-5.84-.021-6.721-1.061 4.971-3.08 9.17-6.51 12.641-10.25-3.93.471-5.59.061-6.539-.62 3.76-3.851 8.52-7.1 10.789-11.85-2.92 1.01-5.59 1.39-7.52-.09 1.279-2.88 6.75-4.58 9.9-11.31-3.07.29-6.33.67-6.98 0 1.43-5.82 3.879-9.09 6.279-12.47-6.58-.1-16.549.03-16.1-.53l4.07-4.16c-6.42-1.73-13 .28-17.77 1.77-2.141-1.69.039-3.83 2.648-6.01-5.459.73-10.389 1.98-14.85 3.71-2.379-2.15 1.551-4.3 3.451-6.45-8.441 1.6-12.012 3.85-15.561 6.1-2.58-2.47-.15-4.57 1.59-6.72-6.359 2.36-9.641 5.4-13.09 8.4-1.17-1.58-2.971-2.74-.791-6.54-4.52 2.6-7.92 5.67-10.43 9.1-2.799-1.78-1.67-4.21-1.68-6.45-4.699 3.82-7.68 7.88-11.32 11.85-.73-.54-1.379-2.35-1.949-5.22-11.189 10.86-27.01 38.221-4.061 49.07 19.524-16.11 42.844-27.821 68.694-36.601z" clip-rule="evenodd" /></svg> }
+        { name: "Raspberry Pi", icon: "", logo: <svg viewBox="0 0 274.072 350" ><path d="M74.19.005c-1.77.055-3.676.708-5.838 2.415C63.057.377 57.922-.332 53.33 3.826c-7.091-.919-9.395.978-11.141 3.194-1.557-.032-11.648-1.6-16.275 5.303-11.629-1.376-15.305 6.841-11.141 14.502-2.375 3.677-4.836 7.309.718 14.319-1.965 3.904-.747 8.139 3.882 13.265-1.222 5.488 1.18 9.36 5.486 12.378-.806 7.51 6.887 11.876 9.184 13.433.882 4.376 2.72 8.505 11.507 10.789 1.449 6.521 6.73 7.648 11.844 9.017-16.901 9.824-31.396 22.75-31.297 54.466l-2.476 4.417c-19.379 11.785-36.815 49.664-9.55 80.453 1.781 9.637 4.768 16.56 7.427 24.221 3.978 30.873 29.937 45.328 36.783 47.037C68.315 318.26 79 325.512 93.46 330.591c13.631 14.06 28.399 19.417 43.247 19.408.218 0 .439.003.657 0 14.849.009 29.616-5.349 43.248-19.408 14.459-5.079 25.146-12.331 35.179-19.974 6.847-1.709 32.806-16.164 36.783-47.037 2.659-7.661 5.646-14.584 7.427-24.221 27.265-30.791 9.83-68.672-9.551-80.458l-2.479-4.416c.098-31.713-14.396-44.64-31.297-54.466 5.113-1.369 10.395-2.495 11.843-9.017 8.786-2.284 10.626-6.413 11.507-10.789 2.297-1.556 9.99-5.922 9.185-13.433 4.306-3.018 6.708-6.89 5.485-12.378 4.629-5.125 5.848-9.36 3.883-13.265 5.555-7.006 3.09-10.639.719-14.316 4.161-7.662.488-15.878-11.145-14.502-4.627-6.903-14.715-5.335-16.275-5.303-1.746-2.215-4.049-4.113-11.139-3.194-4.593-4.157-9.727-3.448-15.023-1.406-6.289-4.962-10.45-.984-15.203.52-7.614-2.488-9.355.92-13.096 2.308-8.304-1.754-10.827 2.065-14.808 6.098l-4.63-.092c-12.524 7.381-18.746 22.41-20.952 30.135-2.207-7.727-8.414-22.756-20.936-30.135l-4.63.092c-3.986-4.032-6.509-7.852-14.813-6.098C92.907 3.858 91.17.45 83.552 2.938c-3.12-.987-5.989-3.039-9.368-2.934l.006.001z" /><path fill="currentColor" fillRule="evenodd" d="M177.65 253.658v-.391c-.119-20.27-18.029-36.609-40.01-36.5-21.979.101-39.709 16.621-39.59 36.891v.39c.11 20.271 18.03 36.61 40.01 36.5 21.981-.1 39.701-16.62 39.59-36.89zm-62.83-104.84c-16.489-10.811-40.26-3.83-53.079 15.57-12.83 19.41-9.86 43.9 6.64 54.7 16.49 10.811 40.25 3.84 53.08-15.57 12.82-19.411 9.85-43.9-6.641-54.7zm44.511-1.961c-16.49 10.811-19.47 35.301-6.64 54.702 12.819 19.41 36.59 26.379 53.08 15.58 16.489-10.811 19.459-35.301 6.64-54.702-12.83-19.41-36.591-26.379-53.08-15.58zM32.392 166.478c-29.54 16.87-24.41 54.411-8.471 67.23 14.49 6.431 26.28-72 8.471-67.23zm205.769-.98c-17.81-4.77-6.011 73.67 8.47 67.231 15.939-12.811 21.07-50.361-8.47-67.231zm-60.5-58.4c-11.32 1.9 54.25 59.16 55.26 46.38 1.04-33.32-24.53-51.57-55.26-46.38zm-84.9-.98c-30.729-5.19-56.289 13.069-55.26 46.39 1.01 12.769 66.58-44.49 55.26-46.39zm44.139-7.77c-18.34-.48-35.939 13.61-35.979 21.78-.05 9.931 14.5 20.101 36.11 20.351 22.06.16 36.14-8.131 36.21-18.381.079-11.61-20.07-23.931-36.341-23.75zm1.121 203.6c-15.891-.39-40.261 6.37-39.961 15.03-.25 5.91 19.131 22.959 38.9 22.109 19.09.33 38.811-16.699 38.55-24.23-.039-7.759-21.499-13.599-37.489-12.909zm-59.06-45.969c-13.061-15.16-30.029-24.201-41.02-17.51-7.351 5.59-8.69 24.619 1.77 43.319 15.51 22.29 37.34 24.521 46.33 19.101 9.5-7.101 4.311-31.201-7.08-44.91zm115.84-4.361c-12.32 14.43-19.17 40.75-10.189 49.22 8.59 6.59 31.649 5.67 48.689-17.97 12.37-15.88 8.221-42.39 1.16-49.431-10.5-8.119-25.561 2.271-39.66 18.181z" clipRule="evenodd" /><path fill="currentColor" fillRule="evenodd" d="M49.247 32.48c25.851 8.78 49.17 20.491 68.71 36.6 22.939-10.85 7.12-38.21-4.07-49.07-.57 2.87-1.209 4.68-1.949 5.22-3.641-3.97-6.621-8.03-11.311-11.85-.02 2.24 1.11 4.68-1.68 6.46-2.52-3.44-5.92-6.51-10.44-9.11 2.181 3.81.38 4.96-.79 6.54-3.449-3-6.729-6.04-13.09-8.4 1.74 2.15 4.17 4.25 1.59 6.72-3.55-2.25-7.119-4.5-15.56-6.1 1.899 2.15 5.84 4.3 3.45 6.46-4.461-1.73-9.391-2.99-14.851-3.72 2.61 2.19 4.79 4.32 2.65 6.01-4.771-1.49-11.34-3.49-17.77-1.76l4.07 4.15c.45.56-9.52.43-16.09.53 2.4 3.39 4.84 6.65 6.27 12.47-.65.67-3.91.29-6.98 0 3.15 6.73 8.62 8.43 9.9 11.31-1.93 1.48-4.6 1.1-7.52.09 2.27 4.75 7.03 8 10.79 11.85-.95.681-2.61 1.091-6.54.62 3.47 3.74 7.67 7.17 12.64 10.25-.88 1.04-3.91.99-6.72 1.061 4.51 4.479 10.3 6.799 15.74 9.729-2.71 1.88-4.65 1.44-6.72 1.41 3.839 3.21 10.38 4.88 16.44 6.81-1.149 1.82-2.3 2.32-4.771 2.83 6.42 3.61 15.621 1.96 18.211 3.801-.62 1.81-2.391 2.989-4.51 3.979 10.34.61 38.609-.38 44.029-22.101C101.796 63.46 82.476 49.61 49.247 32.48zm176.309 0c-33.219 17.13-52.539 30.98-63.119 42.79 5.42 21.721 33.689 22.711 44.029 22.101-2.119-.99-3.889-2.17-4.51-3.979 2.59-1.841 11.791-.19 18.211-3.801-2.471-.51-3.621-1.01-4.771-2.83 6.061-1.93 12.602-3.6 16.441-6.81-2.07.03-4.01.47-6.721-1.41 5.439-2.931 11.23-5.25 15.74-9.729-2.811-.07-5.84-.021-6.721-1.061 4.971-3.08 9.17-6.51 12.641-10.25-3.93.471-5.59.061-6.539-.62 3.76-3.851 8.52-7.1 10.789-11.85-2.92 1.01-5.59 1.39-7.52-.09 1.279-2.88 6.75-4.58 9.9-11.31-3.07.29-6.33.67-6.98 0 1.43-5.82 3.879-9.09 6.279-12.47-6.58-.1-16.549.03-16.1-.53l4.07-4.16c-6.42-1.73-13 .28-17.77 1.77-2.141-1.69.039-3.83 2.648-6.01-5.459.73-10.389 1.98-14.85 3.71-2.379-2.15 1.551-4.3 3.451-6.45-8.441 1.6-12.012 3.85-15.561 6.1-2.58-2.47-.15-4.57 1.59-6.72-6.359 2.36-9.641 5.4-13.09 8.4-1.17-1.58-2.971-2.74-.791-6.54-4.52 2.6-7.92 5.67-10.43 9.1-2.799-1.78-1.67-4.21-1.68-6.45-4.699 3.82-7.68 7.88-11.32 11.85-.73-.54-1.379-2.35-1.949-5.22-11.189 10.86-27.01 38.221-4.061 49.07 19.524-16.11 42.844-27.821 68.694-36.601z" clipRule="evenodd" /></svg> }
       ],
     },
     {
@@ -455,16 +455,6 @@ function CadExperience() {
   const experiences = [
     {
       id: "EXP-01",
-      company: "Kosh",
-      description:
-        "Building a full-fledged email platform from scratch — custom SMTP server, entire mail infrastructure, and a modern client with both a chat-like interface for new-gen users and a traditional UI for classic email users. Leading architecture, product design, and end-to-end development.",
-      period: "2025 — PRESENT",
-      role: "Founder & Lead Engineer",
-      status: "ACTIVE",
-      tech: ["Next.js", "Node.js", "JavaScript", "AWS", "SMTP", "Socket.io", "Razorpay", "PostgreSQL"],
-    },
-    {
-      id: "EXP-02",
       company: "Freelancing",
       description: "Building a full-fledged web and mobile applications for clients across the globe, utilizing the latest technologies and industry best practices.",
       period: "2025 — PRESENT",
@@ -474,7 +464,7 @@ function CadExperience() {
     },
 
     {
-      id: "EXP-03",
+      id: "EXP-02",
       company: "Devnovate.co",
       description:
         "Redesigned the existing UI/UX of the company's website & added new features.",
@@ -484,7 +474,7 @@ function CadExperience() {
       tech: ["React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb"],
     },
     {
-      id: "EXP-04",
+      id: "EXP-03",
       company: "Microsun global infotech LLP",
       description:
         "Worked on designing the UI of the company's website and clients SME portals using Figma and React.",
@@ -785,276 +775,6 @@ function CadExperience() {
             Height: Auto, Size: 11px, Weight: 600
           </span>
         </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── CAD EDUCATION TIMELINE ── */
-function CadEducation() {
-  const [expandedId, setExpandedId] = useState<string>("EDU-01");
-
-  const education = [
-    {
-      id: "EDU-01",
-      degree: "Bachelor of Technology",
-      field: "Computer Science",
-      highlights: [
-        "Data Structures & Algorithms",
-        "Operating Systems",
-        "Database Management",
-        "Computer Networks",
-      ],
-      institution: "Bikaner Technical University, Bikaner",
-      period: "2021 — 2025",
-      status: "COMPLETED",
-    },
-    {
-      id: "EDU-02",
-      degree: "Senior Secondary (XII)",
-      field: "Science — PCM",
-      highlights: ["Physics", "Chemistry", "Mathematics"],
-      institution: "VLM Public School, Alwar",
-      period: "2021",
-      status: "COMPLETED",
-    },
-  ];
-
-  return (
-    <div
-      id="education"
-      style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
-        fontFamily: "var(--font-geist-mono)",
-        fontSize: "12px",
-        marginTop: "24px",
-        position: "relative",
-      }}
-    >
-      <CadDimensionLabel />
-
-
-      {/* CAD Height Dimension (Left Side) */}
-      <div
-        className={clsx('hidden', 'md:block')}
-        style={{
-          borderBottom: "1px solid var(--line-stroke-accent)",
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          bottom: "0",
-          left: "-12px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: "0",
-          width: "6px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "0",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "50%",
-            transform: "translate(-50%, -50%) rotate(-90deg)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          H: AUTO
-        </span>
-      </div>
-
-      {/* Header Bar */}
-      <div
-        style={{
-          alignItems: "center",
-          backgroundColor: "var(--line-fill-accent)",
-          borderBottom: "1px solid var(--line-stroke-accent)",
-          color: "var(--nav-link-hover)",
-          display: "flex",
-          fontSize: "11px",
-          justifyContent: "space-between",
-          letterSpacing: "0.1em",
-          padding: "10px 14px",
-        }}
-      >
-        <div style={{ alignItems: "center", display: "flex", gap: "8px" }}>
-          <span style={{ backgroundColor: "#8b5cf6", borderRadius: "50%", display: "inline-block", height: "6px", width: "6px" }} />
-          <span>SPEC_DATA // EDUCATION_SCHEMA</span>
-        </div>
-        <span>TOTAL: 0{education.length}_RECORDS</span>
-      </div>
-
-      {/* Education Entries */}
-      <div style={{ display: "grid", gap: "0", gridTemplateColumns: "1fr" }}>
-        {education.map((edu, index) => {
-          const isExpanded = expandedId === edu.id;
-
-          return (
-            <div
-              key={edu.id}
-              style={{
-                backgroundColor: "var(--background)",
-                borderBottom: index === education.length - 1 ? "none" : "1px solid var(--line-stroke)",
-                transition: "background-color 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--line-fill)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--background)";
-              }}
-            >
-              {/* Compact Header Row — always visible */}
-              <div
-                style={{
-                  alignItems: "center",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "12px 16px",
-                }}
-                onClick={() => setExpandedId(isExpanded ? "" : edu.id)}
-              >
-                <div style={{ alignItems: "center", display: "flex", gap: "12px" }}>
-                  {/* Education icon — diamond shape */}
-                  <div
-                    style={{
-                      alignItems: "center",
-                      backgroundColor: "var(--line-fill-accent)",
-                      border: "1px solid var(--line-stroke-accent)",
-                      borderRadius: "6px",
-                      color: "var(--foreground)",
-                      display: "flex",
-                      flexShrink: 0,
-                      fontSize: "16px",
-                      height: "32px",
-                      justifyContent: "center",
-                      width: "32px",
-                    }}
-                  >
-                    🎓
-                  </div>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <div style={{ alignItems: "center", display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                      <span style={{ color: "var(--foreground)", fontSize: "14px", fontWeight: 600 }}>{edu.degree}</span>
-                      <span
-                        style={{
-                          border: "1px solid var(--line-stroke-accent)",
-                          borderRadius: "2px",
-                          color: "var(--nav-link)",
-                          fontSize: "8px",
-                          letterSpacing: "0.08em",
-                          padding: "2px 6px",
-                        }}
-                      >
-                        {edu.status}
-                      </span>
-                    </div>
-                    <span style={{ color: "var(--nav-link-hover)", fontSize: "10px", fontWeight: 500 }}>
-                      {edu.institution} · <span style={{ color: "var(--nav-link)", fontWeight: 400 }}>{edu.period}</span>
-                    </span>
-                  </div>
-                </div>
-
-                {/* Expand/Collapse chevron */}
-                <div
-                  style={{
-                    alignItems: "center",
-                    border: "1px solid var(--line-stroke-accent)",
-                    borderRadius: "4px",
-                    color: "var(--foreground)",
-                    display: "flex",
-                    flexShrink: 0,
-                    height: "28px",
-                    justifyContent: "center",
-                    transition: "all 0.2s",
-                    width: "28px",
-                  }}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{
-                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.3s ease",
-                    }}
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Expandable Details */}
-              <div
-                style={{
-                  maxHeight: isExpanded ? "500px" : "0px",
-                  opacity: isExpanded ? 1 : 0,
-                  overflow: "hidden",
-                  transition: "max-height 0.4s ease, opacity 0.3s ease",
-                }}
-              >
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "0 16px 16px" }}>
-                  {/* Divider */}
-                  <div style={{ borderTop: "1px dashed var(--line-stroke)" }} />
-
-                  {/* Field */}
-                  <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6" }}>
-                    Field of Study: <span style={{ color: "var(--foreground)", fontWeight: 500 }}>{edu.field}</span>
-                  </div>
-
-                  {/* Highlight Tags */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                    {edu.highlights.map((h) => (
-                      <span
-                        key={h}
-                        style={{
-                          backgroundColor: "var(--background)",
-                          border: "1px solid var(--line-stroke)",
-                          color: "var(--foreground)",
-                          fontSize: "10px",
-                          letterSpacing: "0.05em",
-                          padding: "3px 7px",
-                        }}
-                      >
-                        {h}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* CAD Footer Bar */}
-      <div
-        style={{
-          alignItems: "center",
-          borderTop: "1px solid var(--line-stroke)",
-          color: "var(--nav-link)",
-          display: "flex",
-          fontSize: "9px",
-          justifyContent: "space-between",
-          letterSpacing: "0.05em",
-          padding: "8px 14px",
-        }}
-      >
-        <span>CREDENTIAL_VERIFICATION // VALID</span>
-        <span>LAST_UPDATED: 2026-07</span>
       </div>
     </div>
   );
@@ -1439,6 +1159,626 @@ function CadProjects() {
             Height: Auto, Size: 11px, Weight: 600
           </span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── CAD EDUCATION TIMELINE ── */
+function CadEducation() {
+  const [expandedId, setExpandedId] = useState<string>("EDU-01");
+
+  const education = [
+    {
+      id: "EDU-01",
+      degree: "Bachelor of Technology",
+      field: "Computer Science",
+      highlights: [
+        "Data Structures & Algorithms",
+        "Operating Systems",
+        "Database Management",
+        "Computer Networks",
+      ],
+      institution: "Bikaner Technical University, Bikaner",
+      period: "2021 — 2025",
+      status: "COMPLETED",
+    },
+    {
+      id: "EDU-02",
+      degree: "Senior Secondary (XII)",
+      field: "Science — PCM",
+      highlights: ["Physics", "Chemistry", "Mathematics"],
+      institution: "VLM Public School, Alwar",
+      period: "2021",
+      status: "COMPLETED",
+    },
+  ];
+
+  return (
+    <div
+      id="education"
+      style={{
+        backgroundColor: "var(--line-fill)",
+        border: "1px solid var(--line-stroke-accent)",
+        fontFamily: "var(--font-geist-mono)",
+        fontSize: "12px",
+        marginTop: "24px",
+        position: "relative",
+      }}
+    >
+      <CadDimensionLabel />
+
+
+      {/* CAD Height Dimension (Left Side) */}
+      <div
+        className={clsx('hidden', 'md:block')}
+        style={{
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          bottom: "0",
+          left: "-12px",
+          pointerEvents: "none",
+          position: "absolute",
+          top: "0",
+          width: "6px",
+        }}
+      >
+        <span
+          style={{
+            backgroundColor: "var(--background)",
+            color: "var(--line-stroke-accent)",
+            fontFamily: "var(--font-geist-mono)",
+            fontSize: "9px",
+            left: "0",
+            letterSpacing: "0.1em",
+            padding: "0 4px",
+            position: "absolute",
+            top: "50%",
+            transform: "translate(-50%, -50%) rotate(-90deg)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          H: AUTO
+        </span>
+      </div>
+
+      {/* Header Bar */}
+      <div
+        style={{
+          alignItems: "center",
+          backgroundColor: "var(--line-fill-accent)",
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          color: "var(--nav-link-hover)",
+          display: "flex",
+          fontSize: "11px",
+          justifyContent: "space-between",
+          letterSpacing: "0.1em",
+          padding: "10px 14px",
+        }}
+      >
+        <div style={{ alignItems: "center", display: "flex", gap: "8px" }}>
+          <span style={{ backgroundColor: "#8b5cf6", borderRadius: "50%", display: "inline-block", height: "6px", width: "6px" }} />
+          <span>SPEC_DATA // EDUCATION_SCHEMA</span>
+        </div>
+        <span>TOTAL: 0{education.length}_RECORDS</span>
+      </div>
+
+      {/* Education Entries */}
+      <div style={{ display: "grid", gap: "0", gridTemplateColumns: "1fr" }}>
+        {education.map((edu, index) => {
+          const isExpanded = expandedId === edu.id;
+
+          return (
+            <div
+              key={edu.id}
+              style={{
+                backgroundColor: "var(--background)",
+                borderBottom: index === education.length - 1 ? "none" : "1px solid var(--line-stroke)",
+                transition: "background-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--background)";
+              }}
+            >
+              {/* Compact Header Row — always visible */}
+              <div
+                style={{
+                  alignItems: "center",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "12px 16px",
+                }}
+                onClick={() => setExpandedId(isExpanded ? "" : edu.id)}
+              >
+                <div style={{ alignItems: "center", display: "flex", gap: "12px" }}>
+                  {/* Education icon — diamond shape */}
+                  <div
+                    style={{
+                      alignItems: "center",
+                      backgroundColor: "var(--line-fill-accent)",
+                      border: "1px solid var(--line-stroke-accent)",
+                      borderRadius: "6px",
+                      color: "var(--foreground)",
+                      display: "flex",
+                      flexShrink: 0,
+                      fontSize: "16px",
+                      height: "32px",
+                      justifyContent: "center",
+                      width: "32px",
+                    }}
+                  >
+                    🎓
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <div style={{ alignItems: "center", display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                      <span style={{ color: "var(--foreground)", fontSize: "14px", fontWeight: 600 }}>{edu.degree}</span>
+                      <span
+                        style={{
+                          border: "1px solid var(--line-stroke-accent)",
+                          borderRadius: "2px",
+                          color: "var(--nav-link)",
+                          fontSize: "8px",
+                          letterSpacing: "0.08em",
+                          padding: "2px 6px",
+                        }}
+                      >
+                        {edu.status}
+                      </span>
+                    </div>
+                    <span style={{ color: "var(--nav-link-hover)", fontSize: "10px", fontWeight: 500 }}>
+                      {edu.institution} · <span style={{ color: "var(--nav-link)", fontWeight: 400 }}>{edu.period}</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Expand/Collapse chevron */}
+                <div
+                  style={{
+                    alignItems: "center",
+                    border: "1px solid var(--line-stroke-accent)",
+                    borderRadius: "4px",
+                    color: "var(--foreground)",
+                    display: "flex",
+                    flexShrink: 0,
+                    height: "28px",
+                    justifyContent: "center",
+                    transition: "all 0.2s",
+                    width: "28px",
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s ease",
+                    }}
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Expandable Details */}
+              <div
+                style={{
+                  maxHeight: isExpanded ? "500px" : "0px",
+                  opacity: isExpanded ? 1 : 0,
+                  overflow: "hidden",
+                  transition: "max-height 0.4s ease, opacity 0.3s ease",
+                }}
+              >
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "0 16px 16px" }}>
+                  {/* Divider */}
+                  <div style={{ borderTop: "1px dashed var(--line-stroke)" }} />
+
+                  {/* Field */}
+                  <div style={{ color: "var(--nav-link-hover)", fontSize: "12px", lineHeight: "1.6" }}>
+                    Field of Study: <span style={{ color: "var(--foreground)", fontWeight: 500 }}>{edu.field}</span>
+                  </div>
+
+                  {/* Highlight Tags */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                    {edu.highlights.map((h) => (
+                      <span
+                        key={h}
+                        style={{
+                          backgroundColor: "var(--background)",
+                          border: "1px solid var(--line-stroke)",
+                          color: "var(--foreground)",
+                          fontSize: "10px",
+                          letterSpacing: "0.05em",
+                          padding: "3px 7px",
+                        }}
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* CAD Footer Bar */}
+      <div
+        style={{
+          alignItems: "center",
+          borderTop: "1px solid var(--line-stroke)",
+          color: "var(--nav-link)",
+          display: "flex",
+          fontSize: "9px",
+          justifyContent: "space-between",
+          letterSpacing: "0.05em",
+          padding: "8px 14px",
+        }}
+      >
+        <span>CREDENTIAL_VERIFICATION // VALID</span>
+        <span>LAST_UPDATED: 2026-07</span>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── CAD COMPONENTS SECTION ── */
+function CadComponents() {
+  const [expandedId, setExpandedId] = useState<string>("CMP-01");
+
+  const components = [
+    {
+      id: "CMP-01",
+      name: "MeasurementCard",
+      package: "@360parminder/components",
+      status: "NPM_PACKAGE",
+      statusColor: "#22c55e",
+      tag: "REACT_NATIVE",
+      description:
+        "Expandable measurement card for mobile health applications. Features an interactive calibrated ruler with snap ticks, precision stepper buttons, and animated multi-unit switching.",
+      tech: ["React Native", "NativeWind", "Tailwind", "Hugeicons", "LayoutAnimation"],
+      preview: "250 mg · Interactive Ruler & Stepper",
+    },
+    {
+      id: "CMP-02",
+      name: "Button System",
+      package: "@360parminder/components",
+      status: "NPM_PACKAGE",
+      statusColor: "#22c55e",
+      tag: "REACT_NATIVE",
+      description:
+        "Production-grade mobile button component system built with Tailwind Variants. Offers 4 visual style tiers, 3 responsive sizes, and built-in loading spinner handling.",
+      tech: ["React Native", "NativeWind", "Tailwind Variants", "TypeScript"],
+      preview: "Primary · Secondary · Outline · Ghost",
+    },
+    {
+      id: "CMP-03",
+      name: "HoverTechTag",
+      package: "portfolio-v3",
+      status: "CORE",
+      statusColor: "#3b82f6",
+      tag: "REACT_WEB",
+      description:
+        "Smooth interactive technology tag powered by Motion (Framer Motion). Expands on cursor hover with physics-based spring curves to reveal authentic SVG brand marks.",
+      tech: ["React", "Motion", "SVG", "TypeScript"],
+      preview: "Dynamic Brand Icons · Spring Transitions",
+    },
+    {
+      id: "CMP-04",
+      name: "ProjectLogo",
+      package: "portfolio-v3",
+      status: "PRODUCTION",
+      statusColor: "#f59e0b",
+      tag: "REACT_WEB",
+      description:
+        "Automated website logo extraction primitive. Connects to server-side head parser to resolve high-res apple-touch-icons and favicons with graceful fallback caching.",
+      tech: ["Next.js", "API Routes", "HTML Parser", "Cache-Control"],
+      preview: "Live Web Favicon Extractor · 3-Tier Fallback",
+    },
+  ];
+
+  return (
+    <div
+      id="components"
+      style={{
+        backgroundColor: "var(--line-fill)",
+        border: "1px solid var(--line-stroke-accent)",
+        fontFamily: "var(--font-geist-mono)",
+        fontSize: "12px",
+        marginTop: "24px",
+        position: "relative",
+      }}
+    >
+      <CadDimensionLabel />
+
+      {/* CAD Height Dimension (Left Side) */}
+      <div
+        className={clsx('hidden', 'md:block')}
+        style={{
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          bottom: "0",
+          left: "-12px",
+          pointerEvents: "none",
+          position: "absolute",
+          top: "0",
+          width: "6px",
+        }}
+      >
+        <span
+          style={{
+            backgroundColor: "var(--background)",
+            color: "var(--line-stroke-accent)",
+            fontFamily: "var(--font-geist-mono)",
+            fontSize: "9px",
+            left: "0",
+            letterSpacing: "0.1em",
+            padding: "0 4px",
+            position: "absolute",
+            top: "50%",
+            transform: "translate(-50%, -50%) rotate(-90deg)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          H: AUTO
+        </span>
+      </div>
+
+      {/* CAD Width Dimension (Top Side) */}
+      <div
+        className={clsx('hidden', 'md:block')}
+        style={{
+          borderLeft: "1px solid var(--line-stroke-accent)",
+          borderRight: "1px solid var(--line-stroke-accent)",
+          borderTop: "1px solid var(--line-stroke-accent)",
+          height: "6px",
+          left: "0",
+          pointerEvents: "none",
+          position: "absolute",
+          right: "0",
+          top: "-12px",
+        }}
+      >
+        <span
+          style={{
+            backgroundColor: "var(--background)",
+            color: "var(--line-stroke-accent)",
+            fontFamily: "var(--font-geist-mono)",
+            fontSize: "9px",
+            left: "50%",
+            letterSpacing: "0.1em",
+            padding: "0 6px",
+            position: "absolute",
+            top: "0",
+            transform: "translate(-50%, -50%)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          W: AUTO
+        </span>
+      </div>
+
+      {/* Header Bar */}
+      <div
+        style={{
+          alignItems: "center",
+          backgroundColor: "var(--line-fill-accent)",
+          borderBottom: "1px solid var(--line-stroke-accent)",
+          color: "var(--nav-link-hover)",
+          display: "flex",
+          fontSize: "11px",
+          justifyContent: "space-between",
+          letterSpacing: "0.1em",
+          padding: "10px 14px",
+        }}
+      >
+        <div style={{ alignItems: "center", display: "flex", gap: "8px" }}>
+          <span style={{ backgroundColor: "#06b6d4", borderRadius: "50%", display: "inline-block", height: "6px", width: "6px" }} />
+          <span>SPEC_DATA // CUSTOM_COMPONENTS_REGISTRY</span>
+        </div>
+        <span>TOTAL: 0{components.length}_ACTIVE_NODES</span>
+      </div>
+
+      {/* Components List */}
+      <div style={{ display: "grid", gap: "0", gridTemplateColumns: "1fr" }}>
+        {components.map((cmp, index) => {
+          const isExpanded = expandedId === cmp.id;
+          const isLast = index === components.length - 1;
+
+          return (
+            <div
+              key={cmp.id}
+              style={{
+                backgroundColor: "var(--background)",
+                borderBottom: isLast ? "none" : "1px solid var(--line-stroke)",
+                transition: "background-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--background)";
+              }}
+            >
+              {/* Header Row */}
+              <div
+                style={{
+                  alignItems: "center",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "12px 16px",
+                }}
+                onClick={() => setExpandedId(isExpanded ? "" : cmp.id)}
+              >
+                <div style={{ alignItems: "center", display: "flex", gap: "12px" }}>
+                  {/* Component Icon Badge */}
+                  <div
+                    style={{
+                      alignItems: "center",
+                      backgroundColor: "var(--line-fill-accent)",
+                      border: "1px solid var(--line-stroke-accent)",
+                      borderRadius: "8px",
+                      color: "#06b6d4",
+                      display: "flex",
+                      flexShrink: 0,
+                      fontSize: "14px",
+                      height: "36px",
+                      justifyContent: "center",
+                      width: "36px",
+                      userSelect: "none",
+                    }}
+                  >
+                    {cmp.id === "CMP-01" ? "💊" : cmp.id === "CMP-02" ? "🔘" : cmp.id === "CMP-03" ? "🏷️" : "🌐"}
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <div style={{ alignItems: "center", display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                      <span style={{ color: "var(--foreground)", fontSize: "14px", fontWeight: 600 }}>{cmp.name}</span>
+                      <span
+                        style={{
+                          border: `1px solid ${cmp.statusColor}`,
+                          borderRadius: "2px",
+                          color: cmp.statusColor,
+                          fontSize: "8px",
+                          letterSpacing: "0.08em",
+                          padding: "2px 6px",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {cmp.status}
+                      </span>
+                      <span
+                        style={{
+                          border: "1px solid var(--line-stroke-accent)",
+                          borderRadius: "2px",
+                          color: "var(--nav-link)",
+                          fontSize: "8px",
+                          letterSpacing: "0.08em",
+                          padding: "2px 6px",
+                        }}
+                      >
+                        {cmp.tag}
+                      </span>
+                    </div>
+                    <span style={{ color: "var(--nav-link)", fontSize: "9px", letterSpacing: "0.05em" }}>
+                      {cmp.id} // {cmp.package}
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ alignItems: "center", display: "flex", gap: "8px" }}>
+                  <Link
+                    href={`/components#${cmp.id.toLowerCase()}`}
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      alignItems: "center",
+                      border: "1px dashed var(--line-stroke-accent)",
+                      color: "var(--foreground)",
+                      display: "flex",
+                      fontSize: "10px",
+                      gap: "6px",
+                      padding: "4px 8px",
+                      textDecoration: "none",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
+                      e.currentTarget.style.borderColor = "var(--foreground)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
+                    }}
+                  >
+                    <span>EXPLORE_DEMO</span>
+                    <span>→</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Expanded Description */}
+              {isExpanded && (
+                <div
+                  style={{
+                    backgroundColor: "var(--line-fill)",
+                    borderTop: "1px dashed var(--line-stroke)",
+                    color: "var(--nav-link-hover)",
+                    fontSize: "11px",
+                    lineHeight: "1.6",
+                    padding: "12px 16px",
+                  }}
+                >
+                  <p style={{ margin: "0 0 10px 0" }}>{cmp.description}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "10px", color: "var(--nav-link)" }}>STACK:</span>
+                    {cmp.tech.map((t) => (
+                      <span
+                        key={t}
+                        style={{
+                          backgroundColor: "var(--background)",
+                          border: "1px solid var(--line-stroke)",
+                          borderRadius: "2px",
+                          color: "var(--foreground)",
+                          fontSize: "9px",
+                          padding: "2px 6px",
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Show All Components CTA Bar */}
+      <div style={{ position: "relative" }}>
+        <Link href="/components" style={{ textDecoration: "none" }}>
+          <div
+            style={{
+              alignItems: "center",
+              backgroundColor: "var(--background)",
+              borderTop: "1px solid var(--line-stroke)",
+              color: "var(--foreground)",
+              cursor: "pointer",
+              display: "flex",
+              fontSize: "11px",
+              fontWeight: 600,
+              justifyContent: "center",
+              letterSpacing: "0.1em",
+              padding: "12px 16px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--line-fill)";
+              e.currentTarget.style.color = "var(--nav-link-hover)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--background)";
+              e.currentTarget.style.color = "var(--foreground)";
+            }}
+          >
+            VIEW_FULL_COMPONENTS_LIBRARY (05) // →
+          </div>
+        </Link>
       </div>
     </div>
   );
@@ -2743,11 +3083,15 @@ export default function Page() {
           {/* CAD EXPERIENCE TIMELINE */}
           <CadExperience />
 
+          {/* CAD PROJECTS SCHEMA */}
+          <CadProjects />
+
           {/* CAD EDUCATION TIMELINE */}
           <CadEducation />
 
-          {/* CAD PROJECTS SCHEMA */}
-          <CadProjects />
+
+          {/* CAD CUSTOM COMPONENTS REGISTRY */}
+          <CadComponents />
 
           {/* INSPIRED BY */}
           <div
