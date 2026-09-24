@@ -2341,7 +2341,7 @@ export default function Page() {
                 <div style={{ alignItems: "center", color: "var(--foreground)", display: "flex", fontWeight: 500, gap: "8px" }}>
                   <BriefcaseIcon />
                   <span>Building</span>
-                  <Link className="text-primary" href="https://rajdoot.wtf">@Rajdoot</Link>
+                  <Link className="text-primary" href="https://kosh.uno">@Kosh</Link>
                 </div>
               </div>
 
