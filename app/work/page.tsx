@@ -438,7 +438,7 @@ function CadProjects() {
         "Deployed secure media storage using Cloudinary and automated serverless backend workflows on AWS."
       ],
       tech: ["React Native", "Node.js", "Tailwind", "Motion", "MongoDB", "AWS", "Cloudinary", "IOT"],
-      link: "https://swasthya.parminder.pro",
+      link: "https://swasthya.pro",
     },
     {
       id: "PRJ-03",
