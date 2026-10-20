@@ -447,16 +447,6 @@ function CadExperience() {
   const experiences = [
     {
       id: "EXP-01",
-      company: "Kosh",
-      description:
-        "Building a full-fledged email platform from scratch — custom SMTP server, entire mail infrastructure, and a modern client with both a chat-like interface for new-gen users and a traditional UI for classic email users. Leading architecture, product design, and end-to-end development.",
-      period: "2025 — PRESENT",
-      role: "Founder & Lead Engineer",
-      status: "ACTIVE",
-      tech: ["Next.js", "Node.js", "JavaScript", "AWS", "SMTP", "Socket.io", "Razorpay", "PostgreSQL"],
-    },
-    {
-      id: "EXP-02",
       company: "Freelancing",
       description: "Building a full-fledged web and mobile applications for clients across the globe, utilizing the latest technologies and industry best practices.",
       period: "2025 — PRESENT",
@@ -464,9 +454,8 @@ function CadExperience() {
       status: "ACTIVE",
       tech: ["Next.js", "React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb", "Supabase", "Socket.io", "Razorpay"],
     },
-
     {
-      id: "EXP-03",
+      id: "EXP-02",
       company: "Devnovate.co",
       description:
         "Redesigned the existing UI/UX of the company's website & added new features.",
@@ -476,7 +465,7 @@ function CadExperience() {
       tech: ["React", "TypeScript", "Tailwind", "motion", "nodejs", "express", "mongodb"],
     },
     {
-      id: "EXP-04",
+      id: "EXP-03",
       company: "Microsun global infotech LLP",
       description:
         "Worked on designing the UI of the company's website and clients SME portals using Figma and React.",
@@ -1066,19 +1055,19 @@ function CadProjects() {
     },
     {
       id: "PRJ-02",
-      description: "Sophisticated Messaging APIs for Developers. Build powerful messaging applications with our elegant, reliable, and affordable API platform.",
-      link: "https://Rajdoot.wtf",
-      name: "Rajdoot",
-      status: "PRODUCTION",
-      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
-    },
-    {
-      id: "PRJ-03",
       description: "A platform that allows you to monitor your health and get alerts when your health is not good. It also allows you to track your family and friends medication and health.",
       link: "https://swasthya.parminder.pro",
       name: "Swasthya",
       status: "PRODUCTION",
       tech: ["React Native", "Node.js", "Tailwind", "Motion", "MongoDB", "AWS", "Cloudinary", "IOT"],
+    },
+    {
+      id: "PRJ-03",
+      description: "Sophisticated Messaging APIs for Developers. Build powerful messaging applications with our elegant, reliable, and affordable API platform.",
+      link: "https://Rajdoot.wtf",
+      name: "Rajdoot",
+      status: "PRODUCTION",
+      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
     },
     {
       id: "PRJ-04",

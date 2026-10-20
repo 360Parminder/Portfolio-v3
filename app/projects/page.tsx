@@ -122,20 +122,6 @@ function CadProjects() {
     },
     {
       id: "PRJ-02",
-      name: "Rajdoot",
-      status: "PRODUCTION",
-      description: [
-        "Architected a developer-first messaging API platform for building custom, high-reliability communication apps with sub-100ms latency.",
-        "Designed RESTful and WebSocket API endpoints using Node.js, Express, and MongoDB for high-throughput message routing.",
-        "Built an interactive developer dashboard with React, Tailwind CSS, and Framer Motion for API key provisioning and real-time usage metrics.",
-        "Implemented hardware IoT integration layer supporting physical triggers via Arduino and webhook events for embedded devices.",
-        "Integrated Cloudinary asset pipelines, Razorpay subscription tiers, and AWS cloud deployment for scaling infrastructure."
-      ],
-      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
-      link: "https://Rajdoot.wtf",
-    },
-    {
-      id: "PRJ-03",
       name: "Swasthya",
       status: "PRODUCTION",
       description: [
@@ -147,6 +133,20 @@ function CadProjects() {
       ],
       tech: ["React Native", "Node.js", "Tailwind", "Motion", "MongoDB", "AWS", "Cloudinary", "IOT"],
       link: "https://swasthya.parminder.pro",
+    },
+    {
+      id: "PRJ-03",
+      name: "Rajdoot",
+      status: "PRODUCTION",
+      description: [
+        "Architected a developer-first messaging API platform for building custom, high-reliability communication apps with sub-100ms latency.",
+        "Designed RESTful and WebSocket API endpoints using Node.js, Express, and MongoDB for high-throughput message routing.",
+        "Built an interactive developer dashboard with React, Tailwind CSS, and Framer Motion for API key provisioning and real-time usage metrics.",
+        "Implemented hardware IoT integration layer supporting physical triggers via Arduino and webhook events for embedded devices.",
+        "Integrated Cloudinary asset pipelines, Razorpay subscription tiers, and AWS cloud deployment for scaling infrastructure."
+      ],
+      tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
+      link: "https://Rajdoot.wtf",
     },
     {
       id: "PRJ-04",
