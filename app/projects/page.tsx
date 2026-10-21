@@ -517,7 +517,6 @@ function CadProjectCardItem({
         <motion.div
           animate={{
             scale: hovered ? 1.12 : 1,
-            rotate: hovered ? [-1, 1, 0] : 0,
           }}
           transition={{ type: "spring", stiffness: 320, damping: 20 }}
           style={{
