@@ -6,9 +6,23 @@ import clsx from "clsx";
 import { TitleBlock } from "./components/TitleBlock";
 import { ProjectLogo } from "./components/ProjectLogo";
 import { CadProjectCardItem } from "./components/CadProjectCardItem";
+import { CadProductFlows } from "./components/CadProductFlows";
+import {
+  CAD_EASE,
+  CadDimensionLabelAnimated,
+  CadDraftBox,
+  CadDraftHeightScale,
+  CadDraftRule,
+  CadDraftStatusControl,
+  CadDraftWidthScale,
+  DraftingScaleRuler,
+  DraftPencilNib,
+  useCadDraft,
+  useCadWriteSlot,
+} from "./components/CadDraft";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 const caveat = Caveat({
   display: "swap",
@@ -132,45 +146,19 @@ function CadTimeTracker() {
   );
 }
 
-function CadDimensionLabel() {
+function CadDimensionLabel({
+  trigger = "view",
+  minDelayMs = 0,
+}: {
+  trigger?: "mount" | "view";
+  minDelayMs?: number;
+}) {
   return (
-    <div
-      className={clsx('hidden', 'md:block')}
-      style={{
-        height: "40px",
-        pointerEvents: "none",
-        position: "absolute",
-        right: "-200px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        width: "220px",
-        zIndex: 20,
-      }}
-    >
-      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-        <path
-          d="M 20,20 L 40,40 L 210,40"
-          fill="none"
-          stroke="var(--line-stroke-accent)"
-          strokeWidth="1"
-        />
-        <circle cx="20" cy="20" r="2" fill="var(--line-stroke-accent)" />
-      </svg>
-      <span
-        className={caveat.className}
-        style={{
-          bottom: "-8px",
-          color: "var(--foreground)",
-          fontSize: "18px",
-          left: "45px",
-          lineHeight: "1",
-          position: "absolute",
-          whiteSpace: "nowrap",
-        }}
-      >
-        Height: Auto, Size: 11px, Weight: 600
-      </span>
-    </div>
+    <CadDimensionLabelAnimated
+      caveatClassName={caveat.className}
+      trigger={trigger}
+      minDelayMs={minDelayMs}
+    />
   );
 }
 
@@ -220,6 +208,152 @@ function MediumIcon() {
     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
       <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42c1.87 0 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
     </svg>
+  );
+}
+
+const BORDER_BEAM_SEGMENTS = [
+  { length: 0.34, offset: 0, opacity: 0.04, width: 1.0, glow: false },
+  { length: 0.295, offset: 0.03, opacity: 0.05, width: 1.05, glow: false },
+  { length: 0.25, offset: 0.06, opacity: 0.06, width: 1.05, glow: false },
+  { length: 0.205, offset: 0.09, opacity: 0.08, width: 1.1, glow: false },
+  { length: 0.16, offset: 0.12, opacity: 0.1, width: 1.1, glow: false },
+  { length: 0.123, offset: 0.145, opacity: 0.12, width: 1.15, glow: false },
+  { length: 0.091, offset: 0.165, opacity: 0.15, width: 1.15, glow: false },
+  { length: 0.064, offset: 0.182, opacity: 0.2, width: 1.2, glow: false },
+  { length: 0.041, offset: 0.196, opacity: 0.28, width: 1.2, glow: false },
+  { length: 0.023, offset: 0.207, opacity: 0.4, width: 1.25, glow: false },
+  { length: 0.011, offset: 0.214, opacity: 0.72, width: 1.3, glow: true },
+] as const;
+
+function HoverBorderBeam({
+  active,
+  rx = 3.5,
+  duration = 4.2,
+}: {
+  active: boolean;
+  rx?: number;
+  duration?: number;
+}) {
+  return (
+    <AnimatePresence>
+      {active && (
+        <motion.svg
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          style={{
+            height: "calc(100% + 1px)",
+            inset: "-0.5px",
+            overflow: "visible",
+            pointerEvents: "none",
+            position: "absolute",
+            width: "calc(100% + 1px)",
+          }}
+        >
+          {BORDER_BEAM_SEGMENTS.map((seg, idx) => {
+            const spacing = Number((1 - seg.length).toFixed(4));
+            return (
+              <motion.rect
+                key={idx}
+                x={0}
+                y={0}
+                width="100%"
+                height="100%"
+                rx={rx}
+                ry={rx}
+                fill="none"
+                stroke="var(--foreground)"
+                strokeOpacity={seg.opacity}
+                strokeWidth={seg.width}
+                strokeLinecap="round"
+                style={
+                  seg.glow
+                    ? { filter: "drop-shadow(0 0 2px var(--foreground))" }
+                    : undefined
+                }
+                initial={{
+                  pathLength: seg.length,
+                  pathSpacing: spacing,
+                  pathOffset: seg.offset,
+                }}
+                animate={{
+                  pathLength: seg.length,
+                  pathSpacing: spacing,
+                  pathOffset: [seg.offset, seg.offset + 1],
+                }}
+                transition={{
+                  pathOffset: {
+                    duration,
+                    ease: "linear",
+                    repeat: Infinity,
+                  },
+                }}
+              />
+            );
+          })}
+        </motion.svg>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function SocialCard({
+  href,
+  label,
+  icon,
+}: {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      animate={{
+        y: isHovered && !shouldReduceMotion ? -2 : 0,
+        scale: isHovered && !shouldReduceMotion ? 1.015 : 1,
+      }}
+      whileTap={{ scale: 0.98, y: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 320,
+        damping: 26,
+        mass: 0.7,
+      }}
+      style={{
+        alignItems: "center",
+        backgroundColor: isHovered ? "var(--line-fill-accent)" : "var(--background)",
+        border: `1px solid ${isHovered && shouldReduceMotion ? "var(--line-stroke-accent)" : "var(--line-stroke)"}`,
+        borderRadius: "4px",
+        boxShadow: isHovered
+          ? "0 8px 20px -6px rgba(0, 0, 0, 0.24), 0 2px 6px -2px rgba(0, 0, 0, 0.12)"
+          : "0 0 0 0 rgba(0, 0, 0, 0)",
+        color: "var(--foreground)",
+        display: "flex",
+        fontSize: "11px",
+        gap: "6px",
+        padding: "5px 10px",
+        position: "relative",
+        textDecoration: "none",
+        transition:
+          "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        zIndex: isHovered ? 20 : 1,
+      }}
+    >
+      <HoverBorderBeam active={isHovered && !shouldReduceMotion} rx={3.5} />
+
+      {icon}
+      <span>{label}</span>
+    </motion.a>
   );
 }
 
@@ -309,15 +443,14 @@ function CadTechStack() {
     },
   ];
   return (
-    <div
+    <CadDraftBox
       id="skills"
+      trigger="view"
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "24px",
-        position: "relative",
       }}
     >
       <CadDimensionLabel />
@@ -437,7 +570,7 @@ function CadTechStack() {
           </div>
         ))}
       </div>
-    </div>
+    </CadDraftBox>
   );
 }
 
@@ -479,53 +612,20 @@ function CadExperience() {
   ];
 
   return (
-    <div
+    <CadDraftBox
       id="experience"
+      trigger="view"
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "24px",
-        position: "relative",
       }}
     >
       <CadDimensionLabel />
 
-
-      {/* CAD Height Dimension (Left Side) */}
-      <div
-        className={clsx('hidden', 'md:block')}
-        style={{
-          borderBottom: "1px solid var(--line-stroke-accent)",
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          bottom: "0",
-          left: "-12px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: "0",
-          width: "6px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "0",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "50%",
-            transform: "translate(-50%, -50%) rotate(-90deg)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          H: AUTO
-        </span>
-      </div>
+      {/* CAD Height Dimension Scale (Left Side) */}
+      <CadDraftHeightScale />
 
       {/* Header Bar */}
       <div
@@ -731,45 +831,9 @@ function CadExperience() {
           </div>
         </Link>
         {/* CAD-style label for Button */}
-        <div
-          className={clsx('hidden', 'md:block')}
-          style={{
-            height: "40px",
-            pointerEvents: "none",
-            position: "absolute",
-            right: "-200px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "220px",
-            zIndex: 20,
-          }}
-        >
-          <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-            <path
-              d="M 20,20 L 40,40 L 210,40"
-              fill="none"
-              stroke="var(--line-stroke-accent)"
-              strokeWidth="1"
-            />
-            <circle cx="20" cy="20" r="2" fill="var(--line-stroke-accent)" />
-          </svg>
-          <span
-            className={caveat.className}
-            style={{
-              bottom: "-8px",
-              color: "var(--foreground)",
-              fontSize: "18px",
-              left: "45px",
-              lineHeight: "1",
-              position: "absolute",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Height: Auto, Size: 11px, Weight: 600
-          </span>
-        </div>
+        <CadDimensionLabel />
       </div>
-    </div>
+    </CadDraftBox>
   );
 }
 
@@ -804,53 +868,20 @@ function CadEducation() {
   ];
 
   return (
-    <div
+    <CadDraftBox
       id="education"
+      trigger="view"
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "24px",
-        position: "relative",
       }}
     >
       <CadDimensionLabel />
 
-
-      {/* CAD Height Dimension (Left Side) */}
-      <div
-        className={clsx('hidden', 'md:block')}
-        style={{
-          borderBottom: "1px solid var(--line-stroke-accent)",
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          bottom: "0",
-          left: "-12px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: "0",
-          width: "6px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "0",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "50%",
-            transform: "translate(-50%, -50%) rotate(-90deg)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          H: AUTO
-        </span>
-      </div>
+      {/* CAD Height Dimension Scale (Left Side) */}
+      <CadDraftHeightScale />
 
       {/* Header Bar */}
       <div
@@ -1039,7 +1070,7 @@ function CadEducation() {
         <span>CREDENTIAL_VERIFICATION // VALID</span>
         <span>LAST_UPDATED: 2026-07</span>
       </div>
-    </div>
+    </CadDraftBox>
   );
 }
 
@@ -1319,7 +1350,7 @@ function CadProjects() {
     {
       id: "PRJ-03",
       description: "Sophisticated Messaging APIs for Developers. Build powerful messaging applications with our elegant, reliable, and affordable API platform.",
-      link: "https://Rajdoot.wtf",
+      link: "https://rajdoot.parminder.pro/",
       name: "Rajdoot",
       status: "PRODUCTION",
       tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
@@ -1335,86 +1366,23 @@ function CadProjects() {
   ];
 
   return (
-    <div
+    <CadDraftBox
       id="projects"
+      trigger="view"
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "24px",
-        position: "relative",
       }}
     >
       <CadDimensionLabel />
 
-      {/* CAD Height Dimension (Left Side) */}
-      <div
-        className={clsx('hidden', 'md:block')}
-        style={{
-          borderBottom: "1px solid var(--line-stroke-accent)",
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          bottom: "0",
-          left: "-12px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: "0",
-          width: "6px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "0",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "50%",
-            transform: "translate(-50%, -50%) rotate(-90deg)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          H: AUTO
-        </span>
-      </div>
+      {/* CAD Height Dimension Scale (Left Side) */}
+      <CadDraftHeightScale />
 
-      {/* CAD Width Dimension (Top Side) */}
-      <div
-        className={clsx('hidden', 'md:block')}
-        style={{
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderRight: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          height: "6px",
-          left: "0",
-          pointerEvents: "none",
-          position: "absolute",
-          right: "0",
-          top: "-12px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "50%",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "0",
-            transform: "translate(-50%, -50%)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          W: 100% (SCALE 1:1)
-        </span>
-      </div>
+      {/* CAD Width Dimension Scale (Top Side) */}
+      <CadDraftWidthScale />
 
       {/* Header Bar */}
       <div
@@ -1701,55 +1669,150 @@ function CadProjects() {
           </div>
         </Link>
         {/* CAD-style label for Button */}
-        <div
-          className={clsx('hidden', 'md:block')}
-          style={{
-            height: "40px",
-            pointerEvents: "none",
-            position: "absolute",
-            right: "-200px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "220px",
-            zIndex: 20,
-          }}
-        >
-          <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-            <path
-              d="M 20,20 L 40,40 L 210,40"
-              fill="none"
-              stroke="var(--line-stroke-accent)"
-              strokeWidth="1"
-            />
-            <circle cx="20" cy="20" r="2" fill="var(--line-stroke-accent)" />
-          </svg>
-          <span
-            className={caveat.className}
-            style={{
-              bottom: "-8px",
-              color: "var(--foreground)",
-              fontSize: "18px",
-              left: "45px",
-              lineHeight: "1",
-              position: "absolute",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Height: Auto, Size: 11px, Weight: 600
-          </span>
-        </div>
+        <CadDimensionLabel />
       </div>
-    </div>
+    </CadDraftBox>
   );
+}
+
+const CAD_COMMIT_LEGEND = [
+  {
+    code: "LVL_0 // INACTIVE",
+    commits: "0 Commits",
+    fill: "none",
+    letterSpacing: "0.05em",
+    rectOpacity: 0.4,
+  },
+  {
+    code: "LVL_1 // LIGHT (///)",
+    commits: "1 - 2 Commits",
+    fill: "url(#cad-hatch-1)",
+    letterSpacing: "0.05em",
+    rectOpacity: undefined,
+  },
+  {
+    code: "LVL_2 // MEDIUM (///)",
+    commits: "3 - 5 Commits",
+    fill: "url(#cad-hatch-2)",
+    letterSpacing: "0.05em",
+    rectOpacity: undefined,
+  },
+  {
+    code: "LVL_3 // CROSS (XXX)",
+    commits: "6 - 9 Commits",
+    fill: "url(#cad-hatch-3)",
+    letterSpacing: "0.05em",
+    rectOpacity: undefined,
+  },
+  {
+    code: "LVL_4 // DENSE (≡≡≡)",
+    commits: "10+ Commits",
+    fill: "url(#cad-hatch-4)",
+    letterSpacing: "0.08em",
+    rectOpacity: 0.9,
+  },
+] as const;
+
+function CommitLegendCard({
+  code,
+  commits,
+  fill,
+  letterSpacing,
+  rectOpacity,
+}: {
+  code: string;
+  commits: string;
+  fill: string;
+  letterSpacing: string;
+  rectOpacity?: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      animate={{
+        y: isHovered && !shouldReduceMotion ? -2 : 0,
+        scale: isHovered && !shouldReduceMotion ? 1.015 : 1,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 320,
+        damping: 26,
+        mass: 0.7,
+      }}
+      style={{
+        alignItems: "center",
+        backgroundColor: isHovered ? "var(--line-fill-accent)" : "var(--background)",
+        border: `1px solid ${isHovered && shouldReduceMotion ? "var(--line-stroke-accent)" : "var(--line-stroke)"}`,
+        borderRadius: "3px",
+        boxShadow: isHovered
+          ? "0 8px 20px -6px rgba(0, 0, 0, 0.24), 0 2px 6px -2px rgba(0, 0, 0, 0.12)"
+          : "0 0 0 0 rgba(0, 0, 0, 0)",
+        display: "flex",
+        gap: "8px",
+        padding: "6px 8px",
+        position: "relative",
+        transition:
+          "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        zIndex: isHovered ? 20 : 1,
+      }}
+    >
+      <HoverBorderBeam active={isHovered && !shouldReduceMotion} rx={2.5} />
+
+      <svg width="14" height="14" style={{ flexShrink: 0 }}>
+        <rect
+          width="14"
+          height="14"
+          rx="2"
+          fill={fill}
+          stroke="var(--foreground)"
+          strokeWidth="1"
+          opacity={rectOpacity}
+        />
+      </svg>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing }}>{code}</span>
+        <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>{commits}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+function getCadHatchStyle(level: number): string {
+  switch (level) {
+    case 1:
+      return "repeating-linear-gradient(-45deg, transparent 0 2.5px, color-mix(in srgb, var(--foreground) 55%, transparent) 2.5px 3.5px)";
+    case 2:
+      return "repeating-linear-gradient(-45deg, transparent 0 1.4px, color-mix(in srgb, var(--foreground) 78%, transparent) 1.4px 2.4px)";
+    case 3:
+      return [
+        "repeating-linear-gradient(45deg, transparent 0 2px, color-mix(in srgb, var(--foreground) 85%, transparent) 2px 3px)",
+        "repeating-linear-gradient(-45deg, transparent 0 2px, color-mix(in srgb, var(--foreground) 85%, transparent) 2px 3px)",
+      ].join(", ");
+    case 4:
+      return [
+        "repeating-linear-gradient(45deg, transparent 0 1.4px, var(--foreground) 1.4px 2.5px)",
+        "repeating-linear-gradient(-45deg, transparent 0 1.4px, var(--foreground) 1.4px 2.5px)",
+        "repeating-linear-gradient(0deg, transparent 0 1.6px, color-mix(in srgb, var(--foreground) 80%, transparent) 1.6px 2.4px)",
+      ].join(", ");
+    default:
+      return "none";
+  }
 }
 
 /* ── CAD GITHUB CONTRIBUTION MATRIX ── */
 function CadGithubChart() {
   const [weeks, setWeeks] = useState<{ count: number; date: string; level: number }[][]>([]);
   const [totalContributions, setTotalContributions] = useState<number | null>(null);
-  const [monthLabels, setMonthLabels] = useState<{ label: string; x: number }[]>([]);
+  const [monthLabels, setMonthLabels] = useState<{ label: string; weekIndex: number }[]>([]);
+  const [hoveredCell, setHoveredCell] = useState<{ w: number; d: number } | null>(null);
   const [tooltip, setTooltip] = useState<{ count: number; date: string; x: number; y: number } | null>(null);
   const chartRef = useRef<HTMLDivElement | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { instantDone, isResetting } = useCadDraft();
 
   useEffect(() => {
     // Fetch live contribution data from our GraphQL API proxy
@@ -1761,7 +1824,7 @@ function CadGithubChart() {
           setTotalContributions(calendar.totalContributions);
 
           const gridWeeks: { count: number; date: string; level: number }[][] = [];
-          const months: { label: string; x: number }[] = [];
+          const months: { label: string; weekIndex: number }[] = [];
           const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           let lastMonth = -1;
 
@@ -1789,7 +1852,7 @@ function CadGithubChart() {
               if (dayOfWeek === 0) {
                 const m = d.getMonth();
                 if (m !== lastMonth) {
-                  months.push({ label: monthNames[m], x: 30 + wIndex * 13 });
+                  months.push({ label: monthNames[m], weekIndex: wIndex });
                   lastMonth = m;
                 }
               }
@@ -1810,19 +1873,19 @@ function CadGithubChart() {
   }, []);
 
   return (
-    <div
-      ref={chartRef}
+    <CadDraftBox
+      trigger="mount"
+      delay={4.75}
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "16px",
         overflow: "visible",
-        position: "relative",
       }}
     >
-      <CadDimensionLabel />
+      <div ref={chartRef} style={{ position: "relative" }}>
+      <CadDimensionLabel trigger="mount" />
       {/* SVG Pencil Hatching Pattern Definitions */}
       <svg style={{ height: 0, position: "absolute", width: 0 }}>
         <defs>
@@ -1871,75 +1934,193 @@ function CadGithubChart() {
           <span style={{ backgroundColor: "#22c55e", borderRadius: "50%", display: "inline-block", height: "6px", width: "6px" }} />
           <span>GITHUB_METRICS // PENCIL_HATCHING_MATRIX</span>
         </div>
-        <span>USER: @360Parminder</span>
+        <motion.a
+          href="https://github.com/360Parminder"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0.82 }}
+          whileHover={{ y: -1, opacity: 1 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.15 }}
+          style={{
+            alignItems: "center",
+            color: "var(--foreground)",
+            display: "inline-flex",
+            gap: "6px",
+            textDecoration: "none",
+          }}
+        >
+          <GithubSocialIcon />
+          <span>@360Parminder</span>
+        </motion.a>
       </div>
 
-      {/* Main Vector SVG Grid Container */}
+      {/* Main Vector / Interactive Wave Grid Container */}
       <div className="scrollbar-hide" style={{ overflowX: "auto", padding: "16px 14px" }}>
-        <div style={{ minWidth: "700px" }}>
-          <svg width="100%" height="130" viewBox={`0 0 ${30 + weeks.length * 13} 130`} style={{ overflow: "visible" }}>
-            {/* Dynamic Month Labels */}
-            {monthLabels.map((m, i) => (
-              <text
-                key={`${m.label}-${i}`}
-                x={m.x}
-                y="14"
-                fill="var(--foreground)"
-                fontSize="10"
-                fontFamily="var(--font-geist-mono)"
-                opacity="0.8"
-              >
-                {m.label}
-              </text>
-            ))}
+        <div style={{ minWidth: "700px", paddingTop: "2px", paddingBottom: "4px" }}>
+          {/* Dynamic Month Labels */}
+          <div
+            style={{
+              height: "18px",
+              marginLeft: "30px",
+              marginBottom: "4px",
+              position: "relative",
+            }}
+          >
+            {weeks.length > 0 &&
+              monthLabels.map((m, i) => (
+                <span
+                  key={`${m.label}-${i}`}
+                  style={{
+                    color: "var(--foreground)",
+                    fontFamily: "var(--font-geist-mono)",
+                    fontSize: "10px",
+                    left: `${(m.weekIndex / weeks.length) * 100}%`,
+                    lineHeight: "1",
+                    opacity: 0.8,
+                    position: "absolute",
+                    top: 0,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {m.label}
+                </span>
+              ))}
+          </div>
 
-            {/* Day Labels */}
-            <text x="0" y="38" fill="var(--foreground)" fontSize="9" fontFamily="var(--font-geist-mono)" opacity="0.7">Mon</text>
-            <text x="0" y="64" fill="var(--foreground)" fontSize="9" fontFamily="var(--font-geist-mono)" opacity="0.7">Wed</text>
-            <text x="0" y="90" fill="var(--foreground)" fontSize="9" fontFamily="var(--font-geist-mono)" opacity="0.7">Fri</text>
+          {/* Day Labels + 53 Weeks x 7 Days Wave Matrix */}
+          <div style={{ alignItems: "stretch", display: "flex", minHeight: "96px" }}>
+            {/* Day Labels Column */}
+            <div
+              style={{
+                display: "grid",
+                flexShrink: 0,
+                gap: "3px",
+                gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                width: "30px",
+              }}
+            >
+              {["", "Mon", "", "Wed", "", "Fri", ""].map((label, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    alignItems: "center",
+                    color: "var(--foreground)",
+                    display: "flex",
+                    fontFamily: "var(--font-geist-mono)",
+                    fontSize: "9px",
+                    lineHeight: "1",
+                    opacity: 0.7,
+                  }}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
 
-            {/* 53 Weeks x 7 Days Tiles Grid (Sunday=row0, Saturday=row6) */}
-            <g transform="translate(30, 24)">
+            {/* Interactive Contribution Tiles Grid */}
+            <motion.div
+              initial={instantDone ? { clipPath: "inset(-14px -10px -14px -10px)" } : { clipPath: "inset(-14px 100% -14px -10px)" }}
+              animate={
+                instantDone
+                  ? { clipPath: "inset(-14px -10px -14px -10px)" }
+                  : isResetting
+                    ? { clipPath: "inset(-14px 100% -14px -10px)" }
+                    : { clipPath: "inset(-14px -10px -14px -10px)" }
+              }
+              transition={instantDone || isResetting ? { duration: 0 } : { delay: 5.45, duration: 1.28, ease: CAD_EASE }}
+              onMouseLeave={() => {
+                setHoveredCell(null);
+                setTooltip(null);
+              }}
+              style={{
+                display: "grid",
+                flex: 1,
+                gap: "3px",
+                gridTemplateColumns: `repeat(${Math.max(weeks.length, 53)}, minmax(0, 1fr))`,
+              }}
+            >
               {weeks.map((week, wIndex) => (
-                <g key={wIndex} transform={`translate(${wIndex * 13}, 0)`}>
+                <div
+                  key={wIndex}
+                  style={{
+                    display: "grid",
+                    gap: "3px",
+                    gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                  }}
+                >
                   {week.map((day, dIndex) => {
-                    let fillStyle = "none";
-                    if (day.level === 1) fillStyle = "url(#cad-hatch-1)";
-                    else if (day.level === 2) fillStyle = "url(#cad-hatch-2)";
-                    else if (day.level === 3) fillStyle = "url(#cad-hatch-3)";
-                    else if (day.level === 4) fillStyle = "url(#cad-hatch-4)";
+                    const WAVE_RADIUS = 3.6;
+                    let dist = Infinity;
+                    let wave = 0;
+                    if (hoveredCell && !shouldReduceMotion) {
+                      dist = Math.hypot(wIndex - hoveredCell.w, dIndex - hoveredCell.d);
+                      if (dist < WAVE_RADIUS) {
+                        const t = 1 - dist / WAVE_RADIUS;
+                        wave = 0.5 * (1 - Math.cos(Math.PI * t));
+                      }
+                    }
+
+                    const isCenter =
+                      hoveredCell !== null &&
+                      hoveredCell.w === wIndex &&
+                      hoveredCell.d === dIndex;
+                    const scale = 1 + wave * 0.52;
+                    const liftY = -(wave * 5);
+                    const zIndex = wave > 0 ? Math.round(10 + wave * 30) : isCenter ? 20 : 1;
+                    const delayMs = hoveredCell && wave > 0 ? Math.round(dist * 16) : 0;
 
                     return (
-                      <rect
+                      <div
                         key={dIndex}
-                        x="0"
-                        y={dIndex * 13}
-                        width="10"
-                        height="10"
-                        rx="1"
-                        fill={fillStyle}
-                        stroke="var(--line-stroke-accent)"
-                        strokeWidth="1"
-                        style={{ cursor: day.date ? "pointer" : "default" }}
                         onMouseEnter={(e) => {
-                          if (!day.date || !chartRef.current) return;
-                          const svgRect = chartRef.current.getBoundingClientRect();
-                          const cellRect = (e.target as SVGRectElement).getBoundingClientRect();
+                          setHoveredCell({ w: wIndex, d: dIndex });
+                          if (!day.date || !chartRef.current) {
+                            setTooltip(null);
+                            return;
+                          }
+                          const containerRect = chartRef.current.getBoundingClientRect();
+                          const cellRect = e.currentTarget.getBoundingClientRect();
                           setTooltip({
                             count: day.count,
                             date: day.date,
-                            x: cellRect.left - svgRect.left + cellRect.width / 2,
-                            y: cellRect.top - svgRect.top,
+                            x: cellRect.left - containerRect.left + cellRect.width / 2,
+                            y: cellRect.top - containerRect.top,
                           });
                         }}
-                        onMouseLeave={() => setTooltip(null)}
+                        style={{
+                          aspectRatio: "1 / 1",
+                          backgroundColor: wave > 0 ? "var(--background)" : "transparent",
+                          backgroundImage: getCadHatchStyle(day.level),
+                          border: `1px solid ${
+                            isCenter
+                              ? "var(--foreground)"
+                              : wave > 0.35
+                                ? "var(--nav-link)"
+                                : "var(--line-stroke-accent)"
+                          }`,
+                          borderRadius: "1.5px",
+                          boxShadow:
+                            wave > 0.05
+                              ? `0 ${(2 + wave * 8).toFixed(1)}px ${(4 + wave * 12).toFixed(1)}px -2px rgba(0, 0, 0, ${(0.16 + wave * 0.34).toFixed(2)})`
+                              : "none",
+                          cursor: day.date ? "pointer" : "default",
+                          position: "relative",
+                          transform:
+                            wave > 0
+                              ? `translate3d(0, ${liftY.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`
+                              : "translate3d(0, 0, 0) scale(1)",
+                          transition: `transform 260ms cubic-bezier(0.22, 1.35, 0.36, 1) ${delayMs}ms, box-shadow 260ms ease ${delayMs}ms, border-color 180ms ease, background-color 180ms ease`,
+                          willChange: wave > 0 ? "transform" : "auto",
+                          zIndex,
+                        }}
                       />
                     );
                   })}
-                </g>
+                </div>
               ))}
-            </g>
-          </svg>
+            </motion.div>
+          </div>
         </div>
 
         {/* CAD Legend & Metadata Bar */}
@@ -1974,113 +2155,82 @@ function CadGithubChart() {
             paddingTop: "10px",
           }}
         >
-          {/* Level 0 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="none" stroke="var(--foreground)" strokeWidth="1" opacity="0.4" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_0 // INACTIVE</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>0 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 1 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-1)" stroke="var(--foreground)" strokeWidth="1" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_1 // LIGHT (///)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>1 - 2 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 2 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-2)" stroke="var(--foreground)" strokeWidth="1" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_2 // MEDIUM (///)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>3 - 5 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 3 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-3)" stroke="var(--foreground)" strokeWidth="1" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_3 // CROSS (XXX)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>6 - 9 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 4 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-4)" stroke="var(--foreground)" strokeWidth="1" opacity="0.9" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.08em" }}>LVL_4 // DENSE (≡≡≡)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>10+ Commits</span>
-            </div>
-          </div>
+          {CAD_COMMIT_LEGEND.map((item) => (
+            <CommitLegendCard
+              key={item.code}
+              code={item.code}
+              commits={item.commits}
+              fill={item.fill}
+              letterSpacing={item.letterSpacing}
+              rectOpacity={item.rectOpacity}
+            />
+          ))}
         </div>
       </div>
 
       {/* Custom Tooltip — rendered outside scroll container to avoid clipping */}
-      {tooltip && (
-        <div
-          style={{
-            alignItems: "center",
-            backgroundColor: "var(--foreground)",
-            borderRadius: "4px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            color: "var(--background)",
-            display: "flex",
-            flexDirection: "column",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "11px",
-            gap: "2px",
-            left: tooltip.x,
-            letterSpacing: "0.03em",
-            padding: "6px 10px",
-            pointerEvents: "none",
-            position: "absolute",
-            top: tooltip.y - 6,
-            transform: "translate(-50%, -100%)",
-            whiteSpace: "nowrap",
-            zIndex: 50,
-          }}
-        >
-          <span style={{ fontWeight: 700 }}>
-            {tooltip.count} {tooltip.count === 1 ? "contribution" : "contributions"}
-          </span>
-          <span style={{ fontSize: "9px", opacity: 0.7 }}>
-            {(() => {
-              const parts = tooltip.date.split("-");
-              const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-              return d.toLocaleDateString("en-US", { day: "numeric", month: "short", weekday: "short", year: "numeric" });
-            })()}
-          </span>
-          {/* Tooltip Arrow */}
+      <AnimatePresence>
+        {tooltip && (
           <div
             style={{
-              backgroundColor: "var(--foreground)",
-              bottom: "-4px",
-              height: "8px",
-              left: "50%",
+              left: tooltip.x,
+              pointerEvents: "none",
               position: "absolute",
-              transform: "translateX(-50%) rotate(45deg)",
-              width: "8px",
+              top: tooltip.y - 12,
+              transform: "translate(-50%, -100%)",
+              zIndex: 50,
             }}
-          />
-        </div>
-      )}
-    </div>
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 4, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 2, scale: 0.96 }}
+              transition={{ duration: 0.14, ease: "easeOut" }}
+              style={{
+                alignItems: "center",
+                backgroundColor: "var(--foreground)",
+                borderRadius: "4px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                color: "var(--background)",
+                display: "flex",
+                flexDirection: "column",
+                fontFamily: "var(--font-geist-mono)",
+                fontSize: "11px",
+                gap: "2px",
+                letterSpacing: "0.03em",
+                padding: "6px 10px",
+                position: "relative",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span style={{ fontWeight: 700 }}>
+                {tooltip.count} {tooltip.count === 1 ? "contribution" : "contributions"}
+              </span>
+              <span style={{ fontSize: "9px", opacity: 0.7 }}>
+                {(() => {
+                  const parts = tooltip.date.split("-");
+                  const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                  return d.toLocaleDateString("en-US", { day: "numeric", month: "short", weekday: "short", year: "numeric" });
+                })()}
+              </span>
+              {/* Tooltip Arrow */}
+              <div
+                style={{
+                  backgroundColor: "var(--foreground)",
+                  bottom: "-4px",
+                  height: "8px",
+                  left: "50%",
+                  position: "absolute",
+                  transform: "translateX(-50%) rotate(45deg)",
+                  width: "8px",
+                }}
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      </div>
+    </CadDraftBox>
   );
 }
 
@@ -2114,15 +2264,14 @@ function CadAboutMe() {
   ];
 
   return (
-    <div
+    <CadDraftBox
       id="about"
+      trigger="view"
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "16px",
-        position: "relative",
       }}
     >
       <CadDimensionLabel />
@@ -2263,11 +2412,1107 @@ function CadAboutMe() {
         <span>NODE: ABOUT_ME // STATUS: RENDERED</span>
         <span>GRID: 03_COL x 01_ROW</span>
       </div>
+    </CadDraftBox>
+  );
+}
+
+function CadHeroCanvas() {
+  const { draftEpoch, instantDone, isResetting } = useCadDraft();
+  const isDrawing = !instantDone && !isResetting;
+
+  return (
+    <div
+      style={{
+        height: "260px",
+        overflow: "hidden",
+        position: "relative",
+        width: "100%",
+      }}
+    >
+      {/* Hero image — pencil sketch wipe settling into full tonal depth */}
+      <motion.div
+        initial={
+          instantDone
+            ? { clipPath: "inset(0 0% 0 0)", filter: "grayscale(0%) contrast(1) brightness(1)" }
+            : { clipPath: "inset(0 100% 0 0)", filter: "grayscale(100%) contrast(1.85) brightness(1.06)" }
+        }
+        animate={
+          instantDone
+            ? { clipPath: "inset(0 0% 0 0)", filter: "grayscale(0%) contrast(1) brightness(1)" }
+            : isResetting
+              ? { clipPath: "inset(0 100% 0 0)", filter: "grayscale(100%) contrast(1.85) brightness(1.06)" }
+              : { clipPath: "inset(0 0% 0 0)", filter: "grayscale(0%) contrast(1) brightness(1)" }
+        }
+        transition={
+          instantDone || isResetting
+            ? { duration: 0 }
+            : {
+                clipPath: { delay: 1.12, duration: 1.42, ease: CAD_EASE },
+                filter: { delay: 2.45, duration: 1.08, ease: "easeOut" },
+              }
+        }
+        style={{ inset: 0, position: "absolute" }}
+      >
+        <Image
+          src="/hero-art.jpg"
+          alt="Hero artwork"
+          fill
+          style={{ objectFit: "cover", objectPosition: "center 30%" }}
+          priority
+          fetchPriority="high"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </motion.div>
+
+      {/* Diagonal pencil hatching shading pass during hand-sketch reveal */}
+      {isDrawing && (
+        <motion.div
+          key={`hero-hatch-${draftEpoch}`}
+          aria-hidden="true"
+          initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+          animate={{ clipPath: "inset(0 0% 0 0)", opacity: [0, 0.9, 0.9, 0] }}
+          transition={{
+            clipPath: { delay: 1.12, duration: 1.42, ease: CAD_EASE },
+            opacity: { delay: 1.12, duration: 2.05, times: [0, 0.15, 0.68, 1] },
+          }}
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(-45deg, transparent 0 3px, color-mix(in srgb, var(--foreground) 22%, transparent) 3px 4px)",
+            inset: 0,
+            pointerEvents: "none",
+            position: "absolute",
+            zIndex: 5,
+          }}
+        />
+      )}
+
+      {/* Subtle gradient fade at the bottom */}
+      <div
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 60%, var(--background) 100%)",
+          inset: 0,
+          pointerEvents: "none",
+          position: "absolute",
+          zIndex: 6,
+        }}
+      />
+
+      {/* CAD construction frame + diagonal drafting guides */}
+      {isDrawing && (
+        <motion.svg
+          key={`hero-frame-${draftEpoch}`}
+          aria-hidden="true"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: [1, 1, 0] }}
+          transition={{
+            delay: 0.55,
+            duration: 2.68,
+            times: [0, 0.72, 1],
+            ease: "easeOut",
+          }}
+          style={{
+            height: "calc(100% + 1px)",
+            inset: "-0.5px",
+            overflow: "visible",
+            pointerEvents: "none",
+            position: "absolute",
+            width: "calc(100% + 1px)",
+            zIndex: 12,
+          }}
+        >
+          <motion.rect
+            x={0}
+            y={0}
+            width="100%"
+            height="100%"
+            fill="none"
+            stroke="var(--foreground)"
+            strokeWidth={1.1}
+            strokeOpacity={0.62}
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ delay: 0.55, duration: 1.15, ease: CAD_EASE }}
+          />
+          <motion.line
+            x1="0"
+            y1="0"
+            x2="100%"
+            y2="100%"
+            stroke="var(--foreground)"
+            strokeWidth={0.75}
+            initial={{ pathLength: 0, strokeOpacity: 0 }}
+            animate={{ pathLength: 1, strokeOpacity: [0, 0.22, 0] }}
+            transition={{
+              pathLength: { delay: 0.66, duration: 0.88, ease: CAD_EASE },
+              strokeOpacity: { delay: 0.66, duration: 2.1, times: [0, 0.25, 1] },
+            }}
+          />
+          <motion.line
+            x1="100%"
+            y1="0"
+            x2="0"
+            y2="100%"
+            stroke="var(--foreground)"
+            strokeWidth={0.75}
+            initial={{ pathLength: 0, strokeOpacity: 0 }}
+            animate={{ pathLength: 1, strokeOpacity: [0, 0.22, 0] }}
+            transition={{
+              pathLength: { delay: 0.84, duration: 0.88, ease: CAD_EASE },
+              strokeOpacity: { delay: 0.84, duration: 1.95, times: [0, 0.25, 1] },
+            }}
+          />
+        </motion.svg>
+      )}
+
+      {/* Graduated CAD Drafting Scale + Mechanical pencil nib tracing the top hero ruler */}
+      {isDrawing && (
+        <>
+          <DraftingScaleRuler
+            key={`hero-ruler-${draftEpoch}`}
+            edge="top"
+            insetMode
+            delay={0.55}
+            duration={0.9}
+          />
+          <motion.div
+            key={`hero-nib-${draftEpoch}`}
+            aria-hidden="true"
+            initial={{ left: "0%", opacity: 0 }}
+            animate={{ left: "100%", opacity: [0, 1, 1, 0] }}
+            transition={{
+              left: { delay: 0.55, duration: 0.84, ease: "linear" },
+              opacity: { delay: 0.55, duration: 0.92, times: [0, 0.1, 0.85, 1] },
+            }}
+            style={{
+              pointerEvents: "none",
+              position: "absolute",
+              top: "14px",
+              zIndex: 28,
+            }}
+          >
+            <DraftPencilNib size={15} />
+          </motion.div>
+        </>
+      )}
+
+      {/* FIG label */}
+      <motion.span
+        initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+        animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+        transition={instantDone || isResetting ? { duration: 0 } : { delay: 2.75, duration: 0.55 }}
+        style={{
+          bottom: "8px",
+          color: "var(--line-stroke-accent)",
+          fontFamily: "var(--font-geist-mono)",
+          fontSize: "9px",
+          letterSpacing: "0.1em",
+          position: "absolute",
+          right: "12px",
+          zIndex: 8,
+        }}
+      >
+        FIG_001
+      </motion.span>
+
+      {/* Live drafting status / skip / redraw control */}
+      <CadDraftStatusControl />
+    </div>
+  );
+}
+
+function HeroNameNote({
+  draftEpoch,
+  instantDone,
+  isResetting,
+}: {
+  draftEpoch: number;
+  instantDone: boolean;
+  isResetting: boolean;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const slotState = useCadWriteSlot({
+    minDelayMs: 2700,
+    priority: 10,
+    ref,
+    requireBoxReady: false,
+    totalDurationMs: 1520,
+    trigger: "mount",
+  });
+
+  const isRevealed = instantDone || slotState === "active" || slotState === "done";
+  const skipAnimation = instantDone || (slotState === "done" && isResetting);
+
+  return (
+    <div
+      ref={ref}
+      className={clsx("hidden", "md:block")}
+      style={{
+        height: "80px",
+        left: "105px",
+        pointerEvents: "none",
+        position: "absolute",
+        top: "0px",
+        width: "270px",
+        zIndex: 20,
+      }}
+    >
+      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+        {instantDone ? (
+          <>
+            <path
+              d="M 0,60 L 30,30 L 270,30"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+            />
+            <circle cx="0" cy="60" r="2" fill="var(--line-stroke-accent)" />
+          </>
+        ) : (
+          <>
+            <motion.circle
+              key={`name-dot-${draftEpoch}`}
+              cx="0"
+              cy="60"
+              r="2"
+              fill="var(--line-stroke-accent)"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
+              style={{ transformOrigin: "0px 60px" }}
+            />
+            <motion.path
+              key={`name-line-${draftEpoch}`}
+              d="M 0,60 L 30,30 L 270,30"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.42, ease: CAD_EASE }}
+            />
+          </>
+        )}
+      </svg>
+
+      {instantDone ? (
+        <span
+          className={caveat.className}
+          style={{
+            bottom: "52px",
+            color: "var(--foreground)",
+            fontSize: "32px",
+            left: "35px",
+            lineHeight: "1",
+            position: "absolute",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Parminder Singh
+        </span>
+      ) : (
+        <span
+          className={caveat.className}
+          style={{
+            bottom: "52px",
+            color: "var(--foreground)",
+            fontSize: "32px",
+            left: "35px",
+            lineHeight: "1",
+            position: "absolute",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <motion.span
+            initial={{ clipPath: "inset(-30% 100% -30% -4%)" }}
+            animate={
+              isRevealed
+                ? { clipPath: "inset(-30% -6% -30% -4%)" }
+                : { clipPath: "inset(-30% 100% -30% -4%)" }
+            }
+            transition={
+              isResetting || skipAnimation
+                ? { duration: 0 }
+                : { delay: 0.36, duration: 1.06, ease: [0.32, 0.04, 0.24, 1] }
+            }
+            style={{ display: "inline-block" }}
+          >
+            Parminder Singh
+          </motion.span>
+          {slotState === "active" && (
+            <motion.span
+              key={`name-nib-${draftEpoch}`}
+              aria-hidden="true"
+              initial={{ left: "0%", opacity: 0, y: -4 }}
+              animate={{
+                left: ["0%", "100%"],
+                opacity: [0, 1, 1, 1, 0],
+                y: [-4, 0, -2.5, 1.5, -2, 1, -6],
+              }}
+              transition={{
+                left: { delay: 0.36, duration: 1.06, ease: [0.32, 0.04, 0.24, 1] },
+                opacity: {
+                  delay: 0.36,
+                  duration: 1.12,
+                  times: [0, 0.08, 0.85, 0.94, 1],
+                },
+                y: { delay: 0.36, duration: 1.06, ease: "easeInOut" },
+              }}
+              style={{
+                bottom: "15%",
+                pointerEvents: "none",
+                position: "absolute",
+                zIndex: 30,
+              }}
+            >
+              <DraftPencilNib size={16} />
+            </motion.span>
+          )}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function HeroDesignEngineerNote({
+  draftEpoch,
+  instantDone,
+  isResetting,
+}: {
+  draftEpoch: number;
+  instantDone: boolean;
+  isResetting: boolean;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const slotState = useCadWriteSlot({
+    minDelayMs: 2700,
+    priority: 20,
+    ref,
+    requireBoxReady: false,
+    totalDurationMs: 1400,
+    trigger: "mount",
+  });
+
+  const isRevealed = instantDone || slotState === "active" || slotState === "done";
+  const skipAnimation = instantDone || (slotState === "done" && isResetting);
+  const tickerActive = instantDone || (!isResetting && slotState === "done");
+
+  return (
+    <div
+      ref={ref}
+      className={clsx("hidden", "2xl:block")}
+      style={{
+        height: "90px",
+        left: "-240px",
+        pointerEvents: "none",
+        position: "absolute",
+        top: "-55px",
+        width: "260px",
+        zIndex: 20,
+      }}
+    >
+      <style>{`
+        @keyframes cad-ticker {
+          0%, 22% { transform: translateY(0); }
+          33%, 55% { transform: translateY(-28px); }
+          66%, 88% { transform: translateY(-56px); }
+          100% { transform: translateY(-84px); }
+        }
+      `}</style>
+      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+        {instantDone ? (
+          <>
+            <circle cx="258" cy="73" r="2" fill="var(--line-stroke-accent)" />
+            <path
+              d="M 258,73 L 225,40 L 0,40"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+            />
+          </>
+        ) : (
+          <>
+            <motion.circle
+              key={`role-dot-${draftEpoch}`}
+              cx="258"
+              cy="73"
+              r="2"
+              fill="var(--line-stroke-accent)"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
+              style={{ transformOrigin: "258px 73px" }}
+            />
+            <motion.path
+              key={`role-line-${draftEpoch}`}
+              d="M 258,73 L 225,40 L 0,40"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.4, ease: CAD_EASE }}
+            />
+          </>
+        )}
+      </svg>
+
+      <motion.div
+        initial={instantDone ? { clipPath: "inset(-15% -6% -15% -4%)" } : { clipPath: "inset(-15% 100% -15% -4%)" }}
+        animate={
+          isRevealed
+            ? { clipPath: "inset(-15% -6% -15% -4%)" }
+            : { clipPath: "inset(-15% 100% -15% -4%)" }
+        }
+        transition={
+          isResetting || skipAnimation
+            ? { duration: 0 }
+            : { delay: 0.32, duration: 0.96, ease: [0.32, 0.04, 0.24, 1] }
+        }
+        style={{
+          color: "var(--foreground)",
+          height: "28px",
+          left: "0px",
+          overflow: "hidden",
+          position: "absolute",
+          top: "10px",
+          whiteSpace: "nowrap",
+          width: "220px",
+        }}
+      >
+        <div
+          key={`ticker-${draftEpoch}`}
+          className={caveat.className}
+          style={{
+            animation: tickerActive
+              ? `cad-ticker 8s infinite cubic-bezier(0.4, 0, 0.2, 1) ${instantDone ? "0s" : "0.9s"}`
+              : "none",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Design Engineer</div>
+          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Open Source Contributor</div>
+          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Small details matter</div>
+          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Design Engineer</div>
+        </div>
+      </motion.div>
+
+      {/* External pen nib writing "Design Engineer" without ticker overflow clipping */}
+      {slotState === "active" && !instantDone && (
+        <motion.span
+          key={`role-nib-${draftEpoch}`}
+          aria-hidden="true"
+          initial={{ left: "0px", opacity: 0, y: -3 }}
+          animate={{
+            left: ["0px", "145px"],
+            opacity: [0, 1, 1, 1, 0],
+            y: [-3, 0, -2, 1, -2, -5],
+          }}
+          transition={{
+            left: { delay: 0.32, duration: 0.96, ease: [0.32, 0.04, 0.24, 1] },
+            opacity: { delay: 0.32, duration: 1.02, times: [0, 0.1, 0.82, 0.92, 1] },
+            y: { delay: 0.32, duration: 0.96, ease: "easeInOut" },
+          }}
+          style={{
+            pointerEvents: "none",
+            position: "absolute",
+            top: "29px",
+            zIndex: 30,
+          }}
+        >
+          <DraftPencilNib size={14} />
+        </motion.span>
+      )}
+    </div>
+  );
+}
+
+function HeroAgeNote({
+  draftEpoch,
+  instantDone,
+  isResetting,
+}: {
+  draftEpoch: number;
+  instantDone: boolean;
+  isResetting: boolean;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const slotState = useCadWriteSlot({
+    minDelayMs: 2700,
+    priority: 30,
+    ref,
+    requireBoxReady: false,
+    totalDurationMs: 1050,
+    trigger: "mount",
+  });
+
+  const isRevealed = instantDone || slotState === "active" || slotState === "done";
+  const skipAnimation = instantDone || (slotState === "done" && isResetting);
+
+  return (
+    <div
+      ref={ref}
+      className={clsx("hidden", "md:block")}
+      style={{
+        bottom: "-25px",
+        height: "70px",
+        left: "-140px",
+        pointerEvents: "none",
+        position: "absolute",
+        width: "150px",
+        zIndex: 20,
+      }}
+    >
+      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+        {instantDone ? (
+          <>
+            <path
+              d="M 140,15 L 85,55 L 0,55"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+            />
+            <circle cx="140" cy="15" r="2" fill="var(--line-stroke-accent)" />
+          </>
+        ) : (
+          <>
+            <motion.circle
+              key={`age-dot-${draftEpoch}`}
+              cx="140"
+              cy="15"
+              r="2"
+              fill="var(--line-stroke-accent)"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
+              style={{ transformOrigin: "140px 15px" }}
+            />
+            <motion.path
+              key={`age-line-${draftEpoch}`}
+              d="M 140,15 L 85,55 L 0,55"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.34, ease: CAD_EASE }}
+            />
+          </>
+        )}
+      </svg>
+
+      {instantDone ? (
+        <span
+          className={caveat.className}
+          style={{
+            bottom: "18px",
+            color: "var(--foreground)",
+            fontSize: "28px",
+            left: "8px",
+            lineHeight: "1",
+            position: "absolute",
+            whiteSpace: "nowrap",
+          }}
+        >
+          23
+        </span>
+      ) : (
+        <span
+          className={caveat.className}
+          style={{
+            bottom: "18px",
+            color: "var(--foreground)",
+            fontSize: "28px",
+            left: "8px",
+            lineHeight: "1",
+            position: "absolute",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <motion.span
+            initial={{ clipPath: "inset(-30% 100% -30% -4%)" }}
+            animate={
+              isRevealed
+                ? { clipPath: "inset(-30% -6% -30% -4%)" }
+                : { clipPath: "inset(-30% 100% -30% -4%)" }
+            }
+            transition={
+              isResetting || skipAnimation
+                ? { duration: 0 }
+                : { delay: 0.32, duration: 0.62, ease: [0.32, 0.04, 0.24, 1] }
+            }
+            style={{ display: "inline-block" }}
+          >
+            23
+          </motion.span>
+          {slotState === "active" && (
+            <motion.span
+              key={`age-nib-${draftEpoch}`}
+              aria-hidden="true"
+              initial={{ left: "0%", opacity: 0, y: -3 }}
+              animate={{
+                left: ["0%", "100%"],
+                opacity: [0, 1, 1, 1, 0],
+                y: [-3, 0, -2, 1.5, -4],
+              }}
+              transition={{
+                left: { delay: 0.32, duration: 0.62, ease: [0.32, 0.04, 0.24, 1] },
+                opacity: {
+                  delay: 0.32,
+                  duration: 0.68,
+                  times: [0, 0.1, 0.82, 0.94, 1],
+                },
+                y: { delay: 0.32, duration: 0.62, ease: "easeInOut" },
+              }}
+              style={{
+                bottom: "15%",
+                pointerEvents: "none",
+                position: "absolute",
+                zIndex: 30,
+              }}
+            >
+              <DraftPencilNib size={14} />
+            </motion.span>
+          )}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function CadHeroProfileTarget() {
+  const { draftEpoch, instantDone, isResetting } = useCadDraft();
+  const isDrawing = !instantDone && !isResetting;
+
+  return (
+    <div
+      style={{
+        alignItems: "center",
+        borderRadius: "50%",
+        bottom: "0",
+        display: "flex",
+        height: "120px",
+        justifyContent: "center",
+        left: "10px",
+        position: "absolute",
+        transform: "translateY(50%)",
+        width: "120px",
+        zIndex: 10,
+      }}
+    >
+      {/* Circular background pocket cleared on the drawing sheet */}
+      <motion.div
+        aria-hidden="true"
+        initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+        animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+        transition={instantDone || isResetting ? { duration: 0 } : { delay: 1.55, duration: 0.44 }}
+        style={{
+          backgroundColor: "var(--background)",
+          borderRadius: "50%",
+          inset: 0,
+          pointerEvents: "none",
+          position: "absolute",
+        }}
+      />
+
+      {/* Settled outer dashed ring */}
+      <motion.div
+        aria-hidden="true"
+        initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+        animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+        transition={instantDone || isResetting ? { duration: 0 } : { delay: 2.68, duration: 0.5 }}
+        style={{
+          border: "1px dashed var(--line-stroke-accent)",
+          borderRadius: "50%",
+          inset: 0,
+          pointerEvents: "none",
+          position: "absolute",
+        }}
+      />
+
+      {/* Drafting compass arm + circumference trace */}
+      {isDrawing && (
+        <motion.svg
+          key={`compass-${draftEpoch}`}
+          aria-hidden="true"
+          width="120"
+          height="120"
+          viewBox="0 0 120 120"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: [1, 1, 0] }}
+          transition={{
+            delay: 1.6,
+            duration: 1.6,
+            times: [0, 0.78, 1],
+          }}
+          style={{
+            inset: 0,
+            overflow: "visible",
+            pointerEvents: "none",
+            position: "absolute",
+            zIndex: 18,
+          }}
+        >
+          {/* Compass pivot crosshair */}
+          <g stroke="var(--foreground)" strokeWidth="0.9" opacity="0.55">
+            <line x1="55" y1="60" x2="65" y2="60" />
+            <line x1="60" y1="55" x2="60" y2="65" />
+          </g>
+
+          {/* Circle arc drawn clockwise from 12 o'clock */}
+          <motion.circle
+            cx="60"
+            cy="60"
+            r="59.5"
+            fill="none"
+            stroke="var(--foreground)"
+            strokeWidth="1.1"
+            strokeOpacity="0.68"
+            transform="rotate(-90 60 60)"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ delay: 1.7, duration: 1.12, ease: CAD_EASE }}
+          />
+
+          {/* Orbiting compass radius leg & graphite point */}
+          <motion.g
+            initial={{ rotate: 0, opacity: 0 }}
+            animate={{ rotate: 360, opacity: [0, 1, 1, 0] }}
+            transition={{
+              rotate: { delay: 1.7, duration: 1.12, ease: CAD_EASE },
+              opacity: { delay: 1.65, duration: 1.24, times: [0, 0.08, 0.86, 1] },
+            }}
+            style={{ transformOrigin: "60px 60px" }}
+          >
+            <line
+              x1="60"
+              y1="60"
+              x2="60"
+              y2="1"
+              stroke="var(--foreground)"
+              strokeWidth="0.85"
+              strokeOpacity="0.4"
+              strokeDasharray="2 2"
+            />
+            <circle cx="60" cy="1" r="2.3" fill="var(--foreground)" />
+          </motion.g>
+        </motion.svg>
+      )}
+
+      {/* CAD-style rotating role label */}
+      <HeroDesignEngineerNote
+        draftEpoch={draftEpoch}
+        instantDone={instantDone}
+        isResetting={isResetting}
+      />
+
+      {/* CAD Height Dimension */}
+      <div
+        className={clsx("hidden", "md:block")}
+        style={{
+          height: "120px",
+          left: "-25px",
+          pointerEvents: "none",
+          position: "absolute",
+          top: "0",
+          width: "20px",
+        }}
+      >
+        <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+          {instantDone ? (
+            <>
+              <line x1="25" y1="0" x2="5" y2="0" stroke="var(--line-stroke-accent)" strokeWidth="1" />
+              <line x1="25" y1="120" x2="5" y2="120" stroke="var(--line-stroke-accent)" strokeWidth="1" />
+              <line x1="10" y1="0" x2="10" y2="120" stroke="var(--line-stroke-accent)" strokeWidth="1" />
+              <polygon points="10,0 7,5 13,5" fill="var(--line-stroke-accent)" />
+              <polygon points="10,120 7,115 13,115" fill="var(--line-stroke-accent)" />
+            </>
+          ) : (
+            <>
+              <motion.line
+                key={`dimh-t-${draftEpoch}`}
+                x1="25"
+                y1="0"
+                x2="5"
+                y2="0"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isResetting ? { pathLength: 0 } : { pathLength: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.3, duration: 0.32, ease: CAD_EASE }}
+              />
+              <motion.line
+                key={`dimh-b-${draftEpoch}`}
+                x1="25"
+                y1="120"
+                x2="5"
+                y2="120"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isResetting ? { pathLength: 0 } : { pathLength: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.4, duration: 0.32, ease: CAD_EASE }}
+              />
+              <motion.line
+                key={`dimh-v-${draftEpoch}`}
+                x1="10"
+                y1="0"
+                x2="10"
+                y2="120"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isResetting ? { pathLength: 0 } : { pathLength: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.52, duration: 0.5, ease: CAD_EASE }}
+              />
+              <motion.polygon
+                points="10,0 7,5 13,5"
+                fill="var(--line-stroke-accent)"
+                initial={{ opacity: 0 }}
+                animate={isResetting ? { opacity: 0 } : { opacity: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.9, duration: 0.26 }}
+              />
+              <motion.polygon
+                points="10,120 7,115 13,115"
+                fill="var(--line-stroke-accent)"
+                initial={{ opacity: 0 }}
+                animate={isResetting ? { opacity: 0 } : { opacity: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.9, duration: 0.26 }}
+              />
+            </>
+          )}
+        </svg>
+        <motion.span
+          initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+          animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+          transition={instantDone || isResetting ? { duration: 0 } : { delay: 2.78, duration: 0.38 }}
+          style={{
+            backgroundColor: "var(--background)",
+            color: "var(--line-stroke-accent)",
+            fontFamily: "var(--font-geist-mono)",
+            fontSize: "10px",
+            left: "10px",
+            padding: "0 4px",
+            position: "absolute",
+            top: "50%",
+            transform: "translate(-50%, -50%) rotate(-90deg)",
+          }}
+        >
+          120
+        </motion.span>
+      </div>
+
+      {/* CAD Width Dimension */}
+      <div
+        className={clsx("hidden", "md:block")}
+        style={{
+          bottom: "-25px",
+          height: "20px",
+          left: "0",
+          pointerEvents: "none",
+          position: "absolute",
+          width: "120px",
+        }}
+      >
+        <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+          {instantDone ? (
+            <>
+              <line x1="0" y1="-5" x2="0" y2="15" stroke="var(--line-stroke-accent)" strokeWidth="1" />
+              <line x1="120" y1="-5" x2="120" y2="15" stroke="var(--line-stroke-accent)" strokeWidth="1" />
+              <line x1="0" y1="10" x2="120" y2="10" stroke="var(--line-stroke-accent)" strokeWidth="1" />
+              <polygon points="0,10 5,7 5,13" fill="var(--line-stroke-accent)" />
+              <polygon points="120,10 115,7 115,13" fill="var(--line-stroke-accent)" />
+            </>
+          ) : (
+            <>
+              <motion.line
+                key={`dimw-l-${draftEpoch}`}
+                x1="0"
+                y1="-5"
+                x2="0"
+                y2="15"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isResetting ? { pathLength: 0 } : { pathLength: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.42, duration: 0.32, ease: CAD_EASE }}
+              />
+              <motion.line
+                key={`dimw-r-${draftEpoch}`}
+                x1="120"
+                y1="-5"
+                x2="120"
+                y2="15"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isResetting ? { pathLength: 0 } : { pathLength: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.52, duration: 0.32, ease: CAD_EASE }}
+              />
+              <motion.line
+                key={`dimw-h-${draftEpoch}`}
+                x1="0"
+                y1="10"
+                x2="120"
+                y2="10"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isResetting ? { pathLength: 0 } : { pathLength: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 2.64, duration: 0.5, ease: CAD_EASE }}
+              />
+              <motion.polygon
+                points="0,10 5,7 5,13"
+                fill="var(--line-stroke-accent)"
+                initial={{ opacity: 0 }}
+                animate={isResetting ? { opacity: 0 } : { opacity: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 3.02, duration: 0.26 }}
+              />
+              <motion.polygon
+                points="120,10 115,7 115,13"
+                fill="var(--line-stroke-accent)"
+                initial={{ opacity: 0 }}
+                animate={isResetting ? { opacity: 0 } : { opacity: 1 }}
+                transition={isResetting ? { duration: 0 } : { delay: 3.02, duration: 0.26 }}
+              />
+            </>
+          )}
+        </svg>
+        <motion.span
+          initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+          animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+          transition={instantDone || isResetting ? { duration: 0 } : { delay: 2.9, duration: 0.38 }}
+          style={{
+            backgroundColor: "var(--background)",
+            color: "var(--line-stroke-accent)",
+            fontFamily: "var(--font-geist-mono)",
+            fontSize: "10px",
+            left: "50%",
+            padding: "0 4px",
+            position: "absolute",
+            top: "10px",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          120
+        </motion.span>
+      </div>
+
+      {/* CAD-style label with handwritten name */}
+      <HeroNameNote
+        draftEpoch={draftEpoch}
+        instantDone={instantDone}
+        isResetting={isResetting}
+      />
+
+      {/* CAD-style label for Age */}
+      <HeroAgeNote
+        draftEpoch={draftEpoch}
+        instantDone={instantDone}
+        isResetting={isResetting}
+      />
+
+      {/* Inner solid border + profile photo reveal */}
+      <div
+        className={clsx("relative", "overflow-hidden")}
+        style={{
+          borderRadius: "50%",
+          height: "104px",
+          width: "104px",
+        }}
+      >
+        <motion.div
+          initial={
+            instantDone
+              ? { clipPath: "circle(55% at 50% 50%)", filter: "grayscale(0%) contrast(1) brightness(1)" }
+              : { clipPath: "circle(0% at 50% 50%)", filter: "grayscale(100%) contrast(1.85) brightness(1.06)" }
+          }
+          animate={
+            instantDone
+              ? { clipPath: "circle(55% at 50% 50%)", filter: "grayscale(0%) contrast(1) brightness(1)" }
+              : isResetting
+                ? { clipPath: "circle(0% at 50% 50%)", filter: "grayscale(100%) contrast(1.85) brightness(1.06)" }
+                : { clipPath: "circle(55% at 50% 50%)", filter: "grayscale(0%) contrast(1) brightness(1)" }
+          }
+          transition={
+            instantDone || isResetting
+              ? { duration: 0 }
+              : {
+                  clipPath: { delay: 2.3, duration: 0.9, ease: CAD_EASE },
+                  filter: { delay: 2.92, duration: 0.88, ease: "easeOut" },
+                }
+          }
+          style={{ inset: 0, position: "absolute" }}
+        >
+          <Image
+            src="/profile.jpg"
+            alt="Hero artwork"
+            fill
+            style={{ objectFit: "cover", objectPosition: "center 30%" }}
+            priority
+            fetchPriority="high"
+            sizes="104px"
+          />
+        </motion.div>
+
+        {/* Inner border circle trace */}
+        {isDrawing && (
+          <svg
+            aria-hidden="true"
+            width="104"
+            height="104"
+            viewBox="0 0 104 104"
+            style={{
+              inset: 0,
+              pointerEvents: "none",
+              position: "absolute",
+              zIndex: 4,
+            }}
+          >
+            <motion.circle
+              key={`inner-ring-${draftEpoch}`}
+              cx="52"
+              cy="52"
+              r="51.5"
+              fill="none"
+              stroke="var(--foreground)"
+              strokeWidth="1"
+              strokeOpacity="0.55"
+              transform="rotate(-90 52 52)"
+              initial={{ pathLength: 0, opacity: 1 }}
+              animate={{ pathLength: 1, opacity: [1, 1, 0] }}
+              transition={{
+                pathLength: { delay: 2.2, duration: 0.84, ease: CAD_EASE },
+                opacity: { delay: 2.2, duration: 1.28, times: [0, 0.7, 1] },
+              }}
+            />
+          </svg>
+        )}
+
+        {/* Settled inner circle border */}
+        <motion.div
+          aria-hidden="true"
+          initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+          animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+          transition={instantDone || isResetting ? { duration: 0 } : { delay: 2.82, duration: 0.5 }}
+          style={{
+            border: "1px solid var(--line-stroke)",
+            borderRadius: "50%",
+            inset: 0,
+            pointerEvents: "none",
+            position: "absolute",
+            zIndex: 5,
+          }}
+        />
+      </div>
     </div>
   );
 }
 
 export default function Page() {
+  const { instantDone, isResetting } = useCadDraft();
+
   return (
     <main style={{ display: "contents" }}>
 
@@ -2278,302 +3523,33 @@ export default function Page() {
       <section
         className={clsx("relative", "flex", "flex-col")}
         style={{
-          borderBottom: "1px solid var(--line-stroke)",
           gridColumn: "2",
           gridRow: "1",
           minWidth: 0,
           paddingTop: "60px",
         }}
       >
-        {/* Hero image — flush to left and right edges of the content column */}
-        <div
+        <CadDraftRule
+          axis="x"
+          origin="left"
+          delay={0.55}
+          duration={1.1}
           style={{
-            height: "260px",
-            overflow: "hidden",
-            position: "relative",
-            width: "100%",
-          }}
-        >
-          <Image
-            src="/hero-art.jpg"
-            alt="Hero artwork"
-            fill
-            style={{ objectFit: "cover", objectPosition: "center 30%" }}
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-          {/* Subtle gradient fade at the bottom */}
-          <div
-            style={{
-              background:
-                "linear-gradient(to bottom, transparent 60%, var(--background) 100%)",
-              inset: 0,
-              position: "absolute",
-            }}
-          />
-          {/* FIG label */}
-          <span
-            style={{
-              bottom: "8px",
-              color: "var(--line-stroke-accent)",
-              fontFamily: "var(--font-geist-mono)",
-              fontSize: "9px",
-              letterSpacing: "0.1em",
-              position: "absolute",
-              right: "12px",
-            }}
-          >
-            FIG_001
-          </span>
-        </div>
-
-        {/* Profile Image Placeholder */}
-        <div
-          style={{
-            alignItems: "center",
-            backgroundColor: "var(--background)",
-            border: "1px dashed var(--line-stroke-accent)",
-            borderRadius: "50%",
-            bottom: "0",
-            display: "flex",
-            height: "120px",
-            justifyContent: "center",
-            left: "10px",
+            backgroundColor: "var(--line-stroke)",
+            bottom: 0,
+            height: "1px",
+            left: 0,
             position: "absolute",
-            transform: "translateY(50%)",
-            width: "120px",
-            zIndex: 10,
+            right: 0,
+            zIndex: 2,
           }}
-        >
-          {/* CAD-style rotating role label */}
-          <div
-            className={clsx('hidden', '2xl:block')}
-            style={{
-              height: "90px",
-              left: "-240px",
-              pointerEvents: "none",
-              position: "absolute",
-              top: "-55px",
-              width: "260px",
-              zIndex: 20,
-            }}
-          >
-            <style>{`
-              @keyframes cad-ticker {
-                0%, 22% { transform: translateY(0); }
-                33%, 55% { transform: translateY(-28px); }
-                66%, 88% { transform: translateY(-56px); }
-                100% { transform: translateY(-84px); }
-              }
-            `}</style>
-            <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-              <circle cx="258" cy="73" r="2" fill="var(--line-stroke-accent)" />
-              <path
-                d="M 258,73 L 225,40 L 0,40"
-                fill="none"
-                stroke="var(--line-stroke-accent)"
-                strokeWidth="1"
-              />
-            </svg>
-            <div
-              style={{
-                color: "var(--foreground)",
-                height: "28px",
-                left: "0px",
-                overflow: "hidden",
-                position: "absolute",
-                top: "10px",
-                whiteSpace: "nowrap",
-                width: "220px",
-              }}
-            >
-              <div
-                className={caveat.className}
-                style={{
-                  animation: "cad-ticker 8s infinite cubic-bezier(0.4, 0, 0.2, 1)",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Design Engineer</div>
-                <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Open Source Contributor</div>
-                <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Small details matter</div>
-                <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Design Engineer</div>
-              </div>
-            </div>
-          </div>
+        />
 
-          {/* CAD Height Dimension */}
-          <div
-            className={clsx('hidden', 'md:block')}
-            style={{
-              height: "120px",
-              left: "-25px",
-              pointerEvents: "none",
-              position: "absolute",
-              top: "0",
-              width: "20px",
-            }}
-          >
-            <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-              <line x1="25" y1="0" x2="5" y2="0" stroke="var(--line-stroke-accent)" strokeWidth="1" />
-              <line x1="25" y1="120" x2="5" y2="120" stroke="var(--line-stroke-accent)" strokeWidth="1" />
-              <line x1="10" y1="0" x2="10" y2="120" stroke="var(--line-stroke-accent)" strokeWidth="1" />
-              <polygon points="10,0 7,5 13,5" fill="var(--line-stroke-accent)" />
-              <polygon points="10,120 7,115 13,115" fill="var(--line-stroke-accent)" />
-            </svg>
-            <span
-              style={{
-                backgroundColor: "var(--background)",
-                color: "var(--line-stroke-accent)",
-                fontFamily: "var(--font-geist-mono)",
-                fontSize: "10px",
-                left: "10px",
-                padding: "0 4px",
-                position: "absolute",
-                top: "50%",
-                transform: "translate(-50%, -50%) rotate(-90deg)",
-              }}
-            >
-              120
-            </span>
-          </div>
+        {/* Hero artwork canvas */}
+        <CadHeroCanvas />
 
-          {/* CAD Width Dimension */}
-          <div
-            className={clsx('hidden', 'md:block')}
-            style={{
-              bottom: "-25px",
-              height: "20px",
-              left: "0",
-              pointerEvents: "none",
-              position: "absolute",
-              width: "120px",
-            }}
-          >
-            <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-              <line x1="0" y1="-5" x2="0" y2="15" stroke="var(--line-stroke-accent)" strokeWidth="1" />
-              <line x1="120" y1="-5" x2="120" y2="15" stroke="var(--line-stroke-accent)" strokeWidth="1" />
-              <line x1="0" y1="10" x2="120" y2="10" stroke="var(--line-stroke-accent)" strokeWidth="1" />
-              <polygon points="0,10 5,7 5,13" fill="var(--line-stroke-accent)" />
-              <polygon points="120,10 115,7 115,13" fill="var(--line-stroke-accent)" />
-            </svg>
-            <span
-              style={{
-                backgroundColor: "var(--background)",
-                color: "var(--line-stroke-accent)",
-                fontFamily: "var(--font-geist-mono)",
-                fontSize: "10px",
-                left: "50%",
-                padding: "0 4px",
-                position: "absolute",
-                top: "10px",
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              120
-            </span>
-          </div>
-
-          {/* CAD-style label with handwritten name */}
-          <div
-            className={clsx('hidden', 'md:block')}
-            style={{
-              height: "80px",
-              left: "105px",
-              pointerEvents: "none",
-              position: "absolute",
-              top: "0px",
-              width: "270px",
-              zIndex: 20,
-            }}
-          >
-            <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-              <path
-                d="M 0,60 L 30,30 L 270,30"
-                fill="none"
-                stroke="var(--line-stroke-accent)"
-                strokeWidth="1"
-              />
-              <circle cx="0" cy="60" r="2" fill="var(--line-stroke-accent)" />
-            </svg>
-            <span
-              className={caveat.className}
-              style={{
-                bottom: "52px",
-                color: "var(--foreground)",
-                fontSize: "32px",
-                left: "35px",
-                lineHeight: "1",
-                position: "absolute",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Parminder Singh
-            </span>
-          </div>
-
-          {/* CAD-style label for Age */}
-          <div
-            className={clsx('hidden', 'md:block')}
-            style={{
-              bottom: "-25px",
-              height: "70px",
-              left: "-140px",
-              pointerEvents: "none",
-              position: "absolute",
-              width: "150px",
-              zIndex: 20,
-            }}
-          >
-            <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-              <path
-                d="M 140,15 L 85,55 L 0,55"
-                fill="none"
-                stroke="var(--line-stroke-accent)"
-                strokeWidth="1"
-              />
-              <circle cx="140" cy="15" r="2" fill="var(--line-stroke-accent)" />
-            </svg>
-            <span
-              className={caveat.className}
-              style={{
-                bottom: "18px",
-                color: "var(--foreground)",
-                fontSize: "28px",
-                left: "8px",
-                lineHeight: "1",
-                position: "absolute",
-                whiteSpace: "nowrap",
-              }}
-            >
-              23
-            </span>
-          </div>
-
-          {/* Inner solid border to make it look like a technical target */}
-          <div
-            className={clsx("relative", "overflow-hidden")}
-            style={{
-              border: "1px solid var(--line-stroke)",
-              borderRadius: "50%",
-              height: "104px",
-              width: "104px",
-            }}
-          >
-            <Image
-              src="/profile.jpg"
-              alt="Hero artwork"
-              fill
-              style={{ objectFit: "cover", objectPosition: "center 30%" }}
-              priority
-              fetchPriority="high"
-              sizes="104px"
-            />
-
-          </div>
-        </div>
+        {/* Profile Target with Compass & Handwritten Leader Notes */}
+        <CadHeroProfileTarget />
       </section>
 
       {/* ── MAIN CONTENT ──
@@ -2582,16 +3558,16 @@ export default function Page() {
       <div className={clsx('px-4', 'md:px-5')} style={{ gridColumn: "2", gridRow: "5", minWidth: 0 }}>
         {/* CAD SPECIFICATION TITLE BLOCK (Placed under the profile picture) */}
         <section style={{ paddingBottom: "40px", paddingTop: "75px" }}>
-          <div
+          <CadDraftBox
+            trigger="mount"
+            delay={2.7}
+            strokeDuration={1.45}
             style={{
-              backgroundColor: "var(--line-fill)",
-              border: "1px solid var(--line-stroke-accent)",
               fontFamily: "var(--font-geist-mono)",
               fontSize: "12px",
-              position: "relative",
             }}
           >
-            <CadDimensionLabel />
+            <CadDimensionLabel trigger="mount" />
 
 
             {/* Header Bar */}
@@ -2776,26 +3752,30 @@ export default function Page() {
                 </a>
               </div>
             </div>
-          </div>
+          </CadDraftBox>
 
           {/* CAD SOCIAL LINKS BAR (Single Horizontal Line) */}
-          <div
+          <CadDraftBox
+            trigger="mount"
+            delay={3.85}
+            strokeDuration={1.26}
             style={{
-              alignItems: "center",
-              backgroundColor: "var(--line-fill)",
-              border: "1px solid var(--line-stroke-accent)",
-              display: "flex",
-              flexWrap: "wrap",
               fontFamily: "var(--font-geist-mono)",
               fontSize: "11px",
-              gap: "12px",
-              justifyContent: "space-between",
               marginTop: "16px",
-              padding: "10px 14px",
-              position: "relative",
             }}
           >
-            <CadDimensionLabel />
+            <div
+              style={{
+                alignItems: "center",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "12px",
+                justifyContent: "space-between",
+                padding: "10px 14px",
+              }}
+            >
+            <CadDimensionLabel trigger="mount" />
             {/* Left Label */}
             <div style={{ alignItems: "center", color: "var(--nav-link)", display: "flex", fontSize: "10px", gap: "8px", letterSpacing: "0.08em" }}>
               <span style={{ color: "var(--line-stroke-accent)" }}>[+]</span>
@@ -2811,193 +3791,40 @@ export default function Page() {
                 gap: "8px",
               }}
             >
-              {/* X */}
-              <a
-                href="https://x.com/360parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <XIcon />
-                <span>X</span>
-              </a>
-
-              {/* GitHub */}
-              <a
-                href="https://github.com/360Parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <GithubSocialIcon />
-                <span>GitHub</span>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href="https://linkedin.com/in/360parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <LinkedinIcon />
-                <span>LinkedIn</span>
-              </a>
-
-              {/* daily.dev */}
-              <a
-                href="https://daily.dev/360parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <DailyDevIcon />
-                <span>daily.dev</span>
-              </a>
-
-              {/* Discord */}
-              <a
-                href="https://discord.com/users/717397694183768076"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <DiscordIcon />
-                <span>Discord</span>
-              </a>
-
-              {/* Medium */}
-              <a
-                href="https://medium.com/@360Parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <MediumIcon />
-                <span>Medium</span>
-              </a>
+              {[
+                { href: "https://x.com/360parminder", label: "X", icon: <XIcon /> },
+                { href: "https://github.com/360Parminder", label: "GitHub", icon: <GithubSocialIcon /> },
+                { href: "https://linkedin.com/in/360parminder", label: "LinkedIn", icon: <LinkedinIcon /> },
+                { href: "https://daily.dev/360parminder", label: "daily.dev", icon: <DailyDevIcon /> },
+                { href: "https://discord.com/users/717397694183768076", label: "Discord", icon: <DiscordIcon /> },
+                { href: "https://medium.com/@360Parminder", label: "Medium", icon: <MediumIcon /> },
+              ].map((social, idx) => (
+                <motion.div
+                  key={social.label}
+                  initial={instantDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
+                  animate={
+                    instantDone
+                      ? { opacity: 1, y: 0 }
+                      : isResetting
+                        ? { opacity: 0, y: 4 }
+                        : { opacity: 1, y: 0 }
+                  }
+                  transition={
+                    instantDone || isResetting
+                      ? { duration: 0 }
+                      : { delay: 4.48 + idx * 0.09, duration: 0.48, ease: CAD_EASE }
+                  }
+                >
+                  <SocialCard
+                    href={social.href}
+                    label={social.label}
+                    icon={social.icon}
+                  />
+                </motion.div>
+              ))}
             </div>
-          </div>
+            </div>
+          </CadDraftBox>
           {/* CAD GITHUB CONTRIBUTION CHART */}
           <CadGithubChart />
 
@@ -3016,15 +3843,17 @@ export default function Page() {
           {/* CAD PROJECTS SCHEMA */}
           <CadProjects />
 
+          {/* CAD PRODUCT & PAYMENT FLOW LAB */}
+          <CadProductFlows />
+
           {/* INSPIRED BY */}
-          <div
+          <CadDraftBox
+            trigger="view"
+            strokeDuration={1.45}
             style={{
-              backgroundColor: "var(--line-fill)",
-              border: "1px solid var(--line-stroke-accent)",
               fontFamily: "var(--font-geist-mono)",
               fontSize: "12px",
               marginTop: "24px",
-              position: "relative",
             }}
           >
             <CadDimensionLabel />
@@ -3165,11 +3994,11 @@ export default function Page() {
               <span>NODE: INSPIRATIONS // TYPE: ACKNOWLEDGEMENT</span>
               <span>DESIGNED WITH ♥</span>
             </div>
-          </div>
+          </CadDraftBox>
 
           {/* CAD Title Block for Mobile (Hidden on Desktop) */}
           <div className={clsx('flex', '2xl:hidden', 'mt-12', 'mb-8', 'justify-center')}>
-            <TitleBlock className="relative" />
+            <TitleBlock className="relative" trigger="view" />
           </div>
         </section>
       </div>

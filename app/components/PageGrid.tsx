@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { motion } from "motion/react";
+import { CAD_EASE, CadDraftRule, useCadDraft } from "./CadDraft";
 import { LeftGutter } from "./LeftGutter";
 import { RightGutter } from "./RightGutter";
 
@@ -10,22 +12,10 @@ import { RightGutter } from "./RightGutter";
  * Column 1 (var(--col-left) = 416px) : LeftGutter  → border-right IS the left vertical line
  * Column 2 (1fr)                      : content
  * Column 3 (var(--col-right) = 400px) : RightGutter → border-left IS the right vertical line
- *
- * Rows:
- *   1 — 200px   top spacer (navbar lives in col-2 via fixed position)
- *   2 — 1px     top band top line
- *   3 — 9px     top band hatching
- *   4 — 1px     top band bottom line
- *   5 — 1fr     main content
- *   6 — 1px     bottom band top line
- *   7 — 15px    bottom band hatching
- *   8 — 1px     bottom band bottom line
- *
- * The gutters span ALL rows (1 → -1).
- * The horizontal band divs span ALL columns (1 → -1) at rows 2-4 and 6-8.
- * CSS Grid stacks overlapping cells in DOM order — bands render on top of gutters at those rows.
  */
 export function PageGrid({ children }: { children: React.ReactNode }) {
+  const { instantDone, isResetting } = useCadDraft();
+
   const hatching = {
     background: `repeating-linear-gradient(
       -45deg,
@@ -56,29 +46,53 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* ── ROWS 2-4: top horizontal band — full width ── */}
-      <div
-        aria-hidden="true"
+      <CadDraftRule
+        axis="x"
+        origin="left"
+        delay={0.2}
+        duration={1.1}
         style={{ gridColumn: "1 / -1", gridRow: "2", backgroundColor: "var(--line-stroke)" }}
       />
       <div
         aria-hidden="true"
-        style={{ gridColumn: "1 / -1", gridRow: "3", ...hatching, position: "relative" }}
+        style={{ gridColumn: "1 / -1", gridRow: "3", position: "relative" }}
       >
+        <motion.div
+          initial={instantDone ? { clipPath: "inset(0 0% 0 0)" } : { clipPath: "inset(0 100% 0 0)" }}
+          animate={
+            instantDone
+              ? { clipPath: "inset(0 0% 0 0)" }
+              : isResetting
+                ? { clipPath: "inset(0 100% 0 0)" }
+                : { clipPath: "inset(0 0% 0 0)" }
+          }
+          transition={instantDone || isResetting ? { duration: 0 } : { delay: 0.65, duration: 0.9, ease: CAD_EASE }}
+          style={{ ...hatching, inset: 0, position: "absolute" }}
+        />
         {/* Horizontal scale (Top) */}
-        <div 
+        <div
           className="absolute inset-0 flex"
           style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10px", color: "var(--line-stroke-accent)", top: "-18px" }}
         >
           {["H", "G", "F", "E", "D", "C", "B", "A"].map((l, i) => (
-            <div key={l} className="flex-1 flex items-center justify-center relative">
+            <motion.div
+              key={l}
+              initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+              animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+              transition={instantDone || isResetting ? { duration: 0 } : { delay: 0.55 + i * 0.06, duration: 0.4 }}
+              className="flex-1 flex items-center justify-center relative"
+            >
               <span className="absolute bottom-1 bg-[var(--background)] px-1">{l}</span>
               <div className="absolute bottom-0 w-[1px] h-[6px] bg-[var(--line-stroke)]" />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-      <div
-        aria-hidden="true"
+      <CadDraftRule
+        axis="x"
+        origin="right"
+        delay={0.32}
+        duration={1.1}
         style={{ gridColumn: "1 / -1", gridRow: "4", backgroundColor: "var(--line-stroke)" }}
       />
 
@@ -86,29 +100,53 @@ export function PageGrid({ children }: { children: React.ReactNode }) {
       {children}
 
       {/* ── ROWS 6-8: bottom horizontal band — full width ── */}
-      <div
-        aria-hidden="true"
+      <CadDraftRule
+        axis="x"
+        origin="left"
+        delay={0.4}
+        duration={1.1}
         style={{ gridColumn: "1 / -1", gridRow: "6", backgroundColor: "var(--line-stroke)" }}
       />
       <div
         aria-hidden="true"
-        style={{ gridColumn: "1 / -1", gridRow: "7", ...hatching, position: "relative" }}
+        style={{ gridColumn: "1 / -1", gridRow: "7", position: "relative" }}
       >
+        <motion.div
+          initial={instantDone ? { clipPath: "inset(0 0% 0 0)" } : { clipPath: "inset(0 100% 0 0)" }}
+          animate={
+            instantDone
+              ? { clipPath: "inset(0 0% 0 0)" }
+              : isResetting
+                ? { clipPath: "inset(0 100% 0 0)" }
+                : { clipPath: "inset(0 0% 0 0)" }
+          }
+          transition={instantDone || isResetting ? { duration: 0 } : { delay: 0.8, duration: 0.9, ease: CAD_EASE }}
+          style={{ ...hatching, inset: 0, position: "absolute" }}
+        />
         {/* Horizontal scale (Bottom) */}
-        <div 
+        <div
           className="absolute inset-0 flex"
           style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10px", color: "var(--line-stroke-accent)", bottom: "-18px" }}
         >
           {["H", "G", "F", "E", "D", "C", "B", "A"].map((l, i) => (
-            <div key={l} className="flex-1 flex items-center justify-center relative">
+            <motion.div
+              key={l}
+              initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+              animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+              transition={instantDone || isResetting ? { duration: 0 } : { delay: 0.66 + i * 0.06, duration: 0.4 }}
+              className="flex-1 flex items-center justify-center relative"
+            >
               <div className="absolute top-0 w-[1px] h-[6px] bg-[var(--line-stroke)]" />
               <span className="absolute top-1 bg-[var(--background)] px-1">{l}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-      <div
-        aria-hidden="true"
+      <CadDraftRule
+        axis="x"
+        origin="right"
+        delay={0.52}
+        duration={1.1}
         style={{ gridColumn: "1 / -1", gridRow: "8", backgroundColor: "var(--line-stroke)" }}
       />
     </div>
