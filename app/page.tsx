@@ -9,7 +9,7 @@ import { CadProjectCardItem } from "./components/CadProjectCardItem";
 import { CadProductFlows } from "./components/CadProductFlows";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 const caveat = Caveat({
   display: "swap",
@@ -221,6 +221,152 @@ function MediumIcon() {
     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
       <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42c1.87 0 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
     </svg>
+  );
+}
+
+const BORDER_BEAM_SEGMENTS = [
+  { length: 0.34, offset: 0, opacity: 0.04, width: 1.0, glow: false },
+  { length: 0.295, offset: 0.03, opacity: 0.05, width: 1.05, glow: false },
+  { length: 0.25, offset: 0.06, opacity: 0.06, width: 1.05, glow: false },
+  { length: 0.205, offset: 0.09, opacity: 0.08, width: 1.1, glow: false },
+  { length: 0.16, offset: 0.12, opacity: 0.1, width: 1.1, glow: false },
+  { length: 0.123, offset: 0.145, opacity: 0.12, width: 1.15, glow: false },
+  { length: 0.091, offset: 0.165, opacity: 0.15, width: 1.15, glow: false },
+  { length: 0.064, offset: 0.182, opacity: 0.2, width: 1.2, glow: false },
+  { length: 0.041, offset: 0.196, opacity: 0.28, width: 1.2, glow: false },
+  { length: 0.023, offset: 0.207, opacity: 0.4, width: 1.25, glow: false },
+  { length: 0.011, offset: 0.214, opacity: 0.72, width: 1.3, glow: true },
+] as const;
+
+function HoverBorderBeam({
+  active,
+  rx = 3.5,
+  duration = 4.2,
+}: {
+  active: boolean;
+  rx?: number;
+  duration?: number;
+}) {
+  return (
+    <AnimatePresence>
+      {active && (
+        <motion.svg
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          style={{
+            height: "calc(100% + 1px)",
+            inset: "-0.5px",
+            overflow: "visible",
+            pointerEvents: "none",
+            position: "absolute",
+            width: "calc(100% + 1px)",
+          }}
+        >
+          {BORDER_BEAM_SEGMENTS.map((seg, idx) => {
+            const spacing = Number((1 - seg.length).toFixed(4));
+            return (
+              <motion.rect
+                key={idx}
+                x={0}
+                y={0}
+                width="100%"
+                height="100%"
+                rx={rx}
+                ry={rx}
+                fill="none"
+                stroke="var(--foreground)"
+                strokeOpacity={seg.opacity}
+                strokeWidth={seg.width}
+                strokeLinecap="round"
+                style={
+                  seg.glow
+                    ? { filter: "drop-shadow(0 0 2px var(--foreground))" }
+                    : undefined
+                }
+                initial={{
+                  pathLength: seg.length,
+                  pathSpacing: spacing,
+                  pathOffset: seg.offset,
+                }}
+                animate={{
+                  pathLength: seg.length,
+                  pathSpacing: spacing,
+                  pathOffset: [seg.offset, seg.offset + 1],
+                }}
+                transition={{
+                  pathOffset: {
+                    duration,
+                    ease: "linear",
+                    repeat: Infinity,
+                  },
+                }}
+              />
+            );
+          })}
+        </motion.svg>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function SocialCard({
+  href,
+  label,
+  icon,
+}: {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      animate={{
+        y: isHovered && !shouldReduceMotion ? -2 : 0,
+        scale: isHovered && !shouldReduceMotion ? 1.015 : 1,
+      }}
+      whileTap={{ scale: 0.98, y: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 320,
+        damping: 26,
+        mass: 0.7,
+      }}
+      style={{
+        alignItems: "center",
+        backgroundColor: isHovered ? "var(--line-fill-accent)" : "var(--background)",
+        border: `1px solid ${isHovered && shouldReduceMotion ? "var(--line-stroke-accent)" : "var(--line-stroke)"}`,
+        borderRadius: "4px",
+        boxShadow: isHovered
+          ? "0 8px 20px -6px rgba(0, 0, 0, 0.24), 0 2px 6px -2px rgba(0, 0, 0, 0.12)"
+          : "0 0 0 0 rgba(0, 0, 0, 0)",
+        color: "var(--foreground)",
+        display: "flex",
+        fontSize: "11px",
+        gap: "6px",
+        padding: "5px 10px",
+        position: "relative",
+        textDecoration: "none",
+        transition:
+          "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        zIndex: isHovered ? 20 : 1,
+      }}
+    >
+      <HoverBorderBeam active={isHovered && !shouldReduceMotion} rx={3.5} />
+
+      {icon}
+      <span>{label}</span>
+    </motion.a>
   );
 }
 
@@ -1744,13 +1890,143 @@ function CadProjects() {
   );
 }
 
+const CAD_COMMIT_LEGEND = [
+  {
+    code: "LVL_0 // INACTIVE",
+    commits: "0 Commits",
+    fill: "none",
+    letterSpacing: "0.05em",
+    rectOpacity: 0.4,
+  },
+  {
+    code: "LVL_1 // LIGHT (///)",
+    commits: "1 - 2 Commits",
+    fill: "url(#cad-hatch-1)",
+    letterSpacing: "0.05em",
+    rectOpacity: undefined,
+  },
+  {
+    code: "LVL_2 // MEDIUM (///)",
+    commits: "3 - 5 Commits",
+    fill: "url(#cad-hatch-2)",
+    letterSpacing: "0.05em",
+    rectOpacity: undefined,
+  },
+  {
+    code: "LVL_3 // CROSS (XXX)",
+    commits: "6 - 9 Commits",
+    fill: "url(#cad-hatch-3)",
+    letterSpacing: "0.05em",
+    rectOpacity: undefined,
+  },
+  {
+    code: "LVL_4 // DENSE (≡≡≡)",
+    commits: "10+ Commits",
+    fill: "url(#cad-hatch-4)",
+    letterSpacing: "0.08em",
+    rectOpacity: 0.9,
+  },
+] as const;
+
+function CommitLegendCard({
+  code,
+  commits,
+  fill,
+  letterSpacing,
+  rectOpacity,
+}: {
+  code: string;
+  commits: string;
+  fill: string;
+  letterSpacing: string;
+  rectOpacity?: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      animate={{
+        y: isHovered && !shouldReduceMotion ? -2 : 0,
+        scale: isHovered && !shouldReduceMotion ? 1.015 : 1,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 320,
+        damping: 26,
+        mass: 0.7,
+      }}
+      style={{
+        alignItems: "center",
+        backgroundColor: isHovered ? "var(--line-fill-accent)" : "var(--background)",
+        border: `1px solid ${isHovered && shouldReduceMotion ? "var(--line-stroke-accent)" : "var(--line-stroke)"}`,
+        borderRadius: "3px",
+        boxShadow: isHovered
+          ? "0 8px 20px -6px rgba(0, 0, 0, 0.24), 0 2px 6px -2px rgba(0, 0, 0, 0.12)"
+          : "0 0 0 0 rgba(0, 0, 0, 0)",
+        display: "flex",
+        gap: "8px",
+        padding: "6px 8px",
+        position: "relative",
+        transition:
+          "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        zIndex: isHovered ? 20 : 1,
+      }}
+    >
+      <HoverBorderBeam active={isHovered && !shouldReduceMotion} rx={2.5} />
+
+      <svg width="14" height="14" style={{ flexShrink: 0 }}>
+        <rect
+          width="14"
+          height="14"
+          rx="2"
+          fill={fill}
+          stroke="var(--foreground)"
+          strokeWidth="1"
+          opacity={rectOpacity}
+        />
+      </svg>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing }}>{code}</span>
+        <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>{commits}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+function getCadHatchStyle(level: number): string {
+  switch (level) {
+    case 1:
+      return "repeating-linear-gradient(-45deg, transparent 0 2.5px, color-mix(in srgb, var(--foreground) 55%, transparent) 2.5px 3.5px)";
+    case 2:
+      return "repeating-linear-gradient(-45deg, transparent 0 1.4px, color-mix(in srgb, var(--foreground) 78%, transparent) 1.4px 2.4px)";
+    case 3:
+      return [
+        "repeating-linear-gradient(45deg, transparent 0 2px, color-mix(in srgb, var(--foreground) 85%, transparent) 2px 3px)",
+        "repeating-linear-gradient(-45deg, transparent 0 2px, color-mix(in srgb, var(--foreground) 85%, transparent) 2px 3px)",
+      ].join(", ");
+    case 4:
+      return [
+        "repeating-linear-gradient(45deg, transparent 0 1.4px, var(--foreground) 1.4px 2.5px)",
+        "repeating-linear-gradient(-45deg, transparent 0 1.4px, var(--foreground) 1.4px 2.5px)",
+        "repeating-linear-gradient(0deg, transparent 0 1.6px, color-mix(in srgb, var(--foreground) 80%, transparent) 1.6px 2.4px)",
+      ].join(", ");
+    default:
+      return "none";
+  }
+}
+
 /* ── CAD GITHUB CONTRIBUTION MATRIX ── */
 function CadGithubChart() {
   const [weeks, setWeeks] = useState<{ count: number; date: string; level: number }[][]>([]);
   const [totalContributions, setTotalContributions] = useState<number | null>(null);
-  const [monthLabels, setMonthLabels] = useState<{ label: string; x: number }[]>([]);
+  const [monthLabels, setMonthLabels] = useState<{ label: string; weekIndex: number }[]>([]);
+  const [hoveredCell, setHoveredCell] = useState<{ w: number; d: number } | null>(null);
   const [tooltip, setTooltip] = useState<{ count: number; date: string; x: number; y: number } | null>(null);
   const chartRef = useRef<HTMLDivElement | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     // Fetch live contribution data from our GraphQL API proxy
@@ -1762,7 +2038,7 @@ function CadGithubChart() {
           setTotalContributions(calendar.totalContributions);
 
           const gridWeeks: { count: number; date: string; level: number }[][] = [];
-          const months: { label: string; x: number }[] = [];
+          const months: { label: string; weekIndex: number }[] = [];
           const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           let lastMonth = -1;
 
@@ -1790,7 +2066,7 @@ function CadGithubChart() {
               if (dayOfWeek === 0) {
                 const m = d.getMonth();
                 if (m !== lastMonth) {
-                  months.push({ label: monthNames[m], x: 30 + wIndex * 13 });
+                  months.push({ label: monthNames[m], weekIndex: wIndex });
                   lastMonth = m;
                 }
               }
@@ -1872,75 +2148,184 @@ function CadGithubChart() {
           <span style={{ backgroundColor: "#22c55e", borderRadius: "50%", display: "inline-block", height: "6px", width: "6px" }} />
           <span>GITHUB_METRICS // PENCIL_HATCHING_MATRIX</span>
         </div>
-        <span>USER: @360Parminder</span>
+        <motion.a
+          href="https://github.com/360Parminder"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0.82 }}
+          whileHover={{ y: -1, opacity: 1 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.15 }}
+          style={{
+            alignItems: "center",
+            color: "var(--foreground)",
+            display: "inline-flex",
+            gap: "6px",
+            textDecoration: "none",
+          }}
+        >
+          <GithubSocialIcon />
+          <span>@360Parminder</span>
+        </motion.a>
       </div>
 
-      {/* Main Vector SVG Grid Container */}
+      {/* Main Vector / Interactive Wave Grid Container */}
       <div className="scrollbar-hide" style={{ overflowX: "auto", padding: "16px 14px" }}>
-        <div style={{ minWidth: "700px" }}>
-          <svg width="100%" height="130" viewBox={`0 0 ${30 + weeks.length * 13} 130`} style={{ overflow: "visible" }}>
-            {/* Dynamic Month Labels */}
-            {monthLabels.map((m, i) => (
-              <text
-                key={`${m.label}-${i}`}
-                x={m.x}
-                y="14"
-                fill="var(--foreground)"
-                fontSize="10"
-                fontFamily="var(--font-geist-mono)"
-                opacity="0.8"
-              >
-                {m.label}
-              </text>
-            ))}
+        <div style={{ minWidth: "700px", paddingTop: "2px", paddingBottom: "4px" }}>
+          {/* Dynamic Month Labels */}
+          <div
+            style={{
+              height: "18px",
+              marginLeft: "30px",
+              marginBottom: "4px",
+              position: "relative",
+            }}
+          >
+            {weeks.length > 0 &&
+              monthLabels.map((m, i) => (
+                <span
+                  key={`${m.label}-${i}`}
+                  style={{
+                    color: "var(--foreground)",
+                    fontFamily: "var(--font-geist-mono)",
+                    fontSize: "10px",
+                    left: `${(m.weekIndex / weeks.length) * 100}%`,
+                    lineHeight: "1",
+                    opacity: 0.8,
+                    position: "absolute",
+                    top: 0,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {m.label}
+                </span>
+              ))}
+          </div>
 
-            {/* Day Labels */}
-            <text x="0" y="38" fill="var(--foreground)" fontSize="9" fontFamily="var(--font-geist-mono)" opacity="0.7">Mon</text>
-            <text x="0" y="64" fill="var(--foreground)" fontSize="9" fontFamily="var(--font-geist-mono)" opacity="0.7">Wed</text>
-            <text x="0" y="90" fill="var(--foreground)" fontSize="9" fontFamily="var(--font-geist-mono)" opacity="0.7">Fri</text>
+          {/* Day Labels + 53 Weeks x 7 Days Wave Matrix */}
+          <div style={{ alignItems: "stretch", display: "flex", minHeight: "96px" }}>
+            {/* Day Labels Column */}
+            <div
+              style={{
+                display: "grid",
+                flexShrink: 0,
+                gap: "3px",
+                gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                width: "30px",
+              }}
+            >
+              {["", "Mon", "", "Wed", "", "Fri", ""].map((label, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    alignItems: "center",
+                    color: "var(--foreground)",
+                    display: "flex",
+                    fontFamily: "var(--font-geist-mono)",
+                    fontSize: "9px",
+                    lineHeight: "1",
+                    opacity: 0.7,
+                  }}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
 
-            {/* 53 Weeks x 7 Days Tiles Grid (Sunday=row0, Saturday=row6) */}
-            <g transform="translate(30, 24)">
+            {/* Interactive Contribution Tiles Grid */}
+            <div
+              onMouseLeave={() => {
+                setHoveredCell(null);
+                setTooltip(null);
+              }}
+              style={{
+                display: "grid",
+                flex: 1,
+                gap: "3px",
+                gridTemplateColumns: `repeat(${Math.max(weeks.length, 53)}, minmax(0, 1fr))`,
+              }}
+            >
               {weeks.map((week, wIndex) => (
-                <g key={wIndex} transform={`translate(${wIndex * 13}, 0)`}>
+                <div
+                  key={wIndex}
+                  style={{
+                    display: "grid",
+                    gap: "3px",
+                    gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                  }}
+                >
                   {week.map((day, dIndex) => {
-                    let fillStyle = "none";
-                    if (day.level === 1) fillStyle = "url(#cad-hatch-1)";
-                    else if (day.level === 2) fillStyle = "url(#cad-hatch-2)";
-                    else if (day.level === 3) fillStyle = "url(#cad-hatch-3)";
-                    else if (day.level === 4) fillStyle = "url(#cad-hatch-4)";
+                    const WAVE_RADIUS = 3.6;
+                    let dist = Infinity;
+                    let wave = 0;
+                    if (hoveredCell && !shouldReduceMotion) {
+                      dist = Math.hypot(wIndex - hoveredCell.w, dIndex - hoveredCell.d);
+                      if (dist < WAVE_RADIUS) {
+                        const t = 1 - dist / WAVE_RADIUS;
+                        wave = 0.5 * (1 - Math.cos(Math.PI * t));
+                      }
+                    }
+
+                    const isCenter =
+                      hoveredCell !== null &&
+                      hoveredCell.w === wIndex &&
+                      hoveredCell.d === dIndex;
+                    const scale = 1 + wave * 0.52;
+                    const liftY = -(wave * 5);
+                    const zIndex = wave > 0 ? Math.round(10 + wave * 30) : isCenter ? 20 : 1;
+                    const delayMs = hoveredCell && wave > 0 ? Math.round(dist * 16) : 0;
 
                     return (
-                      <rect
+                      <div
                         key={dIndex}
-                        x="0"
-                        y={dIndex * 13}
-                        width="10"
-                        height="10"
-                        rx="1"
-                        fill={fillStyle}
-                        stroke="var(--line-stroke-accent)"
-                        strokeWidth="1"
-                        style={{ cursor: day.date ? "pointer" : "default" }}
                         onMouseEnter={(e) => {
-                          if (!day.date || !chartRef.current) return;
-                          const svgRect = chartRef.current.getBoundingClientRect();
-                          const cellRect = (e.target as SVGRectElement).getBoundingClientRect();
+                          setHoveredCell({ w: wIndex, d: dIndex });
+                          if (!day.date || !chartRef.current) {
+                            setTooltip(null);
+                            return;
+                          }
+                          const containerRect = chartRef.current.getBoundingClientRect();
+                          const cellRect = e.currentTarget.getBoundingClientRect();
                           setTooltip({
                             count: day.count,
                             date: day.date,
-                            x: cellRect.left - svgRect.left + cellRect.width / 2,
-                            y: cellRect.top - svgRect.top,
+                            x: cellRect.left - containerRect.left + cellRect.width / 2,
+                            y: cellRect.top - containerRect.top,
                           });
                         }}
-                        onMouseLeave={() => setTooltip(null)}
+                        style={{
+                          aspectRatio: "1 / 1",
+                          backgroundColor: wave > 0 ? "var(--background)" : "transparent",
+                          backgroundImage: getCadHatchStyle(day.level),
+                          border: `1px solid ${
+                            isCenter
+                              ? "var(--foreground)"
+                              : wave > 0.35
+                                ? "var(--nav-link)"
+                                : "var(--line-stroke-accent)"
+                          }`,
+                          borderRadius: "1.5px",
+                          boxShadow:
+                            wave > 0.05
+                              ? `0 ${(2 + wave * 8).toFixed(1)}px ${(4 + wave * 12).toFixed(1)}px -2px rgba(0, 0, 0, ${(0.16 + wave * 0.34).toFixed(2)})`
+                              : "none",
+                          cursor: day.date ? "pointer" : "default",
+                          position: "relative",
+                          transform:
+                            wave > 0
+                              ? `translate3d(0, ${liftY.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`
+                              : "translate3d(0, 0, 0) scale(1)",
+                          transition: `transform 260ms cubic-bezier(0.22, 1.35, 0.36, 1) ${delayMs}ms, box-shadow 260ms ease ${delayMs}ms, border-color 180ms ease, background-color 180ms ease`,
+                          willChange: wave > 0 ? "transform" : "auto",
+                          zIndex,
+                        }}
                       />
                     );
                   })}
-                </g>
+                </div>
               ))}
-            </g>
-          </svg>
+            </div>
+          </div>
         </div>
 
         {/* CAD Legend & Metadata Bar */}
@@ -1975,112 +2360,80 @@ function CadGithubChart() {
             paddingTop: "10px",
           }}
         >
-          {/* Level 0 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="none" stroke="var(--foreground)" strokeWidth="1" opacity="0.4" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_0 // INACTIVE</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>0 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 1 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-1)" stroke="var(--foreground)" strokeWidth="1" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_1 // LIGHT (///)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>1 - 2 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 2 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-2)" stroke="var(--foreground)" strokeWidth="1" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_2 // MEDIUM (///)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>3 - 5 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 3 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-3)" stroke="var(--foreground)" strokeWidth="1" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.05em" }}>LVL_3 // CROSS (XXX)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>6 - 9 Commits</span>
-            </div>
-          </div>
-
-          {/* Level 4 */}
-          <div style={{ alignItems: "center", backgroundColor: "var(--background)", border: "1px solid var(--line-stroke)", borderRadius: "3px", display: "flex", gap: "8px", padding: "6px 8px" }}>
-            <svg width="14" height="14">
-              <rect width="14" height="14" rx="2" fill="url(#cad-hatch-4)" stroke="var(--foreground)" strokeWidth="1" opacity="0.9" />
-            </svg>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "var(--nav-link)", fontSize: "8px", letterSpacing: "0.08em" }}>LVL_4 // DENSE (≡≡≡)</span>
-              <span style={{ color: "var(--foreground)", fontSize: "10px", fontWeight: 600 }}>10+ Commits</span>
-            </div>
-          </div>
+          {CAD_COMMIT_LEGEND.map((item) => (
+            <CommitLegendCard
+              key={item.code}
+              code={item.code}
+              commits={item.commits}
+              fill={item.fill}
+              letterSpacing={item.letterSpacing}
+              rectOpacity={item.rectOpacity}
+            />
+          ))}
         </div>
       </div>
 
       {/* Custom Tooltip — rendered outside scroll container to avoid clipping */}
-      {tooltip && (
-        <div
-          style={{
-            alignItems: "center",
-            backgroundColor: "var(--foreground)",
-            borderRadius: "4px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            color: "var(--background)",
-            display: "flex",
-            flexDirection: "column",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "11px",
-            gap: "2px",
-            left: tooltip.x,
-            letterSpacing: "0.03em",
-            padding: "6px 10px",
-            pointerEvents: "none",
-            position: "absolute",
-            top: tooltip.y - 6,
-            transform: "translate(-50%, -100%)",
-            whiteSpace: "nowrap",
-            zIndex: 50,
-          }}
-        >
-          <span style={{ fontWeight: 700 }}>
-            {tooltip.count} {tooltip.count === 1 ? "contribution" : "contributions"}
-          </span>
-          <span style={{ fontSize: "9px", opacity: 0.7 }}>
-            {(() => {
-              const parts = tooltip.date.split("-");
-              const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-              return d.toLocaleDateString("en-US", { day: "numeric", month: "short", weekday: "short", year: "numeric" });
-            })()}
-          </span>
-          {/* Tooltip Arrow */}
+      <AnimatePresence>
+        {tooltip && (
           <div
             style={{
-              backgroundColor: "var(--foreground)",
-              bottom: "-4px",
-              height: "8px",
-              left: "50%",
+              left: tooltip.x,
+              pointerEvents: "none",
               position: "absolute",
-              transform: "translateX(-50%) rotate(45deg)",
-              width: "8px",
+              top: tooltip.y - 12,
+              transform: "translate(-50%, -100%)",
+              zIndex: 50,
             }}
-          />
-        </div>
-      )}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 4, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 2, scale: 0.96 }}
+              transition={{ duration: 0.14, ease: "easeOut" }}
+              style={{
+                alignItems: "center",
+                backgroundColor: "var(--foreground)",
+                borderRadius: "4px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                color: "var(--background)",
+                display: "flex",
+                flexDirection: "column",
+                fontFamily: "var(--font-geist-mono)",
+                fontSize: "11px",
+                gap: "2px",
+                letterSpacing: "0.03em",
+                padding: "6px 10px",
+                position: "relative",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span style={{ fontWeight: 700 }}>
+                {tooltip.count} {tooltip.count === 1 ? "contribution" : "contributions"}
+              </span>
+              <span style={{ fontSize: "9px", opacity: 0.7 }}>
+                {(() => {
+                  const parts = tooltip.date.split("-");
+                  const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                  return d.toLocaleDateString("en-US", { day: "numeric", month: "short", weekday: "short", year: "numeric" });
+                })()}
+              </span>
+              {/* Tooltip Arrow */}
+              <div
+                style={{
+                  backgroundColor: "var(--foreground)",
+                  bottom: "-4px",
+                  height: "8px",
+                  left: "50%",
+                  position: "absolute",
+                  transform: "translateX(-50%) rotate(45deg)",
+                  width: "8px",
+                }}
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -2812,191 +3165,21 @@ export default function Page() {
                 gap: "8px",
               }}
             >
-              {/* X */}
-              <a
-                href="https://x.com/360parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <XIcon />
-                <span>X</span>
-              </a>
-
-              {/* GitHub */}
-              <a
-                href="https://github.com/360Parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <GithubSocialIcon />
-                <span>GitHub</span>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href="https://linkedin.com/in/360parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <LinkedinIcon />
-                <span>LinkedIn</span>
-              </a>
-
-              {/* daily.dev */}
-              <a
-                href="https://daily.dev/360parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <DailyDevIcon />
-                <span>daily.dev</span>
-              </a>
-
-              {/* Discord */}
-              <a
-                href="https://discord.com/users/717397694183768076"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <DiscordIcon />
-                <span>Discord</span>
-              </a>
-
-              {/* Medium */}
-              <a
-                href="https://medium.com/@360Parminder"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "var(--background)",
-                  border: "1px solid var(--line-stroke)",
-                  borderRadius: "4px",
-                  color: "var(--foreground)",
-                  display: "flex",
-                  fontSize: "11px",
-                  gap: "6px",
-                  padding: "5px 10px",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke-accent)";
-                  e.currentTarget.style.backgroundColor = "var(--line-fill-accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--line-stroke)";
-                  e.currentTarget.style.backgroundColor = "var(--background)";
-                }}
-              >
-                <MediumIcon />
-                <span>Medium</span>
-              </a>
+              {[
+                { href: "https://x.com/360parminder", label: "X", icon: <XIcon /> },
+                { href: "https://github.com/360Parminder", label: "GitHub", icon: <GithubSocialIcon /> },
+                { href: "https://linkedin.com/in/360parminder", label: "LinkedIn", icon: <LinkedinIcon /> },
+                { href: "https://daily.dev/360parminder", label: "daily.dev", icon: <DailyDevIcon /> },
+                { href: "https://discord.com/users/717397694183768076", label: "Discord", icon: <DiscordIcon /> },
+                { href: "https://medium.com/@360Parminder", label: "Medium", icon: <MediumIcon /> },
+              ].map((social) => (
+                <SocialCard
+                  key={social.label}
+                  href={social.href}
+                  label={social.label}
+                  icon={social.icon}
+                />
+              ))}
             </div>
           </div>
           {/* CAD GITHUB CONTRIBUTION CHART */}
