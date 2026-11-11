@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   ActorId,
   FLOW_ACTORS,
@@ -57,6 +57,8 @@ export function FlowSimulator({
   initialScenarioId,
   returnParams,
 }: FlowSimulatorProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   const defaultScenario =
     product.scenarios.find((s) => s.id === initialScenarioId) ?? product.scenarios[0];
 
@@ -158,18 +160,25 @@ export function FlowSimulator({
 
   const fromIdx = ACTOR_ORDER.indexOf(activeStep.from);
   const toIdx = ACTOR_ORDER.indexOf(activeStep.to);
+  const safeFromIdx = Math.max(0, fromIdx);
+  const safeToIdx = Math.max(0, toIdx);
   const visitedActors = new Set<ActorId>();
   steps.slice(0, safeIndex + 1).forEach((s) => {
     visitedActors.add(s.from);
     visitedActors.add(s.to);
   });
 
-  const fromPct = ((fromIdx + 0.5) / ACTOR_ORDER.length) * 100;
-  const toPct = ((toIdx + 0.5) / ACTOR_ORDER.length) * 100;
-  const bandLeftPct = Math.min(fromPct, toPct);
-  const bandWidthPct = Math.max(Math.abs(toPct - fromPct), 2);
-  const isReverse = toIdx < fromIdx;
-  const isSelfLoop = fromIdx === toIdx;
+  const maxHopSpan = Math.max(ACTOR_ORDER.length - 1, 1);
+  const fromRailPct = (safeFromIdx / maxHopSpan) * 100;
+  const toRailPct = (safeToIdx / maxHopSpan) * 100;
+  const bandLeftRailPct = Math.min(fromRailPct, toRailPct);
+  const bandWidthRailPct = Math.abs(toRailPct - fromRailPct);
+  const isReverse = safeToIdx < safeFromIdx;
+  const isSelfLoop = safeFromIdx === safeToIdx;
+  const rawMidRailPct = (fromRailPct + toRailPct) / 2;
+  const clampedMidRailPct = Math.max(12.5, Math.min(87.5, rawMidRailPct));
+  const streamDurationSec = Number((0.55 * SPEED_OPTIONS[speedIdx].multiplier).toFixed(2));
+  const cometCycleSec = Number((1.45 * SPEED_OPTIONS[speedIdx].multiplier).toFixed(2));
 
   const fromMeta = getActorLabel(activeStep.from, product);
   const toMeta = getActorLabel(activeStep.to, product);
@@ -600,15 +609,19 @@ export function FlowSimulator({
         <div
           style={{
             backgroundColor: "var(--line-stroke)",
-            height: "2px",
+            borderRadius: "2px",
+            height: "3px",
             marginTop: "10px",
             overflow: "hidden",
+            position: "relative",
             width: "100%",
           }}
         >
           <div
             style={{
-              backgroundColor: product.accentColor,
+              background: `linear-gradient(90deg, color-mix(in srgb, ${product.accentColor} 65%, transparent) 0%, ${product.accentColor} 100%)`,
+              borderRadius: "2px",
+              boxShadow: `0 0 8px color-mix(in srgb, ${product.accentColor} 55%, transparent)`,
               height: "100%",
               transition: "width 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
               width: `${progressPct}%`,
@@ -660,7 +673,7 @@ export function FlowSimulator({
                 display: "grid",
                 gap: "8px",
                 gridTemplateColumns: "repeat(5, 1fr)",
-                marginBottom: "10px",
+                marginBottom: "0px",
               }}
             >
               {ACTOR_ORDER.map((actorId) => {
@@ -683,6 +696,9 @@ export function FlowSimulator({
                         ? "1px solid var(--line-stroke-accent)"
                         : "1px dashed var(--line-stroke)",
                       borderRadius: "3px",
+                      boxShadow: isTarget
+                        ? `0 0 14px color-mix(in srgb, ${product.accentColor} 18%, transparent)`
+                        : "none",
                       opacity: isVisited || isSource || isTarget ? 1 : 0.6,
                       padding: "8px 10px",
                       position: "relative",
@@ -739,110 +755,598 @@ export function FlowSimulator({
               })}
             </div>
 
-            {/* Traveling Packet Track */}
-            <div
-              style={{
-                backgroundColor: "var(--line-fill)",
-                border: "1px solid var(--line-stroke)",
-                borderRadius: "2px",
-                height: "28px",
-                position: "relative",
-              }}
-            >
-              {/* Baseline Center Rail */}
+            {/* CAD Drop Leads: exact column centers into the Signal Bus */}
+            <div style={{ height: "14px", position: "relative" }}>
               <div
                 style={{
-                  backgroundColor: "var(--line-stroke-accent)",
-                  height: "1px",
-                  left: "10%",
+                  bottom: 0,
+                  left: "calc(10% - 3.2px)",
                   position: "absolute",
-                  right: "10%",
-                  top: "50%",
-                }}
-              />
-
-              {/* Column node ticks */}
-              {ACTOR_ORDER.map((id, idx) => (
-                <div
-                  key={id}
-                  style={{
-                    backgroundColor: "var(--background)",
-                    border: "1px solid var(--line-stroke-accent)",
-                    borderRadius: "50%",
-                    height: "7px",
-                    left: `${((idx + 0.5) / ACTOR_ORDER.length) * 100}%`,
-                    position: "absolute",
-                    top: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "7px",
-                    zIndex: 1,
-                  }}
-                />
-              ))}
-
-              {/* Active Vector Segment */}
-              <div
-                style={{
-                  backgroundColor: product.accentColor,
-                  height: "2px",
-                  left: `${bandLeftPct}%`,
-                  opacity: 0.7,
-                  position: "absolute",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
-                  width: `${bandWidthPct}%`,
-                  zIndex: 2,
-                }}
-              />
-
-              {/* Animated Signal Packet */}
-              <motion.div
-                key={`${activeStep.id}-packet`}
-                initial={{ left: `${fromPct}%`, scale: 0.9 }}
-                animate={{ left: `${toPct}%`, scale: [1, 1.35, 1] }}
-                transition={{
-                  duration: 0.75,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                style={{
-                  alignItems: "center",
-                  backgroundColor: product.accentColor,
-                  border: "2px solid var(--background)",
-                  borderRadius: "50%",
-                  boxShadow: `0 0 12px ${product.accentColor}`,
-                  display: "flex",
-                  height: "14px",
-                  justifyContent: "center",
-                  position: "absolute",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "14px",
-                  zIndex: 4,
-                }}
-                title={`${fromMeta.label} ${isReverse ? "◀─" : "─▶"} ${toMeta.label}`}
-              />
-
-              {/* Center Protocol Callout */}
-              <div
-                style={{
-                  backgroundColor: "var(--background)",
-                  border: `1px solid ${product.accentColor}`,
-                  borderRadius: "2px",
-                  color: "var(--foreground)",
-                  fontSize: "9px",
-                  left: `${(fromPct + toPct) / 2}%`,
-                  padding: "1px 6px",
-                  position: "absolute",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                  whiteSpace: "nowrap",
-                  zIndex: 5,
+                  right: "calc(10% - 3.2px)",
+                  top: 0,
                 }}
               >
-                {isReverse ? "◀ " : ""}
-                {activeStep.protocol}
-                {!isReverse ? " ▶" : ""}
+                {ACTOR_ORDER.map((actorId, idx) => {
+                  const isSource = activeStep.from === actorId;
+                  const isTarget = activeStep.to === actorId;
+                  const isVisited = visitedActors.has(actorId);
+                  const railX = `${(idx / maxHopSpan) * 100}%`;
+
+                  return (
+                    <div
+                      key={`${actorId}-stem`}
+                      style={{
+                        bottom: 0,
+                        left: railX,
+                        position: "absolute",
+                        top: 0,
+                        width: 0,
+                      }}
+                    >
+                      {(isSource || isTarget) && (
+                        <span
+                          style={{
+                            backgroundColor: isTarget
+                              ? product.accentColor
+                              : "var(--foreground)",
+                            borderRadius: "50%",
+                            height: "4px",
+                            left: "-2px",
+                            position: "absolute",
+                            top: "-2px",
+                            width: "4px",
+                          }}
+                        />
+                      )}
+                      <span
+                        style={{
+                          backgroundColor: isTarget
+                            ? product.accentColor
+                            : isSource
+                            ? "var(--foreground)"
+                            : isVisited
+                            ? "var(--line-stroke-accent)"
+                            : "transparent",
+                          borderLeft:
+                            !isSource && !isTarget && !isVisited
+                              ? "1px dashed var(--line-stroke)"
+                              : undefined,
+                          bottom: 0,
+                          boxShadow: isTarget ? `0 0 6px ${product.accentColor}` : "none",
+                          left: isTarget ? "-0.75px" : "-0.5px",
+                          opacity: isSource ? 0.75 : isTarget ? 0.95 : 1,
+                          position: "absolute",
+                          top: 0,
+                          transition: "all 0.25s ease",
+                          width: isTarget ? "1.5px" : isSource || isVisited ? "1px" : "0px",
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Redesigned Dual-Lane CAD Signal Transfer Bus */}
+            <div style={{ height: "78px", position: "relative" }}>
+              {/* Blueprint grid backdrop */}
+              <div
+                style={{
+                  backgroundColor: "var(--line-fill)",
+                  backgroundImage:
+                    "radial-gradient(var(--line-stroke) 1px, transparent 1px)",
+                  backgroundSize: "12px 12px",
+                  border: "1px solid var(--line-stroke)",
+                  borderRadius: "3px",
+                  inset: 0,
+                  overflow: "hidden",
+                  pointerEvents: "none",
+                  position: "absolute",
+                }}
+              />
+
+              {/* Exact rail coordinate space anchored to card centers */}
+              <div
+                style={{
+                  bottom: 0,
+                  left: "calc(10% - 3.2px)",
+                  position: "absolute",
+                  right: "calc(10% - 3.2px)",
+                  top: 0,
+                }}
+              >
+                {/* Vertical column guide hairlines */}
+                {ACTOR_ORDER.map((actorId, idx) => {
+                  const isSource = activeStep.from === actorId;
+                  const isTarget = activeStep.to === actorId;
+                  return (
+                    <div
+                      key={`${actorId}-guide`}
+                      style={{
+                        borderLeft:
+                          isSource || isTarget
+                            ? `1px solid color-mix(in srgb, ${product.accentColor} 22%, transparent)`
+                            : "1px dashed var(--line-stroke-light)",
+                        bottom: 0,
+                        left: `${(idx / maxHopSpan) * 100}%`,
+                        position: "absolute",
+                        top: 0,
+                        width: 0,
+                        zIndex: 1,
+                      }}
+                    />
+                  );
+                })}
+
+                {/* LANE 1 (top: 9px): Unobstructed Protocol Callout Pill + Leader Stem */}
+                <motion.div
+                  initial={false}
+                  animate={{ left: `${clampedMidRailPct}%` }}
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0 }
+                      : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
+                  }
+                  style={{
+                    height: 0,
+                    left: `${clampedMidRailPct}%`,
+                    position: "absolute",
+                    top: "9px",
+                    width: 0,
+                    zIndex: 6,
+                  }}
+                >
+                  <div
+                    style={{
+                      alignItems: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      left: 0,
+                      position: "absolute",
+                      top: 0,
+                      transform: "translateX(-50%)",
+                      whiteSpace: "nowrap",
+                      width: "max-content",
+                    }}
+                  >
+                    <div
+                      style={{
+                        alignItems: "center",
+                        backgroundColor: "var(--background)",
+                        border: `1px solid ${product.accentColor}`,
+                        borderRadius: "3px",
+                        boxShadow: `0 2px 10px color-mix(in srgb, ${product.accentColor} 18%, transparent)`,
+                        display: "inline-flex",
+                        gap: "5px",
+                        height: "22px",
+                        padding: "0 7px",
+                      }}
+                    >
+                      {shouldReduceMotion ? (
+                        <span
+                          style={{
+                            backgroundColor: product.accentColor,
+                            borderRadius: "50%",
+                            display: "inline-block",
+                            height: "5px",
+                            width: "5px",
+                          }}
+                        />
+                      ) : (
+                        <motion.span
+                          animate={{ opacity: [1, 0.35, 1], scale: [1, 0.85, 1] }}
+                          transition={{
+                            duration: Math.max(0.9, streamDurationSec * 1.8),
+                            ease: "easeInOut",
+                            repeat: Infinity,
+                          }}
+                          style={{
+                            backgroundColor: product.accentColor,
+                            borderRadius: "50%",
+                            boxShadow: `0 0 6px ${product.accentColor}`,
+                            display: "inline-block",
+                            height: "5px",
+                            width: "5px",
+                          }}
+                        />
+                      )}
+
+                      {isReverse && (
+                        <span style={{ color: readableAccent, fontSize: "8.5px", fontWeight: 700 }}>
+                          ◀
+                        </span>
+                      )}
+                      {isSelfLoop && (
+                        <span style={{ color: readableAccent, fontSize: "9.5px", fontWeight: 700 }}>
+                          ↻
+                        </span>
+                      )}
+
+                      <span
+                        style={{
+                          color: "var(--foreground)",
+                          fontSize: "8.5px",
+                          fontWeight: 700,
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        {activeStep.protocol}
+                      </span>
+
+                      <span
+                        style={{
+                          backgroundColor: "var(--line-stroke-accent)",
+                          height: "9px",
+                          width: "1px",
+                        }}
+                      />
+
+                      <span
+                        style={{
+                          color: readableAccent,
+                          fontSize: "8px",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {activeStep.latencyLabel}
+                      </span>
+
+                      {!isReverse && !isSelfLoop && (
+                        <span style={{ color: readableAccent, fontSize: "8.5px", fontWeight: 700 }}>
+                          ▶
+                        </span>
+                      )}
+                    </div>
+
+                    {!isSelfLoop && (
+                      <span
+                        style={{
+                          backgroundColor: product.accentColor,
+                          height: "15px",
+                          opacity: 0.55,
+                          width: "1px",
+                        }}
+                      />
+                    )}
+                  </div>
+                </motion.div>
+
+                {/* LANE 2 (top: 48px, 0px-height axis): Unobstructed Signal Rail */}
+                <div
+                  style={{
+                    height: 0,
+                    left: 0,
+                    position: "absolute",
+                    right: 0,
+                    top: "48px",
+                  }}
+                >
+                  {/* Recessed baseline track */}
+                  <div
+                    style={{
+                      backgroundColor: "var(--line-stroke-accent)",
+                      borderRadius: "1px",
+                      height: "2px",
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                      top: "-1px",
+                      zIndex: 1,
+                    }}
+                  />
+
+                  {/* Active Hop Conduit + Continuous Directional Signal Stream */}
+                  {!isSelfLoop && (
+                    <div
+                      style={{
+                        backgroundColor: `color-mix(in srgb, ${product.accentColor} 22%, transparent)`,
+                        borderRadius: "2px",
+                        boxShadow: `0 0 10px color-mix(in srgb, ${product.accentColor} 42%, transparent)`,
+                        height: "4px",
+                        left: `${bandLeftRailPct}%`,
+                        overflow: "hidden",
+                        position: "absolute",
+                        top: "-2px",
+                        transition:
+                          "left 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+                        width: `${bandWidthRailPct}%`,
+                        zIndex: 2,
+                      }}
+                    >
+                      {shouldReduceMotion ? (
+                        <div
+                          style={{
+                            backgroundColor: product.accentColor,
+                            inset: 0,
+                            position: "absolute",
+                          }}
+                        />
+                      ) : (
+                        <motion.div
+                          key={`${activeScenario.id}-${activeStep.id}-${speedIdx}-${isReverse ? "rev" : "fwd"}-stream`}
+                          animate={{ x: isReverse ? [0, -16] : [0, 16] }}
+                          transition={{
+                            duration: streamDurationSec,
+                            ease: "linear",
+                            repeat: Infinity,
+                          }}
+                          style={{
+                            backgroundImage: `repeating-linear-gradient(90deg, ${product.accentColor} 0px, ${product.accentColor} 7px, transparent 7px, transparent 16px)`,
+                            bottom: 0,
+                            left: "-16px",
+                            position: "absolute",
+                            right: "-16px",
+                            top: 0,
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  {/* RX Target Arrival Pulse Ripple */}
+                  {!isSelfLoop && !shouldReduceMotion && (
+                    <div
+                      style={{
+                        height: 0,
+                        left: `${toRailPct}%`,
+                        pointerEvents: "none",
+                        position: "absolute",
+                        top: 0,
+                        width: 0,
+                        zIndex: 3,
+                      }}
+                    >
+                      <motion.div
+                        key={`${activeScenario.id}-${activeStep.id}-${speedIdx}-ripple`}
+                        animate={{
+                          opacity: [0, 0, 0.85, 0],
+                          scale: [0.6, 0.6, 1.4, 1.65],
+                        }}
+                        transition={{
+                          duration: cometCycleSec,
+                          ease: "easeOut",
+                          repeat: Infinity,
+                          repeatDelay: 0.25,
+                          times: [0, 0.72, 0.88, 1],
+                        }}
+                        style={{
+                          border: `1.5px solid ${product.accentColor}`,
+                          borderRadius: "50%",
+                          height: "18px",
+                          left: "-9px",
+                          position: "absolute",
+                          top: "-9px",
+                          width: "18px",
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Self-Loop Orbital Telemetry Arc */}
+                  {isSelfLoop && !shouldReduceMotion && (
+                    <div
+                      style={{
+                        height: 0,
+                        left: `${fromRailPct}%`,
+                        pointerEvents: "none",
+                        position: "absolute",
+                        top: 0,
+                        width: 0,
+                        zIndex: 3,
+                      }}
+                    >
+                      <motion.svg
+                        animate={{ rotate: 360 }}
+                        height="26"
+                        style={{
+                          left: "-13px",
+                          position: "absolute",
+                          top: "-13px",
+                        }}
+                        transition={{
+                          duration: Number((1.6 * SPEED_OPTIONS[speedIdx].multiplier).toFixed(2)),
+                          ease: "linear",
+                          repeat: Infinity,
+                        }}
+                        viewBox="0 0 26 26"
+                        width="26"
+                      >
+                        <circle
+                          cx="13"
+                          cy="13"
+                          fill="none"
+                          r="11"
+                          stroke={product.accentColor}
+                          strokeDasharray="16 8"
+                          strokeLinecap="round"
+                          strokeWidth="1.5"
+                        />
+                      </motion.svg>
+                    </div>
+                  )}
+
+                  {/* 5 Centered Terminal Ports + Datum Labels */}
+                  {ACTOR_ORDER.map((id, idx) => {
+                    const actor = getActorLabel(id, product);
+                    const isSource = activeStep.from === id;
+                    const isTarget = activeStep.to === id;
+                    const isVisited = visitedActors.has(id);
+                    const isEndpoint = isSource || isTarget;
+                    const portTag =
+                      isSource && isTarget
+                        ? `${actor.code}·LOOP`
+                        : isSource
+                        ? `${actor.code}·TX`
+                        : isTarget
+                        ? `${actor.code}·RX`
+                        : actor.code;
+
+                    return (
+                      <div
+                        key={id}
+                        style={{
+                          height: 0,
+                          left: `${(idx / maxHopSpan) * 100}%`,
+                          position: "absolute",
+                          top: 0,
+                          width: 0,
+                          zIndex: 4,
+                        }}
+                      >
+                        <div
+                          style={{
+                            alignItems: "center",
+                            backgroundColor: "var(--background)",
+                            border: isTarget
+                              ? `2px solid ${product.accentColor}`
+                              : isSource
+                              ? "2px solid var(--foreground)"
+                              : isVisited
+                              ? "1.5px solid var(--line-stroke-accent)"
+                              : "1px dashed var(--line-stroke-accent)",
+                            borderRadius: "50%",
+                            boxShadow: isTarget
+                              ? `0 0 10px color-mix(in srgb, ${product.accentColor} 65%, transparent)`
+                              : "none",
+                            display: "flex",
+                            height: isEndpoint ? "14px" : "8px",
+                            justifyContent: "center",
+                            left: isEndpoint ? "-7px" : "-4px",
+                            position: "absolute",
+                            top: isEndpoint ? "-7px" : "-4px",
+                            transition: "all 0.2s ease",
+                            width: isEndpoint ? "14px" : "8px",
+                          }}
+                        >
+                          {isEndpoint && (
+                            <span
+                              style={{
+                                backgroundColor: isTarget
+                                  ? product.accentColor
+                                  : "var(--foreground)",
+                                borderRadius: "50%",
+                                display: "block",
+                                height: "4px",
+                                width: "4px",
+                              }}
+                            />
+                          )}
+                        </div>
+
+                        <span
+                          style={{
+                            color: isTarget
+                              ? readableAccent
+                              : isSource
+                              ? "var(--foreground)"
+                              : "var(--nav-link)",
+                            fontSize: "7.5px",
+                            fontWeight: isEndpoint ? 700 : 500,
+                            left: "-28px",
+                            letterSpacing: "0.06em",
+                            opacity: isVisited || isEndpoint ? 1 : 0.65,
+                            position: "absolute",
+                            textAlign: "center",
+                            top: "10px",
+                            whiteSpace: "nowrap",
+                            width: "56px",
+                          }}
+                        >
+                          {portTag}
+                        </span>
+                      </div>
+                    );
+                  })}
+
+                  {/* Clipped Directional Comet Tail (bounded strictly to active hop span) */}
+                  {!isSelfLoop && !shouldReduceMotion && (
+                    <div
+                      style={{
+                        height: "6px",
+                        left: `${bandLeftRailPct}%`,
+                        overflow: "hidden",
+                        pointerEvents: "none",
+                        position: "absolute",
+                        top: "-3px",
+                        width: `${bandWidthRailPct}%`,
+                        zIndex: 5,
+                      }}
+                    >
+                      <motion.div
+                        key={`${activeScenario.id}-${activeStep.id}-${speedIdx}-tail`}
+                        initial={{ left: isReverse ? "100%" : "0%" }}
+                        animate={{ left: isReverse ? "0%" : "100%" }}
+                        transition={{
+                          duration: cometCycleSec,
+                          ease: [0.22, 1, 0.36, 1],
+                          repeat: Infinity,
+                          repeatDelay: 0.25,
+                        }}
+                        style={{
+                          height: "100%",
+                          position: "absolute",
+                          top: 0,
+                          width: 0,
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: isReverse
+                              ? `linear-gradient(90deg, ${product.accentColor} 0%, transparent 100%)`
+                              : `linear-gradient(90deg, transparent 0%, ${product.accentColor} 100%)`,
+                            borderRadius: "2px",
+                            height: "3px",
+                            left: isReverse ? "3px" : undefined,
+                            opacity: 0.9,
+                            position: "absolute",
+                            right: isReverse ? undefined : "3px",
+                            top: "1.5px",
+                            width: "44px",
+                          }}
+                        />
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {/* Traveling Signal Packet Core */}
+                  {!isSelfLoop && !shouldReduceMotion && (
+                    <motion.div
+                      key={`${activeScenario.id}-${activeStep.id}-${speedIdx}-comet`}
+                      initial={{ left: `${fromRailPct}%` }}
+                      animate={{ left: `${toRailPct}%` }}
+                      transition={{
+                        duration: cometCycleSec,
+                        ease: [0.22, 1, 0.36, 1],
+                        repeat: Infinity,
+                        repeatDelay: 0.25,
+                      }}
+                      style={{
+                        height: 0,
+                        pointerEvents: "none",
+                        position: "absolute",
+                        top: 0,
+                        width: 0,
+                        zIndex: 6,
+                      }}
+                      title={`${fromMeta.label} ${isReverse ? "◀─" : "─▶"} ${toMeta.label}`}
+                    >
+                      {/* Centered glowing packet core (zero translate conflict) */}
+                      <div
+                        style={{
+                          backgroundColor: product.accentColor,
+                          border: "1.5px solid var(--background)",
+                          borderRadius: "50%",
+                          boxShadow: `0 0 12px ${product.accentColor}`,
+                          height: "10px",
+                          left: "-5px",
+                          position: "absolute",
+                          top: "-5px",
+                          width: "10px",
+                        }}
+                      />
+                    </motion.div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -878,7 +1382,9 @@ export function FlowSimulator({
                   color: isCurrent ? "var(--foreground)" : "var(--nav-link)",
                   cursor: "pointer",
                   fontFamily: "var(--font-geist-mono)",
+                  overflow: "hidden",
                   padding: "7px 8px",
+                  position: "relative",
                   textAlign: "left",
                   transition: "all 0.15s ease",
                 }}
@@ -892,8 +1398,29 @@ export function FlowSimulator({
                     marginBottom: "2px",
                   }}
                 >
-                  <span style={{ color: isCurrent ? readableAccent : "var(--nav-link)", fontWeight: 700 }}>
-                    STEP_{step.stepNo}
+                  <span
+                    style={{
+                      alignItems: "center",
+                      color: isCurrent ? readableAccent : "var(--nav-link)",
+                      display: "inline-flex",
+                      fontWeight: 700,
+                      gap: "5px",
+                    }}
+                  >
+                    {isCurrent && isPlaying && !shouldReduceMotion && (
+                      <motion.span
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ duration: 0.9, ease: "easeInOut", repeat: Infinity }}
+                        style={{
+                          backgroundColor: product.accentColor,
+                          borderRadius: "50%",
+                          display: "inline-block",
+                          height: "4px",
+                          width: "4px",
+                        }}
+                      />
+                    )}
+                    <span>STEP_{step.stepNo}</span>
                   </span>
                   <span style={{ opacity: 0.75 }}>{step.latencyLabel}</span>
                 </div>
@@ -909,6 +1436,45 @@ export function FlowSimulator({
                 >
                   {step.title}
                 </div>
+
+                {isCurrent && isPlaying && (
+                  <div
+                    style={{
+                      backgroundColor: "var(--line-stroke)",
+                      bottom: 0,
+                      height: "2px",
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                    }}
+                  >
+                    {shouldReduceMotion ? (
+                      <div
+                        style={{
+                          backgroundColor: product.accentColor,
+                          height: "100%",
+                          width: "100%",
+                        }}
+                      />
+                    ) : (
+                      <motion.div
+                        key={`${activeScenario.id}-${step.id}-${durationMs}-stepbar`}
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{
+                          duration: durationMs / 1000,
+                          ease: "linear",
+                        }}
+                        style={{
+                          backgroundColor: product.accentColor,
+                          height: "100%",
+                          transformOrigin: "left",
+                          width: "100%",
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
               </button>
             );
           })}
