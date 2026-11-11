@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { TitleBlock } from "./components/TitleBlock";
 import { ProjectLogo } from "./components/ProjectLogo";
 import { CadProjectCardItem } from "./components/CadProjectCardItem";
+import { CadProductFlows } from "./components/CadProductFlows";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
@@ -1319,7 +1320,7 @@ function CadProjects() {
     {
       id: "PRJ-03",
       description: "Sophisticated Messaging APIs for Developers. Build powerful messaging applications with our elegant, reliable, and affordable API platform.",
-      link: "https://Rajdoot.wtf",
+      link: "https://rajdoot.parminder.pro/",
       name: "Rajdoot",
       status: "PRODUCTION",
       tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
@@ -3015,6 +3016,9 @@ export default function Page() {
 
           {/* CAD PROJECTS SCHEMA */}
           <CadProjects />
+
+          {/* CAD PRODUCT & PAYMENT FLOW LAB */}
+          <CadProductFlows />
 
           {/* INSPIRED BY */}
           <div

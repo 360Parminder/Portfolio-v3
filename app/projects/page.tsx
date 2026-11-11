@@ -401,7 +401,7 @@ function CadProjects() {
         "Integrated Cloudinary asset pipelines, Razorpay subscription tiers, and AWS cloud deployment for scaling infrastructure."
       ],
       tech: ["React", "Tailwind", "Node.js", "MongoDB", "Razorpay", "AWS", "Cloudinary", "Arduino", "Motion", "Socket.io"],
-      link: "https://Rajdoot.wtf",
+      link: "https://rajdoot.parminder.pro/",
     },
     {
       id: "PRJ-04",
