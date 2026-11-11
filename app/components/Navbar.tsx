@@ -2,12 +2,14 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { GithubIcon, Moon02Icon, Sun01Icon, Calendar01Icon, Menu01Icon, Cancel01Icon } from "hugeicons-react";
 import { getCalApi } from "@calcom/embed-react";
+import { CAD_EASE, CadDraftRule, useCadDraft } from "./CadDraft";
 
 export function Navbar() {
+  const { instantDone, isResetting } = useCadDraft();
   const [isDark, setIsDark] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -81,12 +83,28 @@ export function Navbar() {
         style={{
           height: "60px",
           padding: "0 24px",
-          borderBottom: "1px solid var(--line-stroke-accent)",
           backgroundColor: "var(--background)",
           fontFamily: "var(--font-geist-mono)",
           backdropFilter: "blur(8px)",
         }}
       >
+        {/* Bottom ruled drafting line */}
+        <CadDraftRule
+          axis="x"
+          origin="left"
+          delay={0.25}
+          duration={1.1}
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: "1px",
+            backgroundColor: "var(--line-stroke-accent)",
+            pointerEvents: "none",
+          }}
+        />
+
         {/* CAD Left System Identifier & Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <Link href="/" className={clsx("no-underline", "flex", "items-center")}>
@@ -99,17 +117,76 @@ export function Navbar() {
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "var(--line-fill)",
+                position: "relative",
               }}
             >
-              <Image src="/logo.svg" alt="logo" width={26} height={26} priority fetchPriority="high" />
+              <svg width="26" height="26" viewBox="0 0 200 200" fill="none" aria-label="logo">
+                <motion.rect
+                  width="200"
+                  height="200"
+                  rx="47"
+                  fill="white"
+                  stroke="rgba(128, 128, 128, 0.35)"
+                  strokeWidth="3"
+                  initial={instantDone ? { fillOpacity: 1, pathLength: 1 } : { fillOpacity: 0, pathLength: 0 }}
+                  animate={
+                    instantDone
+                      ? { fillOpacity: 1, pathLength: 1 }
+                      : isResetting
+                        ? { fillOpacity: 0, pathLength: 0 }
+                        : { fillOpacity: 1, pathLength: 1 }
+                  }
+                  transition={
+                    instantDone || isResetting
+                      ? { duration: 0 }
+                      : {
+                          pathLength: { delay: 0.32, duration: 0.65, ease: CAD_EASE },
+                          fillOpacity: { delay: 0.46, duration: 0.44 },
+                        }
+                  }
+                />
+                <motion.path
+                  d="M42.6451 66.199V48.247H158.398V66.199H143.999V174.285L120.811 163.813V140.625C112.458 147.357 105.103 150.723 98.7451 150.723C96.7504 150.723 94.6934 150.411 92.5741 149.788C90.4547 149.04 88.2107 147.856 85.8421 146.235C83.4734 144.614 81.4164 143.181 79.6711 141.934C77.9257 140.563 75.6817 138.568 72.9391 135.95C70.3211 133.207 68.3264 131.213 66.9551 129.966C65.7084 128.595 63.6514 126.413 60.7841 123.421C58.0414 120.304 56.2961 118.372 55.5481 117.624C54.8001 116.876 54.4261 99.7343 54.4261 66.199H42.6451ZM77.8011 125.104C83.1617 130.34 90.4547 131.088 99.6801 127.348C108.905 123.608 115.949 117.624 120.811 109.396V66.199H77.4271L77.8011 125.104Z"
+                  fill="black"
+                  stroke="black"
+                  strokeWidth="5"
+                  strokeLinejoin="round"
+                  initial={
+                    instantDone
+                      ? { fillOpacity: 1, pathLength: 1, strokeOpacity: 0 }
+                      : { fillOpacity: 0, pathLength: 0, strokeOpacity: 1 }
+                  }
+                  animate={
+                    instantDone
+                      ? { fillOpacity: 1, pathLength: 1, strokeOpacity: 0 }
+                      : isResetting
+                        ? { fillOpacity: 0, pathLength: 0, strokeOpacity: 1 }
+                        : { fillOpacity: 1, pathLength: 1, strokeOpacity: 0 }
+                  }
+                  transition={
+                    instantDone || isResetting
+                      ? { duration: 0 }
+                      : {
+                          pathLength: { delay: 0.6, duration: 1.05, ease: CAD_EASE },
+                          fillOpacity: { delay: 1.32, duration: 0.48 },
+                          strokeOpacity: { delay: 1.4, duration: 0.48 },
+                        }
+                  }
+                />
+              </svg>
             </div>
           </Link>
 
           {/* CAD Identifier Tag */}
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px", color: "var(--nav-link)" }}>
+          <motion.div
+            initial={instantDone ? { opacity: 1 } : { opacity: 0 }}
+            animate={instantDone ? { opacity: 1 } : isResetting ? { opacity: 0 } : { opacity: 1 }}
+            transition={instantDone || isResetting ? { duration: 0 } : { delay: 0.7, duration: 0.58 }}
+            style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px", color: "var(--nav-link)" }}
+          >
             <span style={{ color: "var(--line-stroke-accent)" }}>[+]</span>
             <span style={{ letterSpacing: "0.1em" }}>SYS_NAV // REV_01</span>
-          </div>
+          </motion.div>
         </div>
 
         {/* Center Nav Links with CAD Section Indices */}
@@ -124,28 +201,51 @@ export function Navbar() {
             height: "100%",
           }}
         >
-          {navLinks.map((item) => (
-            <Link
+          {navLinks.map((item, i) => (
+            <motion.div
               key={item.name}
-              href={item.href}
-              className={clsx("no-underline", "transition-colors", "flex", "items-center", "gap-1.5")}
-              style={{
-                fontSize: "11px",
-                letterSpacing: "0.08em",
-                color: "var(--nav-link)",
-                fontFamily: "var(--font-geist-mono)",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--nav-link-hover)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--nav-link)")}
+              initial={instantDone ? { opacity: 1, y: 0 } : { opacity: 0, y: -4 }}
+              animate={
+                instantDone
+                  ? { opacity: 1, y: 0 }
+                  : isResetting
+                    ? { opacity: 0, y: -4 }
+                    : { opacity: 1, y: 0 }
+              }
+              transition={instantDone || isResetting ? { duration: 0 } : { delay: 0.6 + i * 0.1, duration: 0.54, ease: CAD_EASE }}
             >
-              <span style={{ fontSize: "9px", opacity: 0.5 }}>{item.code} //</span>
-              <span>{item.name}</span>
-            </Link>
+              <Link
+                href={item.href}
+                className={clsx("no-underline", "transition-colors", "flex", "items-center", "gap-1.5")}
+                style={{
+                  fontSize: "11px",
+                  letterSpacing: "0.08em",
+                  color: "var(--nav-link)",
+                  fontFamily: "var(--font-geist-mono)",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--nav-link-hover)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--nav-link)")}
+              >
+                <span style={{ fontSize: "9px", opacity: 0.5 }}>{item.code} {"//"}</span>
+                <span>{item.name}</span>
+              </Link>
+            </motion.div>
           ))}
         </div>
 
         {/* Right Controls: GitHub, Theme Toggle, Cal.com Meet */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <motion.div
+          initial={instantDone ? { opacity: 1, y: 0 } : { opacity: 0, y: -4 }}
+          animate={
+            instantDone
+              ? { opacity: 1, y: 0 }
+              : isResetting
+                ? { opacity: 0, y: -4 }
+                : { opacity: 1, y: 0 }
+          }
+          transition={instantDone || isResetting ? { duration: 0 } : { delay: 1.12, duration: 0.6, ease: CAD_EASE }}
+          style={{ display: "flex", alignItems: "center", gap: "12px" }}
+        >
           {/* GitHub Button */}
           <a
             href="https://github.com/360Parminder"
@@ -229,7 +329,7 @@ export function Navbar() {
             <Calendar01Icon size={14} color="currentColor" />
             <span>MEET_SYNC</span>
           </button>
-        </div>
+        </motion.div>
       </nav>
 
       {/* ── MOBILE NAVIGATION ── */}

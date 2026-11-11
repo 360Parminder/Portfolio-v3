@@ -11,54 +11,18 @@ import {
   PRODUCT_FLOWS,
 } from "../data/productFlows";
 import { GatewayLogoTile } from "../data/techLogos";
+import {
+  CadDimensionLabelAnimated,
+  CadDraftBox,
+  CadDraftHeightScale,
+  CadDraftWidthScale,
+} from "./CadDraft";
 
 const caveat = Caveat({
   display: "swap",
   subsets: ["latin"],
   weight: "400",
 });
-
-function CadDimensionLabel() {
-  return (
-    <div
-      className={clsx("hidden", "md:block")}
-      style={{
-        height: "40px",
-        pointerEvents: "none",
-        position: "absolute",
-        right: "-200px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        width: "220px",
-        zIndex: 20,
-      }}
-    >
-      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-        <path
-          d="M 20,20 L 40,40 L 210,40"
-          fill="none"
-          stroke="var(--line-stroke-accent)"
-          strokeWidth="1"
-        />
-        <circle cx="20" cy="20" r="2" fill="var(--line-stroke-accent)" />
-      </svg>
-      <span
-        className={caveat.className}
-        style={{
-          bottom: "-8px",
-          color: "var(--foreground)",
-          fontSize: "18px",
-          left: "45px",
-          lineHeight: "1",
-          position: "absolute",
-          whiteSpace: "nowrap",
-        }}
-      >
-        Height: Auto, Size: 11px, Weight: 600
-      </span>
-    </div>
-  );
-}
 
 function CategoryGlyph({ id, color }: { id: FlowCategoryId; color: string }) {
   if (id === "payment-gateways") {
@@ -103,86 +67,23 @@ export function CadProductFlows() {
   );
 
   return (
-    <div
+    <CadDraftBox
       id="flows"
+      trigger="view"
+      strokeDuration={1.45}
       style={{
-        backgroundColor: "var(--line-fill)",
-        border: "1px solid var(--line-stroke-accent)",
         fontFamily: "var(--font-geist-mono)",
         fontSize: "12px",
         marginTop: "24px",
-        position: "relative",
       }}
     >
-      <CadDimensionLabel />
+      <CadDimensionLabelAnimated caveatClassName={caveat.className} trigger="view" />
 
-      {/* CAD Height Dimension (Left Side) */}
-      <div
-        className={clsx("hidden", "md:block")}
-        style={{
-          borderBottom: "1px solid var(--line-stroke-accent)",
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          bottom: "0",
-          left: "-12px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: "0",
-          width: "6px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "0",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "50%",
-            transform: "translate(-50%, -50%) rotate(-90deg)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          H: AUTO
-        </span>
-      </div>
+      {/* CAD Height Dimension Scale (Left Side) */}
+      <CadDraftHeightScale />
 
-      {/* CAD Width Dimension (Top Side) */}
-      <div
-        className={clsx("hidden", "md:block")}
-        style={{
-          borderLeft: "1px solid var(--line-stroke-accent)",
-          borderRight: "1px solid var(--line-stroke-accent)",
-          borderTop: "1px solid var(--line-stroke-accent)",
-          height: "6px",
-          left: "0",
-          pointerEvents: "none",
-          position: "absolute",
-          right: "0",
-          top: "-12px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "var(--background)",
-            color: "var(--line-stroke-accent)",
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "9px",
-            left: "50%",
-            letterSpacing: "0.1em",
-            padding: "0 4px",
-            position: "absolute",
-            top: "0",
-            transform: "translate(-50%, -50%)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          W: 100% (SCALE 1:1)
-        </span>
-      </div>
+      {/* CAD Width Dimension Scale (Top Side) */}
+      <CadDraftWidthScale />
 
       {/* Header Bar */}
       <div
@@ -594,6 +495,6 @@ export function CadProductFlows() {
           </div>
         </Link>
       </div>
-    </div>
+    </CadDraftBox>
   );
 }
