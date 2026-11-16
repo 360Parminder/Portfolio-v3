@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "Parminder Singh Portfolio",
     images: [
       {
-        url: "https://res.cloudinary.com/dvo4tvvgb/image/upload/v1786394946/Profile/landing_jz9jmv.png",
+        url: "https://res.cloudinary.com/dvo4tvvgb/image/upload/Profile/opengrp_ftezjb.png",
         width: 1200,
         height: 630,
         alt: "Parminder Singh - Portfolio",
