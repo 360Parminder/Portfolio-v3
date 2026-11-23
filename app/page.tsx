@@ -3094,7 +3094,7 @@ function HeroNameNote({
   );
 }
 
-function HeroDesignEngineerNote({
+function HeroHireMeNote({
   draftEpoch,
   instantDone,
   isResetting,
@@ -3115,136 +3115,246 @@ function HeroDesignEngineerNote({
 
   const isRevealed = instantDone || slotState === "active" || slotState === "done";
   const skipAnimation = instantDone || (slotState === "done" && isResetting);
-  const tickerActive = instantDone || (!isResetting && slotState === "done");
 
   return (
-    <div
-      ref={ref}
-      className={clsx("hidden", "2xl:block")}
-      style={{
-        height: "90px",
-        left: "-240px",
-        pointerEvents: "none",
-        position: "absolute",
-        top: "-55px",
-        width: "260px",
-        zIndex: 20,
-      }}
-    >
+    <>
       <style>{`
-        @keyframes cad-ticker {
-          0%, 22% { transform: translateY(0); }
-          33%, 55% { transform: translateY(-28px); }
-          66%, 88% { transform: translateY(-56px); }
-          100% { transform: translateY(-84px); }
+        @keyframes hirePing {
+          0% { transform: scale(1); opacity: 0.95; }
+          75%, 100% { transform: scale(2.4); opacity: 0; }
         }
       `}</style>
-      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-        {instantDone ? (
-          <>
-            <circle cx="258" cy="73" r="2" fill="var(--line-stroke-accent)" />
-            <path
-              d="M 258,73 L 225,40 L 0,40"
-              fill="none"
-              stroke="var(--line-stroke-accent)"
-              strokeWidth="1"
-            />
-          </>
-        ) : (
-          <>
-            <motion.circle
-              key={`role-dot-${draftEpoch}`}
-              cx="258"
-              cy="73"
-              r="2"
-              fill="var(--line-stroke-accent)"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-              transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
-              style={{ transformOrigin: "258px 73px" }}
-            />
-            <motion.path
-              key={`role-line-${draftEpoch}`}
-              d="M 258,73 L 225,40 L 0,40"
-              fill="none"
-              stroke="var(--line-stroke-accent)"
-              strokeWidth="1"
-              initial={{ pathLength: 0 }}
-              animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
-              transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.4, ease: CAD_EASE }}
-            />
-          </>
-        )}
-      </svg>
 
-      <motion.div
-        initial={instantDone ? { clipPath: "inset(-15% -6% -15% -4%)" } : { clipPath: "inset(-15% 100% -15% -4%)" }}
-        animate={
-          isRevealed
-            ? { clipPath: "inset(-15% -6% -15% -4%)" }
-            : { clipPath: "inset(-15% 100% -15% -4%)" }
-        }
-        transition={
-          isResetting || skipAnimation
-            ? { duration: 0 }
-            : { delay: 0.32, duration: 0.96, ease: [0.32, 0.04, 0.24, 1] }
-        }
+      {/* Desktop CAD leader line going to the LEFT side with interactive Hire me option */}
+      <div
+        ref={ref}
+        className={clsx("hidden", "md:block")}
         style={{
-          color: "var(--foreground)",
-          height: "28px",
-          left: "0px",
-          overflow: "hidden",
+          height: "90px",
+          left: "-215px",
+          pointerEvents: "none",
           position: "absolute",
-          top: "10px",
-          whiteSpace: "nowrap",
-          width: "220px",
+          top: "-55px",
+          width: "235px",
+          zIndex: 20,
         }}
       >
-        <div
-          key={`ticker-${draftEpoch}`}
-          className={caveat.className}
-          style={{
-            animation: tickerActive
-              ? `cad-ticker 8s infinite cubic-bezier(0.4, 0, 0.2, 1) ${instantDone ? "0s" : "0.9s"}`
-              : "none",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Design Engineer</div>
-          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Open Source Contributor</div>
-          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Small details matter</div>
-          <div style={{ alignItems: "center", display: "flex", fontSize: "24px", height: "28px" }}>Design Engineer</div>
-        </div>
-      </motion.div>
+        <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+          {instantDone ? (
+            <>
+              <circle cx="233" cy="73" r="2" fill="var(--line-stroke-accent)" />
+              <path
+                d="M 233,73 L 200,40 L 10,40"
+                fill="none"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+              />
+            </>
+          ) : (
+            <>
+              <motion.circle
+                key={`hire-dot-${draftEpoch}`}
+                cx="233"
+                cy="73"
+                r="2"
+                fill="var(--line-stroke-accent)"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
+                style={{ transformOrigin: "233px 73px" }}
+              />
+              <motion.path
+                key={`hire-line-${draftEpoch}`}
+                d="M 233,73 L 200,40 L 10,40"
+                fill="none"
+                stroke="var(--line-stroke-accent)"
+                strokeWidth="1"
+                initial={{ pathLength: 0 }}
+                animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
+                transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.4, ease: CAD_EASE }}
+              />
+            </>
+          )}
+        </svg>
 
-      {/* External pen nib writing "Design Engineer" without ticker overflow clipping */}
-      {slotState === "active" && !instantDone && (
-        <motion.span
-          key={`role-nib-${draftEpoch}`}
-          aria-hidden="true"
-          initial={{ left: "0px", opacity: 0, y: -3 }}
-          animate={{
-            left: ["0px", "145px"],
-            opacity: [0, 1, 1, 1, 0],
-            y: [-3, 0, -2, 1, -2, -5],
-          }}
-          transition={{
-            left: { delay: 0.32, duration: 0.96, ease: [0.32, 0.04, 0.24, 1] },
-            opacity: { delay: 0.32, duration: 1.02, times: [0, 0.1, 0.82, 0.92, 1] },
-            y: { delay: 0.32, duration: 0.96, ease: "easeInOut" },
-          }}
+        {/* Clickable Hire Me Option resting on the left horizontal line */}
+        <div
           style={{
-            pointerEvents: "none",
+            alignItems: "center",
+            bottom: "52px",
+            display: "inline-flex",
             position: "absolute",
-            top: "29px",
-            zIndex: 30,
+            right: "42px",
+            whiteSpace: "nowrap",
           }}
         >
-          <DraftPencilNib size={14} />
-        </motion.span>
-      )}
-    </div>
+          <motion.a
+            href="mailto:360.parimnder@gmail.com?subject=Hiring%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20discuss%20an%20opportunity%20with%20you.%0A%0ABest%20regards%2C"
+            title="Send email to Parminder (360.parimnder@gmail.com)"
+            aria-label="Hire me - send email to Parminder Singh"
+            whileHover={{ scale: 1.08, y: -2 }}
+            whileTap={{ scale: 0.94 }}
+            style={{
+              alignItems: "center",
+              color: "var(--foreground)",
+              cursor: "pointer",
+              display: "inline-flex",
+              gap: "7px",
+              lineHeight: 1,
+              pointerEvents: "auto",
+              position: "relative",
+              textDecoration: "none",
+            }}
+          >
+            {/* Live green pulsing availability beacon */}
+            <span style={{ display: "inline-flex", height: "7px", position: "relative", width: "7px" }}>
+              <span
+                style={{
+                  animation: "hirePing 1.6s cubic-bezier(0, 0, 0.2, 1) infinite",
+                  backgroundColor: "#22c55e",
+                  borderRadius: "50%",
+                  height: "100%",
+                  opacity: 0.75,
+                  position: "absolute",
+                  width: "100%",
+                }}
+              />
+              <span
+                style={{
+                  backgroundColor: "#22c55e",
+                  borderRadius: "50%",
+                  height: "7px",
+                  position: "relative",
+                  width: "7px",
+                }}
+              />
+            </span>
+
+            {/* Handwritten 'Hire me' text */}
+            <span
+              className={caveat.className}
+              style={{
+                fontSize: "30px",
+                fontWeight: 600,
+                lineHeight: "1",
+                position: "relative",
+              }}
+            >
+              {instantDone ? (
+                <span>Hire me</span>
+              ) : (
+                <>
+                  <motion.span
+                    initial={{ clipPath: "inset(-30% 100% -30% -4%)" }}
+                    animate={
+                      isRevealed
+                        ? { clipPath: "inset(-30% -6% -30% -4%)" }
+                        : { clipPath: "inset(-30% 100% -30% -4%)" }
+                    }
+                    transition={
+                      isResetting || skipAnimation
+                        ? { duration: 0 }
+                        : { delay: 0.32, duration: 0.88, ease: [0.32, 0.04, 0.24, 1] }
+                    }
+                    style={{ display: "inline-block" }}
+                  >
+                    Hire me
+                  </motion.span>
+                  {slotState === "active" && (
+                    <motion.span
+                      key={`hire-nib-${draftEpoch}`}
+                      aria-hidden="true"
+                      initial={{ left: "0px", opacity: 0, y: -3 }}
+                      animate={{
+                        left: ["0px", "85px"],
+                        opacity: [0, 1, 1, 1, 0],
+                        y: [-3, 0, -2, 1, -2, -5],
+                      }}
+                      transition={{
+                        left: { delay: 0.32, duration: 0.88, ease: [0.32, 0.04, 0.24, 1] },
+                        opacity: { delay: 0.32, duration: 0.94, times: [0, 0.1, 0.82, 0.92, 1] },
+                        y: { delay: 0.32, duration: 0.88, ease: "easeInOut" },
+                      }}
+                      style={{
+                        bottom: "15%",
+                        pointerEvents: "none",
+                        position: "absolute",
+                        zIndex: 30,
+                      }}
+                    >
+                      <DraftPencilNib size={15} />
+                    </motion.span>
+                  )}
+                </>
+              )}
+            </span>
+
+            <MailIcon />
+          </motion.a>
+        </div>
+      </div>
+
+      {/* Mobile profile 'Hire me' button (< md) */}
+      <div
+        className={clsx("md:hidden")}
+        style={{
+          left: "135px",
+          position: "absolute",
+          top: "24px",
+          whiteSpace: "nowrap",
+          zIndex: 20,
+        }}
+      >
+        <motion.a
+          href="mailto:360.parimnder@gmail.com?subject=Hiring%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20discuss%20an%20opportunity%20with%20you.%0A%0ABest%20regards%2C"
+          title="Send email to Parminder (360.parimnder@gmail.com)"
+          aria-label="Hire me - send email to Parminder Singh"
+          whileTap={{ scale: 0.94 }}
+          style={{
+            alignItems: "center",
+            backgroundColor: "var(--background)",
+            border: "1px solid var(--line-stroke-accent)",
+            borderRadius: "9999px",
+            boxShadow: "0 2px 6px -1px rgba(0, 0, 0, 0.25)",
+            color: "var(--foreground)",
+            cursor: "pointer",
+            display: "inline-flex",
+            gap: "5px",
+            lineHeight: 1,
+            padding: "3px 9px 3px 7px",
+            pointerEvents: "auto",
+            textDecoration: "none",
+          }}
+        >
+          <span style={{ display: "inline-flex", height: "6px", position: "relative", width: "6px" }}>
+            <span
+              style={{
+                animation: "hirePing 1.6s cubic-bezier(0, 0, 0.2, 1) infinite",
+                backgroundColor: "#22c55e",
+                borderRadius: "50%",
+                height: "100%",
+                opacity: 0.75,
+                position: "absolute",
+                width: "100%",
+              }}
+            />
+            <span
+              style={{
+                backgroundColor: "#22c55e",
+                borderRadius: "50%",
+                height: "6px",
+                position: "relative",
+                width: "6px",
+              }}
+            />
+          </span>
+          <span className={caveat.className} style={{ fontSize: "18px", fontWeight: 600 }}>
+            Hire me
+          </span>
+          <MailIcon />
+        </motion.a>
+      </div>
+    </>
   );
 }
 
@@ -3520,8 +3630,8 @@ function CadHeroProfileTarget() {
         </motion.svg>
       )}
 
-      {/* CAD-style rotating role label */}
-      <HeroDesignEngineerNote
+      {/* CAD-style label on LEFT side: leader line going left to 'Hire me' */}
+      <HeroHireMeNote
         draftEpoch={draftEpoch}
         instantDone={instantDone}
         isResetting={isResetting}
