@@ -23,6 +23,7 @@ import {
 import { Caveat } from "next/font/google";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { playPenClickSound } from "./components/PenClickSound";
 
 const caveat = Caveat({
   display: "swap",
@@ -2941,6 +2942,10 @@ function CadHeroCanvas() {
   );
 }
 
+function playHireSound() {
+  playPenClickSound();
+}
+
 function HeroNameNote({
   draftEpoch,
   instantDone,
@@ -3015,6 +3020,7 @@ function HeroNameNote({
         )}
       </svg>
 
+      {/* Name: Parminder Singh resting on top of the line */}
       {instantDone ? (
         <span
           className={caveat.className}
@@ -3090,6 +3096,74 @@ function HeroNameNote({
           )}
         </span>
       )}
+
+      {/* Subtitle below line: Available for freelance */}
+      <span
+        className={caveat.className}
+        style={{
+          color: "var(--foreground)",
+          fontSize: "21px",
+          fontWeight: 500,
+          left: "35px",
+          lineHeight: "1.1",
+          position: "absolute",
+          top: "34px",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {instantDone ? (
+          <motion.a
+            href="mailto:360.parimnder@gmail.com?subject=Freelance%20Project%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20have%20a%20project%20and%20would%20love%20to%20work%20with%20you.%0A%0ABest%20regards%2C"
+            title="Available for freelance - send email"
+            aria-label="Available for freelance - send email to Parminder Singh"
+            onClick={playHireSound}
+            whileHover={{ y: -1, opacity: 1 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              color: "var(--foreground)",
+              cursor: "pointer",
+              display: "inline-block",
+              pointerEvents: "auto",
+              textDecoration: "none",
+            }}
+          >
+            Available for freelance
+          </motion.a>
+        ) : (
+          <motion.a
+            href="mailto:360.parimnder@gmail.com?subject=Freelance%20Project%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20have%20a%20project%20and%20would%20love%20to%20work%20with%20you.%0A%0ABest%20regards%2C"
+            title="Available for freelance - send email"
+            aria-label="Available for freelance - send email to Parminder Singh"
+            onClick={playHireSound}
+            whileHover={{ y: -1, opacity: 1 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              color: "var(--foreground)",
+              cursor: "pointer",
+              display: "inline-block",
+              pointerEvents: "auto",
+              textDecoration: "none",
+            }}
+          >
+            <motion.span
+              initial={{ clipPath: "inset(-30% 100% -30% -4%)" }}
+              animate={
+                isRevealed
+                  ? { clipPath: "inset(-30% -6% -30% -4%)" }
+                  : { clipPath: "inset(-30% 100% -30% -4%)" }
+              }
+              transition={
+                isResetting || skipAnimation
+                  ? { duration: 0 }
+                  : { delay: 0.72, duration: 0.85, ease: [0.32, 0.04, 0.24, 1] }
+              }
+              style={{ display: "inline-block" }}
+            >
+              Available for freelance
+            </motion.span>
+          </motion.a>
+        )}
+      </span>
     </div>
   );
 }
@@ -3109,7 +3183,7 @@ function HeroHireMeNote({
     priority: 20,
     ref,
     requireBoxReady: false,
-    totalDurationMs: 1400,
+    totalDurationMs: 1100,
     trigger: "mount",
   });
 
@@ -3117,244 +3191,152 @@ function HeroHireMeNote({
   const skipAnimation = instantDone || (slotState === "done" && isResetting);
 
   return (
-    <>
-      <style>{`
-        @keyframes hirePing {
-          0% { transform: scale(1); opacity: 0.95; }
-          75%, 100% { transform: scale(2.4); opacity: 0; }
-        }
-      `}</style>
+    <div
+      ref={ref}
+      className={clsx("hidden", "md:block")}
+      style={{
+        height: "80px",
+        left: "-120px",
+        pointerEvents: "none",
+        position: "absolute",
+        top: "-45px",
+        width: "140px",
+        zIndex: 20,
+      }}
+    >
+      <svg width="100%" height="100%" style={{ overflow: "visible" }}>
+        {instantDone ? (
+          <>
+            <circle cx="138" cy="65" r="2" fill="var(--line-stroke-accent)" />
+            <path
+              d="M 138,65 L 105,32 L 15,32"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+            />
+          </>
+        ) : (
+          <>
+            <motion.circle
+              key={`hire-dot-${draftEpoch}`}
+              cx="138"
+              cy="65"
+              r="2"
+              fill="var(--line-stroke-accent)"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
+              style={{ transformOrigin: "138px 65px" }}
+            />
+            <motion.path
+              key={`hire-line-${draftEpoch}`}
+              d="M 138,65 L 105,32 L 15,32"
+              fill="none"
+              stroke="var(--line-stroke-accent)"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.4, ease: CAD_EASE }}
+            />
+          </>
+        )}
+      </svg>
 
-      {/* Desktop CAD leader line going to the LEFT side with interactive Hire me option */}
-      <div
-        ref={ref}
-        className={clsx("hidden", "md:block")}
-        style={{
-          height: "90px",
-          left: "-215px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: "-55px",
-          width: "235px",
-          zIndex: 20,
-        }}
-      >
-        <svg width="100%" height="100%" style={{ overflow: "visible" }}>
-          {instantDone ? (
-            <>
-              <circle cx="233" cy="73" r="2" fill="var(--line-stroke-accent)" />
-              <path
-                d="M 233,73 L 200,40 L 10,40"
-                fill="none"
-                stroke="var(--line-stroke-accent)"
-                strokeWidth="1"
-              />
-            </>
-          ) : (
-            <>
-              <motion.circle
-                key={`hire-dot-${draftEpoch}`}
-                cx="233"
-                cy="73"
-                r="2"
-                fill="var(--line-stroke-accent)"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={isRevealed ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-                transition={isResetting || skipAnimation ? { duration: 0 } : { duration: 0.22, ease: "easeOut" }}
-                style={{ transformOrigin: "233px 73px" }}
-              />
-              <motion.path
-                key={`hire-line-${draftEpoch}`}
-                d="M 233,73 L 200,40 L 10,40"
-                fill="none"
-                stroke="var(--line-stroke-accent)"
-                strokeWidth="1"
-                initial={{ pathLength: 0 }}
-                animate={isRevealed ? { pathLength: 1 } : { pathLength: 0 }}
-                transition={isResetting || skipAnimation ? { duration: 0 } : { delay: 0.08, duration: 0.4, ease: CAD_EASE }}
-              />
-            </>
-          )}
-        </svg>
-
-        {/* Clickable Hire Me Option resting on the left horizontal line */}
-        <div
+      {/* Normal handwritten note resting on the line just like Age and Name */}
+      {instantDone ? (
+        <span
+          className={caveat.className}
           style={{
-            alignItems: "center",
-            bottom: "52px",
-            display: "inline-flex",
+            bottom: "50px",
+            color: "var(--foreground)",
+            fontSize: "28px",
+            lineHeight: "1",
             position: "absolute",
-            right: "42px",
+            right: "38px",
             whiteSpace: "nowrap",
           }}
         >
-          <motion.a
+          <a
             href="mailto:360.parimnder@gmail.com?subject=Hiring%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20discuss%20an%20opportunity%20with%20you.%0A%0ABest%20regards%2C"
             title="Send email to Parminder (360.parimnder@gmail.com)"
             aria-label="Hire me - send email to Parminder Singh"
-            whileHover={{ scale: 1.08, y: -2 }}
-            whileTap={{ scale: 0.94 }}
             style={{
-              alignItems: "center",
-              color: "var(--foreground)",
-              cursor: "pointer",
-              display: "inline-flex",
-              gap: "7px",
-              lineHeight: 1,
+              color: "inherit",
               pointerEvents: "auto",
-              position: "relative",
               textDecoration: "none",
             }}
           >
-            {/* Live green pulsing availability beacon */}
-            <span style={{ display: "inline-flex", height: "7px", position: "relative", width: "7px" }}>
-              <span
-                style={{
-                  animation: "hirePing 1.6s cubic-bezier(0, 0, 0.2, 1) infinite",
-                  backgroundColor: "#22c55e",
-                  borderRadius: "50%",
-                  height: "100%",
-                  opacity: 0.75,
-                  position: "absolute",
-                  width: "100%",
-                }}
-              />
-              <span
-                style={{
-                  backgroundColor: "#22c55e",
-                  borderRadius: "50%",
-                  height: "7px",
-                  position: "relative",
-                  width: "7px",
-                }}
-              />
-            </span>
-
-            {/* Handwritten 'Hire me' text */}
-            <span
-              className={caveat.className}
-              style={{
-                fontSize: "30px",
-                fontWeight: 600,
-                lineHeight: "1",
-                position: "relative",
-              }}
-            >
-              {instantDone ? (
-                <span>Hire me</span>
-              ) : (
-                <>
-                  <motion.span
-                    initial={{ clipPath: "inset(-30% 100% -30% -4%)" }}
-                    animate={
-                      isRevealed
-                        ? { clipPath: "inset(-30% -6% -30% -4%)" }
-                        : { clipPath: "inset(-30% 100% -30% -4%)" }
-                    }
-                    transition={
-                      isResetting || skipAnimation
-                        ? { duration: 0 }
-                        : { delay: 0.32, duration: 0.88, ease: [0.32, 0.04, 0.24, 1] }
-                    }
-                    style={{ display: "inline-block" }}
-                  >
-                    Hire me
-                  </motion.span>
-                  {slotState === "active" && (
-                    <motion.span
-                      key={`hire-nib-${draftEpoch}`}
-                      aria-hidden="true"
-                      initial={{ left: "0px", opacity: 0, y: -3 }}
-                      animate={{
-                        left: ["0px", "85px"],
-                        opacity: [0, 1, 1, 1, 0],
-                        y: [-3, 0, -2, 1, -2, -5],
-                      }}
-                      transition={{
-                        left: { delay: 0.32, duration: 0.88, ease: [0.32, 0.04, 0.24, 1] },
-                        opacity: { delay: 0.32, duration: 0.94, times: [0, 0.1, 0.82, 0.92, 1] },
-                        y: { delay: 0.32, duration: 0.88, ease: "easeInOut" },
-                      }}
-                      style={{
-                        bottom: "15%",
-                        pointerEvents: "none",
-                        position: "absolute",
-                        zIndex: 30,
-                      }}
-                    >
-                      <DraftPencilNib size={15} />
-                    </motion.span>
-                  )}
-                </>
-              )}
-            </span>
-
-            <MailIcon />
-          </motion.a>
-        </div>
-      </div>
-
-      {/* Mobile profile 'Hire me' button (< md) */}
-      <div
-        className={clsx("md:hidden")}
-        style={{
-          left: "135px",
-          position: "absolute",
-          top: "24px",
-          whiteSpace: "nowrap",
-          zIndex: 20,
-        }}
-      >
-        <motion.a
-          href="mailto:360.parimnder@gmail.com?subject=Hiring%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20discuss%20an%20opportunity%20with%20you.%0A%0ABest%20regards%2C"
-          title="Send email to Parminder (360.parimnder@gmail.com)"
-          aria-label="Hire me - send email to Parminder Singh"
-          whileTap={{ scale: 0.94 }}
+            Hire me
+          </a>
+        </span>
+      ) : (
+        <span
+          className={caveat.className}
           style={{
-            alignItems: "center",
-            backgroundColor: "var(--background)",
-            border: "1px solid var(--line-stroke-accent)",
-            borderRadius: "9999px",
-            boxShadow: "0 2px 6px -1px rgba(0, 0, 0, 0.25)",
+            bottom: "50px",
             color: "var(--foreground)",
-            cursor: "pointer",
-            display: "inline-flex",
-            gap: "5px",
-            lineHeight: 1,
-            padding: "3px 9px 3px 7px",
-            pointerEvents: "auto",
-            textDecoration: "none",
+            fontSize: "28px",
+            lineHeight: "1",
+            position: "absolute",
+            right: "38px",
+            whiteSpace: "nowrap",
           }}
         >
-          <span style={{ display: "inline-flex", height: "6px", position: "relative", width: "6px" }}>
-            <span
+          <a
+            href="mailto:360.parimnder@gmail.com?subject=Hiring%20Inquiry%20%E2%80%94%20Parminder%20Singh&body=Hi%20Parminder%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20discuss%20an%20opportunity%20with%20you.%0A%0ABest%20regards%2C"
+            title="Send email to Parminder (360.parimnder@gmail.com)"
+            aria-label="Hire me - send email to Parminder Singh"
+            style={{
+              color: "inherit",
+              pointerEvents: "auto",
+              textDecoration: "none",
+            }}
+          >
+            <motion.span
+              initial={{ clipPath: "inset(-30% 100% -30% -4%)" }}
+              animate={
+                isRevealed
+                  ? { clipPath: "inset(-30% -6% -30% -4%)" }
+                  : { clipPath: "inset(-30% 100% -30% -4%)" }
+              }
+              transition={
+                isResetting || skipAnimation
+                  ? { duration: 0 }
+                  : { delay: 0.32, duration: 0.75, ease: [0.32, 0.04, 0.24, 1] }
+              }
+              style={{ display: "inline-block" }}
+            >
+              Hire me
+            </motion.span>
+          </a>
+          {slotState === "active" && (
+            <motion.span
+              key={`hire-nib-${draftEpoch}`}
+              aria-hidden="true"
+              initial={{ left: "0px", opacity: 0, y: -3 }}
+              animate={{
+                left: ["0px", "65px"],
+                opacity: [0, 1, 1, 1, 0],
+                y: [-3, 0, -2, 1, -2, -5],
+              }}
+              transition={{
+                left: { delay: 0.32, duration: 0.75, ease: [0.32, 0.04, 0.24, 1] },
+                opacity: { delay: 0.32, duration: 0.82, times: [0, 0.1, 0.82, 0.92, 1] },
+                y: { delay: 0.32, duration: 0.75, ease: "easeInOut" },
+              }}
               style={{
-                animation: "hirePing 1.6s cubic-bezier(0, 0, 0.2, 1) infinite",
-                backgroundColor: "#22c55e",
-                borderRadius: "50%",
-                height: "100%",
-                opacity: 0.75,
+                bottom: "15%",
+                pointerEvents: "none",
                 position: "absolute",
-                width: "100%",
+                zIndex: 30,
               }}
-            />
-            <span
-              style={{
-                backgroundColor: "#22c55e",
-                borderRadius: "50%",
-                height: "6px",
-                position: "relative",
-                width: "6px",
-              }}
-            />
-          </span>
-          <span className={caveat.className} style={{ fontSize: "18px", fontWeight: 600 }}>
-            Hire me
-          </span>
-          <MailIcon />
-        </motion.a>
-      </div>
-    </>
+            >
+              <DraftPencilNib size={16} />
+            </motion.span>
+          )}
+        </span>
+      )}
+    </div>
   );
 }
 

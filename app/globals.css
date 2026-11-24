@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f5f5f7;
   --foreground: #171717;
 
   /* Blueprint / construction line tokens — light mode */
@@ -68,7 +68,7 @@ html.dark {
 /* Explicit Light Theme Overrides */
 :root[data-theme="light"],
 html.light {
-  --background: #ffffff;
+  --background: #f5f5f7;
   --foreground: #171717;
 
   --line-stroke: rgba(0, 0, 0, 0.10);

@@ -5,6 +5,7 @@ import { Navbar } from "./components/Navbar";
 import { PageGrid } from "./components/PageGrid";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { CadDraftProvider } from "./components/CadDraft";
+import { PenClickSound } from "./components/PenClickSound";
 import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -57,6 +58,7 @@ export default function RootLayout({
     >
       <body>
         <CadDraftProvider>
+          <PenClickSound />
           <ScrollToTop />
           <Navbar />
           <PageGrid>{children}</PageGrid>
